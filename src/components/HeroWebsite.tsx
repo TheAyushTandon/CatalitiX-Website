@@ -383,41 +383,41 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
         ref={overviewRef}
         className="relative z-10 w-full max-w-[min(100vw,100vh)] min-h-screen max-h-screen mx-auto px-4 sm:px-6 flex flex-col justify-between pt-16 sm:pt-20 pb-4 text-center overflow-hidden"
       >
-        <div className="flex flex-col items-center my-auto w-full">
-          {/* LOGOS ABOVE BADGE: Bigger & prominent side-by-side */}
-          <div className="flex items-center justify-center gap-5 sm:gap-7 mb-3">
+        <div className="flex flex-col items-center my-auto w-full px-2 sm:px-4">
+          {/* LOGOS ABOVE BADGE: Much bigger, prominent, wide & taking full presence */}
+          <div className="flex items-center justify-center gap-6 sm:gap-12 md:gap-16 mb-4 w-full">
             <img
               src="/bennett-logo.png"
               alt="Bennett University"
-              className="h-10 sm:h-12 md:h-14 w-auto object-contain hover:scale-105 transition-transform drop-shadow-sm"
+              className="h-12 sm:h-16 md:h-20 lg:h-24 w-auto max-w-[42%] object-contain hover:scale-105 transition-transform drop-shadow-sm"
             />
-            <div className="h-8 sm:h-10 w-px bg-slate-300" />
+            <div className="h-10 sm:h-14 md:h-18 w-[1.5px] bg-slate-300 shrink-0" />
             <img
               src="/logo.png"
               alt="Bennett Hatchery Foundation"
-              className="h-10 sm:h-12 md:h-14 w-auto object-contain hover:scale-105 transition-transform drop-shadow-sm"
+              className="h-12 sm:h-16 md:h-20 lg:h-24 w-auto max-w-[42%] object-contain hover:scale-105 transition-transform drop-shadow-sm"
             />
           </div>
 
-          {/* Release Pill Badge */}
-          <div ref={heroBadgeRef} style={initialHiddenStyle} className="mb-3">
+          {/* Release Pill Badge: Wider, bolder, full visibility */}
+          <div ref={heroBadgeRef} style={initialHiddenStyle} className="mb-4 w-full flex justify-center">
             <Magnet padding={25} magnetStrength={3}>
-              <div className="badge-pill-light cursor-pointer hover:border-cyan-400/50 transition-all shadow-sm border border-slate-200/90 text-xs sm:text-sm font-extrabold py-1.5 px-4">
-                <span className="flex h-2 w-2 rounded-full bg-[#16A34A] animate-pulse" />
-                <span className="text-slate-900 font-bold">BENNETT HATCHERY FOUNDATION // DPIIT</span>
-                <span className="text-[#0284C7] font-black flex items-center gap-1">
+              <div className="badge-pill-light cursor-pointer hover:border-cyan-400/50 transition-all shadow-sm border border-slate-200/90 text-xs sm:text-sm md:text-base font-black py-2 px-5 sm:px-8">
+                <span className="flex h-2.5 w-2.5 rounded-full bg-[#16A34A] animate-pulse shrink-0" />
+                <span className="text-slate-900 font-extrabold tracking-wide">BENNETT HATCHERY FOUNDATION // DPIIT</span>
+                <span className="text-[#0284C7] font-black flex items-center gap-1.5 shrink-0">
                   <span>COHORT 2026</span>
-                  <Icons8 name="chevronRight" size={13} color="0284C7" />
+                  <Icons8 name="chevronRight" size={15} color="0284C7" />
                 </span>
               </div>
             </Magnet>
           </div>
 
-          {/* Big Bold Headline taking full space */}
+          {/* Big Bold Headline taking full 1:1 width without max-w restrictions */}
           <h1
             ref={heroTitleRef}
             style={initialHiddenStyle}
-            className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight max-w-2xl leading-[1.04] mb-3 text-slate-950"
+            className="w-full text-4xl sm:text-6xl md:text-7xl lg:text-[5.4rem] font-black tracking-tight leading-[1.03] mb-3 text-slate-950"
           >
             Incubation Program{' '}
             <span className="font-asimovian gradient-text-playful inline-block">
@@ -425,20 +425,21 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
             </span>
           </h1>
 
+          {/* Subtitle: Full width, larger, bolder, filling 1:1 space */}
           <p
             ref={heroSubtitleRef}
             style={initialHiddenStyle}
-            className="max-w-xl text-sm sm:text-base lg:text-lg text-slate-700 font-semibold mb-5 leading-relaxed"
+            className="w-full max-w-4xl px-2 sm:px-4 text-base sm:text-xl lg:text-2xl text-slate-700 font-bold mb-6 leading-relaxed sm:leading-snug"
           >
             A comprehensive institutional venture runway empowering early and growth-stage startups with seed capital,
             state-of-the-art makerspaces, marquee mentorship, and direct access to top-tier venture funds.
           </p>
 
-          {/* Call to Actions */}
+          {/* Call to Actions: Larger buttons spreading wide across horizontal space */}
           <div
             ref={heroCtaRef}
             style={initialHiddenStyle}
-            className="flex flex-wrap items-center justify-center gap-3.5 mb-5"
+            className="w-full flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-6"
           >
             <Magnet padding={35} magnetStrength={3}>
               <StarBorder color="#00F0FF" speed="3.5s" thickness={2} className="!rounded-full shadow-lg">
@@ -448,9 +449,9 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
                   href="https://forms.gle/bennett-incubation"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-liquid-glass-tinted-cyan !py-3.5 !px-8 text-sm sm:text-base font-bold shadow-md inline-flex items-center gap-2.5"
+                  className="btn-liquid-glass-tinted-cyan !py-4 sm:!py-4.5 !px-8 sm:!px-12 text-base sm:text-lg font-black shadow-md inline-flex items-center gap-3"
                 >
-                  <Icons8 name="rocket" size={17} color="090D16" />
+                  <Icons8 name="rocket" size={20} color="090D16" />
                   <span>Apply for Incubation</span>
                 </LiquidGlass>
               </StarBorder>
@@ -462,9 +463,9 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
                 href="https://bennett-university-hatchery.vercel.app/portfolio"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-liquid-glass-crystal !py-3.5 !px-8 text-sm sm:text-base font-bold border border-slate-300 inline-flex items-center gap-2.5 shadow-sm"
+                className="btn-liquid-glass-crystal !py-4 sm:!py-4.5 !px-8 sm:!px-12 text-base sm:text-lg font-black border border-slate-300 inline-flex items-center gap-3 shadow-sm"
               >
-                <Icons8 name="briefcase" size={16} color="0284C7" />
+                <Icons8 name="briefcase" size={19} color="0284C7" />
                 <span>Explore 80+ Startups</span>
               </LiquidGlass>
             </Magnet>
