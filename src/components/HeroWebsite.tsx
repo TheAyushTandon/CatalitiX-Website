@@ -310,16 +310,30 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
           className="liquid-glass-header w-full max-w-[min(100vw,100vh)] mx-auto rounded-2xl px-4 sm:px-6 py-2.5 transition-all shadow-sm pointer-events-auto"
         >
           <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-6">
-              <Magnet padding={30} magnetStrength={4}>
+            <div className="flex items-center gap-4 sm:gap-6">
+              <Magnet padding={25} magnetStrength={3}>
                 <button
                   onClick={() => setPresentationStep(0)}
-                  className="cursor-pointer text-left"
+                  className="cursor-pointer flex items-center gap-2.5 sm:gap-3 group text-left"
                 >
-                  <Wordmark size="sm" colorScheme="playful" markFill="#0f172a" />
+                  <img
+                    src="/bennett-logo.png"
+                    alt="Bennett University"
+                    className="h-6 sm:h-7.5 max-w-[110px] sm:max-w-[130px] w-auto object-contain hover:opacity-90 transition-opacity"
+                  />
+                  <div className="h-5 sm:h-6 w-px bg-slate-300" />
+                  <img
+                    src="/logo.png"
+                    alt="Hatchery Foundation"
+                    className="h-6 sm:h-7.5 max-w-[90px] sm:max-w-[110px] w-auto object-contain hover:opacity-90 transition-opacity"
+                  />
+                  <div className="h-5 sm:h-6 w-px bg-slate-300 hidden md:block" />
+                  <div className="hidden md:block">
+                    <Wordmark size="sm" colorScheme="playful" markFill="#0f172a" />
+                  </div>
                 </button>
               </Magnet>
-              <nav className="hidden sm:flex items-center gap-5 text-xs sm:text-sm font-bold text-slate-700">
+              <nav className="hidden sm:flex items-center gap-4 lg:gap-5 text-xs sm:text-sm font-bold text-slate-700">
                 <button
                   onClick={() => setPresentationStep(0)}
                   className="hover:text-slate-950 transition-colors cursor-pointer"
