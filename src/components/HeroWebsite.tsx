@@ -918,11 +918,11 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
       </section>
 
       {/* 7. Comprehensive Modern Footer: Full-Width Locked Layout */}
-      <footer className="relative z-10 w-full border-t border-slate-200 py-16 text-xs text-slate-500 font-mono bg-slate-50/80">
+      <footer className="relative z-10 w-full border-t border-slate-200/90 py-16 text-xs text-slate-500 font-mono bg-slate-50/80">
         <div className="w-full max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           <div className="md:col-span-1 space-y-4">
             <Magnet padding={35} magnetStrength={4}>
-              <Wordmark size="md" colorScheme="playful" markFill="#0f172a" />
+              <Wordmark size="lg" colorScheme="playful" markFill="#0f172a" />
             </Magnet>
             <p className="text-slate-500 leading-relaxed text-[11px] max-w-sm">
               Bennett Hatchery Foundation (BHF) — A DPIIT-recognized institutional incubator supporting deeptech, space, hardware, and scalable technology startups.
@@ -960,7 +960,14 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
           </div>
         </div>
 
-        <div className="w-full max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+        {/* Big Bold CatalytiX Display Banner */}
+        <div className="w-full max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 my-10 pt-10 border-t border-slate-200/80 flex items-center justify-center select-none overflow-hidden">
+          <Magnet padding={60} magnetStrength={2.5}>
+            <Wordmark size="footer" colorScheme="playful" markFill="#090D16" />
+          </Magnet>
+        </div>
+
+        <div className="w-full max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 pt-8 border-t border-slate-200/90 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p>© 2026 Bennett Hatchery Foundation (CatalytiX). All venture rights reserved.</p>
           <div className="flex items-center gap-6">
             <a href="https://forms.gle/bennett-incubation" target="_blank" rel="noopener noreferrer" className="hover:text-slate-950 transition-colors">Apply Now</a>
