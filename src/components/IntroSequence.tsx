@@ -138,61 +138,105 @@ export default function IntroSequence() {
     }
   }, [computeCenterDelta, lockToWebpage]);
 
-  // Entrance animation for Wordmark screen once Countdown completes
+  // Entrance animation: First X appears in center, then CATALYTI emerges to left shifting X to right
   useEffect(() => {
     if (showCountdown || isLocked) return;
 
-    const validLetters = lettersRef.current.filter(Boolean);
-    const entranceTl = gsap.timeline({ delay: 0.1 });
+    let activeTl: gsap.core.Timeline | null = null;
 
-    // 1. "Bennett Hatchery Presents" reveals smoothly
-    if (subtitleTopRef.current) {
-      entranceTl.fromTo(
-        subtitleTopRef.current,
-        { y: 22, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out' }
-      );
-    }
+    const runEntrance = () => {
+      if (!catalytiTextRef.current || !xEntranceRef.current || !singleXRef.current) return;
 
-    // 2. Letter-by-letter smooth animation down to up of "CATALYTIX"
-    if (validLetters.length > 0) {
-      entranceTl.fromTo(
-        validLetters,
-        { y: 55, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.7,
-          stagger: 0.055,
-          ease: 'power4.out',
-        },
-        '-=0.25'
-      );
-    }
+      // Accurately measure screen center vs resting center of the X element
+      // Temporarily reset any transforms to get pure unshifted bounding boxes
+      gsap.set(xEntranceRef.current, { x: 0, opacity: 0 });
+      gsap.set(catalytiTextRef.current, { opacity: 0, x: 0, clipPath: 'inset(0 0% 0 100%)' });
+      gsap.set([subtitleTopRef.current, subtitleBottomRef.current], { opacity: 0 });
 
-    // The "X" completes the wordmark in sequence with the letters
-    if (xEntranceRef.current) {
-      entranceTl.fromTo(
+      const xRect = xEntranceRef.current.getBoundingClientRect();
+      const screenCenterX = window.innerWidth / 2;
+      const currentXCenter = xRect.left + xRect.width / 2;
+      // Exactly how far left the X needs to move to be dead center on the screen:
+      const shiftToCenter = screenCenterX - currentXCenter;
+
+      // 1. Initial state: The X is placed dead center on the screen
+      gsap.set(xEntranceRef.current, {
+        x: shiftToCenter,
+        opacity: 0,
+        scale: 0.5,
+        rotation: -90,
+      });
+
+      // CATALYTI starts compressed against the X (shifted right towards X's center position)
+      // and clipped from left to right (hidden)
+      gsap.set(catalytiTextRef.current, {
+        opacity: 0,
+        x: 60,
+        clipPath: 'inset(0 0% 0 100%)',
+      });
+
+      const entranceTl = gsap.timeline({ delay: 0.15 });
+      activeTl = entranceTl;
+
+      // 2. First: The X appears alone in the exact center of the screen
+      entranceTl.to(xEntranceRef.current, {
+        opacity: 1,
+        scale: 1,
+        rotation: 0,
+        duration: 0.85,
+        ease: 'back.out(1.8)',
+      });
+
+      // 3. Next: CATALYTI comes out of the left of the X, shifting the X to the right!
+      entranceTl.to(
         xEntranceRef.current,
-        { y: 55, opacity: 0 },
         {
-          y: 0,
-          opacity: 1,
-          duration: 0.7,
-          ease: 'power4.out',
+          x: 0,
+          duration: 1.0,
+          ease: 'power3.inOut',
         },
-        '<+=0.35'
+        '+=0.25'
       );
-    }
 
-    // 3. "Built to Begin, Catalized to Scale" reveals smoothly
-    if (subtitleBottomRef.current) {
-      entranceTl.fromTo(
-        subtitleBottomRef.current,
-        { y: 18, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out' },
-        '-=0.25'
+      entranceTl.to(
+        catalytiTextRef.current,
+        {
+          opacity: 1,
+          x: 0,
+          clipPath: 'inset(0 0% 0 0%)',
+          duration: 1.0,
+          ease: 'power3.inOut',
+        },
+        '<'
       );
+
+      // 4. Subtitles reveal smoothly once wordmark locks in place
+      if (subtitleTopRef.current) {
+        entranceTl.fromTo(
+          subtitleTopRef.current,
+          { y: 18, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out' },
+          '-=0.4'
+        );
+      }
+
+      if (subtitleBottomRef.current) {
+        entranceTl.fromTo(
+          subtitleBottomRef.current,
+          { y: -18, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out' },
+          '-=0.5'
+        );
+      }
+    };
+
+    if (typeof document !== 'undefined' && document.fonts) {
+      document.fonts.ready.then(() => {
+        // Small rAF tick to allow DOM layout to settle
+        requestAnimationFrame(runEntrance);
+      });
+    } else {
+      setTimeout(runEntrance, 80);
     }
 
     // Listen for left click or key press to ignite X animation
@@ -215,7 +259,7 @@ export default function IntroSequence() {
     return () => {
       window.removeEventListener('click', handleClick);
       window.removeEventListener('keydown', handleKeyDown);
-      entranceTl.kill();
+      if (activeTl) activeTl.kill();
     };
   }, [showCountdown, isLocked, playXTransition]);
 
@@ -227,17 +271,20 @@ export default function IntroSequence() {
       )}
 
       {/* 1. INTRO WORDMARK SEQUENCE (Waits for Sir's click, then plays X transition to inner page) */}
-      {!showCountdown && (
+      <div
+        ref={containerRef}
+        style={{
+          display: isLocked ? 'none' : 'block',
+          visibility: showCountdown ? 'hidden' : 'visible',
+          pointerEvents: showCountdown ? 'none' : 'auto',
+        }}
+        className="fixed inset-0 z-40 w-full h-screen bg-[#08080d] cursor-pointer overflow-hidden"
+        onClick={playXTransition}
+      >
         <div
-          ref={containerRef}
-          style={{ display: isLocked ? 'none' : 'block' }}
-          className="fixed inset-0 z-40 w-full h-screen bg-[#08080d] cursor-pointer overflow-hidden"
-          onClick={playXTransition}
+          ref={stageRef}
+          className="relative w-full h-screen overflow-hidden z-10"
         >
-          <div
-            ref={stageRef}
-            className="relative w-full h-screen overflow-hidden z-10"
-          >
             <ClickSpark
               sparkColor={['#00F0FF', '#FF2E93', '#7cff67', '#FFD600']}
               sparkCount={12}
@@ -305,7 +352,7 @@ export default function IntroSequence() {
                     <span
                       ref={subtitleTopRef}
                       className="font-mono text-sm sm:text-base md:text-lg lg:text-xl uppercase tracking-[0.4em] text-sky-400 font-black mb-6 sm:mb-8 inline-flex items-center gap-2 select-none"
-                      style={{ willChange: 'transform, opacity' }}
+                      style={{ opacity: 0, willChange: 'transform, opacity' }}
                     >
                       Bennett Hatchery Presents
                     </span>
@@ -318,7 +365,7 @@ export default function IntroSequence() {
                       <div
                         ref={catalytiTextRef}
                         className="relative inline-flex items-center justify-center"
-                        style={{ willChange: 'transform, opacity' }}
+                        style={{ opacity: 0, willChange: 'transform, opacity, clip-path' }}
                       >
                         <div
                           className="absolute -inset-20 rounded-full pointer-events-none"
@@ -359,6 +406,7 @@ export default function IntroSequence() {
                         ref={xEntranceRef}
                         className="shrink-0 inline-flex items-center justify-center select-none"
                         style={{
+                          opacity: 0,
                           width: 'clamp(58px, 15.6vmin, 160px)',
                           height: 'clamp(58px, 15.6vmin, 160px)',
                           position: 'relative',
@@ -392,7 +440,7 @@ export default function IntroSequence() {
                     <div
                       ref={subtitleBottomRef}
                       className="mt-6 sm:mt-8 text-sm sm:text-base md:text-lg lg:text-xl font-mono tracking-[0.28em] uppercase font-black inline-flex items-center gap-2 select-none"
-                      style={{ willChange: 'transform, opacity' }}
+                      style={{ opacity: 0, willChange: 'transform, opacity' }}
                     >
                       <ShinyText
                         text="Built to Begin, Catalized to Scale"
@@ -407,7 +455,6 @@ export default function IntroSequence() {
             </ClickSpark>
           </div>
         </div>
-      )}
 
       {/* 2. INNER WEBPAGE CONTAINER */}
       <div
