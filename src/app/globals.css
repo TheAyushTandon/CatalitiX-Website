@@ -98,12 +98,47 @@ html, body {
   box-shadow: 0 25px 50px -12px rgba(121, 40, 202, 0.25);
 }
 
-/* Playful Gradient Text */
-.gradient-text-playful {
-  background: linear-gradient(to top, #FF8A00 0%, #FF2E93 32%, #7cff67 68%, #00F0FF 100%);
+/* Playful Breathing Gradient Text - Continuously color-changing and breathing */
+.gradient-text-playful,
+.breathing-gradient-text {
+  background: linear-gradient(
+    to top,
+    #FF8A00 0%,
+    #FF2E93 18%,
+    #A855F7 35%,
+    #00F0FF 55%,
+    #7cff67 75%,
+    #FF8A00 90%,
+    #FF2E93 100%
+  );
+  background-size: 100% 250%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: breathingGradient 6s ease-in-out infinite;
+  will-change: background-position, filter;
+  display: inline-block;
+}
+
+@keyframes breathingGradient {
+  0% {
+    background-position: 50% 0%;
+    filter: hue-rotate(0deg) brightness(1);
+  }
+  25% {
+    filter: hue-rotate(90deg) brightness(1.08);
+  }
+  50% {
+    background-position: 50% 100%;
+    filter: hue-rotate(180deg) brightness(1.15);
+  }
+  75% {
+    filter: hue-rotate(270deg) brightness(1.08);
+  }
+  100% {
+    background-position: 50% 0%;
+    filter: hue-rotate(360deg) brightness(1);
+  }
 }
 
 .gradient-text-cool {

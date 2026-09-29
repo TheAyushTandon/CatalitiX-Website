@@ -452,13 +452,8 @@ export default function IntroSequence() {
                             ref={(el) => {
                               lettersRef.current[idx] = el;
                             }}
-                            className="inline-block transform-gpu"
+                            className="inline-block transform-gpu breathing-gradient-text"
                             style={{
-                              background: 'linear-gradient(to top, #FF8A00 0%, #FF2E93 32%, #7cff67 68%, #00F0FF 100%)',
-                              backgroundSize: '800% 100%',
-                              backgroundPosition: `${(idx / 7) * 100}% 0%`,
-                              WebkitBackgroundClip: 'text',
-                              WebkitTextFillColor: 'transparent',
                               willChange: 'transform, opacity',
                             }}
                           >
