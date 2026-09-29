@@ -153,13 +153,23 @@ export default function IntroSequence() {
       gsap.set(catalytiTextRef.current, { opacity: 0, x: 0, clipPath: 'inset(0 0% 0 100%)' });
       gsap.set([subtitleTopRef.current, subtitleBottomRef.current], { opacity: 0 });
 
+      // Measure unshifted positions
       const xRect = xEntranceRef.current.getBoundingClientRect();
+      const textRect = catalytiTextRef.current.getBoundingClientRect();
       const screenCenterX = window.innerWidth / 2;
       const currentXCenter = xRect.left + xRect.width / 2;
-      // Exactly how far left the X needs to move to be dead center on the screen:
+      
+      // Exact distance X needs to shift to be positioned dead center on screen
       const shiftToCenter = screenCenterX - currentXCenter;
 
-      // 1. Initial state: The X is placed dead center on the screen
+      // When the X is at screen center, its center is at (xRect.left + shiftToCenter + xRect.width / 2) = screenCenterX.
+      // In the resting state, CATALYTI's right edge is at textRect.right.
+      // To place CATALYTI directly behind/tucked at the center X initially, its right edge
+      // should align with screenCenterX:
+      // initial text offset = screenCenterX - textRect.right
+      const textShiftToX = screenCenterX - textRect.right;
+
+      // 1. Initial state: X appears in center
       gsap.set(xEntranceRef.current, {
         x: shiftToCenter,
         opacity: 0,
@@ -167,12 +177,10 @@ export default function IntroSequence() {
         rotation: -90,
       });
 
-      // CATALYTI starts compressed against the X (shifted right towards X's center position)
-      // and clipped from left to right (hidden)
+      // CATALYTI starts uncontainerized, positioned tucked directly under/behind the X at screen center
       gsap.set(catalytiTextRef.current, {
         opacity: 0,
-        x: 60,
-        clipPath: 'inset(0 0% 0 100%)',
+        x: textShiftToX,
       });
 
       const entranceTl = gsap.timeline({ delay: 0.15 });
@@ -187,12 +195,13 @@ export default function IntroSequence() {
         ease: 'back.out(1.8)',
       });
 
-      // 3. Next: CATALYTI comes out of the left of the X, shifting the X to the right!
+      // 3. Next: "CATALYTI" emerges from behind the X, coming out to the left of the X
+      // while the X shifts to the right into its final spot!
       entranceTl.to(
         xEntranceRef.current,
         {
           x: 0,
-          duration: 1.0,
+          duration: 1.1,
           ease: 'power3.inOut',
         },
         '+=0.25'
@@ -203,8 +212,7 @@ export default function IntroSequence() {
         {
           opacity: 1,
           x: 0,
-          clipPath: 'inset(0 0% 0 0%)',
-          duration: 1.0,
+          duration: 1.1,
           ease: 'power3.inOut',
         },
         '<'
@@ -341,14 +349,13 @@ export default function IntroSequence() {
                   className="absolute inset-0 bg-white pointer-events-none opacity-0"
                   style={{ zIndex: 15, willChange: 'opacity' }}
                 />
-
-                {/* Hero Wordmark: "Bennett Hatchery Presents" + "CATALYTI" + The Spinning White "X" (BIG TO FIT 1:1 SCREEN) */}
+                {/* Hero Wordmark: "Bennett Hatchery Presents" + "CATALYTI" + The Spinning White "X" */}
                 <div
                   ref={stageRef}
-                  className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none px-4 sm:px-6"
+                  className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none px-4 sm:px-6 w-full h-full"
                   style={{ zIndex: 30 }}
                 >
-                  <div className="w-full max-w-[min(100vw,100vh)] aspect-square flex flex-col items-center justify-center text-center">
+                  <div className="w-full flex flex-col items-center justify-center text-center">
                     <span
                       ref={subtitleTopRef}
                       className="font-mono text-sm sm:text-base md:text-lg lg:text-xl uppercase tracking-[0.4em] text-sky-400 font-black mb-6 sm:mb-8 inline-flex items-center gap-2 select-none"
@@ -357,24 +364,16 @@ export default function IntroSequence() {
                       Bennett Hatchery Presents
                     </span>
 
-                    {/* Big Wordmark Row Fitting 1:1 Screen */}
+                    {/* Pure uncontainerized Wordmark Row */}
                     <div
-                      className="w-full flex items-center justify-center whitespace-nowrap select-none"
+                      className="w-full flex items-center justify-center whitespace-nowrap select-none overflow-visible"
                       style={{ gap: 'clamp(2px, 0.6vmin, 8px)' }}
                     >
                       <div
                         ref={catalytiTextRef}
-                        className="relative inline-flex items-center justify-center"
-                        style={{ opacity: 0, willChange: 'transform, opacity, clip-path' }}
+                        className="relative inline-flex items-center justify-center select-none"
+                        style={{ opacity: 0, zIndex: 1, willChange: 'transform, opacity' }}
                       >
-                        <div
-                          className="absolute -inset-20 rounded-full pointer-events-none"
-                          style={{
-                            background:
-                              'radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.35) 0%, rgba(245, 158, 11, 0.22) 45%, transparent 75%)',
-                            filter: 'blur(50px)',
-                          }}
-                        />
                         <span
                           className="relative z-10 font-asimovian select-none inline-flex items-center"
                           style={{
@@ -407,6 +406,7 @@ export default function IntroSequence() {
                         className="shrink-0 inline-flex items-center justify-center select-none"
                         style={{
                           opacity: 0,
+                          zIndex: 10,
                           width: 'clamp(58px, 15.6vmin, 160px)',
                           height: 'clamp(58px, 15.6vmin, 160px)',
                           position: 'relative',
