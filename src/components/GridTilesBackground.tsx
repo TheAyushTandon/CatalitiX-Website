@@ -14,45 +14,51 @@ export interface TilePalette {
 export const THEME_PALETTES: TilePalette[] = [
   {
     name: 'pink',
-    background: 'linear-gradient(135deg, rgba(255, 96, 151, 0.85) 0%, rgba(255, 46, 147, 0.92) 100%)',
-    glow: 'rgba(255, 46, 147, 0.3)',
-    border: 'rgba(255, 138, 185, 0.6)',
+    background: 'linear-gradient(135deg, rgba(255, 60, 140, 0.88) 0%, rgba(255, 30, 130, 0.95) 100%)',
+    glow: 'rgba(255, 46, 147, 0.45)',
+    border: 'rgba(255, 120, 180, 0.75)',
   },
   {
     name: 'cyan',
-    background: 'linear-gradient(135deg, rgba(103, 245, 255, 0.85) 0%, rgba(0, 200, 240, 0.92) 100%)',
-    glow: 'rgba(0, 240, 255, 0.3)',
-    border: 'rgba(140, 248, 255, 0.65)',
+    background: 'linear-gradient(135deg, rgba(56, 225, 255, 0.88) 0%, rgba(0, 190, 240, 0.95) 100%)',
+    glow: 'rgba(0, 240, 255, 0.45)',
+    border: 'rgba(120, 245, 255, 0.8)',
   },
   {
     name: 'orange',
-    background: 'linear-gradient(135deg, rgba(255, 163, 102, 0.85) 0%, rgba(255, 107, 0, 0.92) 100%)',
-    glow: 'rgba(255, 107, 0, 0.3)',
-    border: 'rgba(255, 180, 130, 0.6)',
+    background: 'linear-gradient(135deg, rgba(255, 145, 60, 0.88) 0%, rgba(255, 95, 0, 0.95) 100%)',
+    glow: 'rgba(255, 107, 0, 0.45)',
+    border: 'rgba(255, 175, 110, 0.75)',
   },
   {
     name: 'lime',
-    background: 'linear-gradient(135deg, rgba(184, 255, 171, 0.85) 0%, rgba(74, 222, 128, 0.92) 100%)',
-    glow: 'rgba(74, 222, 128, 0.3)',
-    border: 'rgba(180, 250, 170, 0.65)',
+    background: 'linear-gradient(135deg, rgba(140, 245, 110, 0.88) 0%, rgba(52, 211, 115, 0.95) 100%)',
+    glow: 'rgba(74, 222, 128, 0.45)',
+    border: 'rgba(165, 250, 150, 0.8)',
   },
   {
     name: 'purple',
-    background: 'linear-gradient(135deg, rgba(206, 150, 255, 0.85) 0%, rgba(121, 40, 202, 0.92) 100%)',
-    glow: 'rgba(121, 40, 202, 0.3)',
-    border: 'rgba(215, 175, 255, 0.6)',
+    background: 'linear-gradient(135deg, rgba(195, 125, 255, 0.88) 0%, rgba(121, 40, 202, 0.95) 100%)',
+    glow: 'rgba(121, 40, 202, 0.45)',
+    border: 'rgba(210, 160, 255, 0.75)',
   },
   {
     name: 'amber',
-    background: 'linear-gradient(135deg, rgba(255, 232, 115, 0.85) 0%, rgba(245, 158, 11, 0.92) 100%)',
-    glow: 'rgba(245, 158, 11, 0.3)',
-    border: 'rgba(255, 230, 120, 0.65)',
+    background: 'linear-gradient(135deg, rgba(255, 215, 65, 0.88) 0%, rgba(245, 158, 11, 0.95) 100%)',
+    glow: 'rgba(245, 158, 11, 0.45)',
+    border: 'rgba(255, 225, 100, 0.8)',
   },
   {
     name: 'blue',
-    background: 'linear-gradient(135deg, rgba(125, 214, 253, 0.85) 0%, rgba(2, 132, 199, 0.92) 100%)',
-    glow: 'rgba(2, 132, 199, 0.3)',
-    border: 'rgba(155, 220, 255, 0.65)',
+    background: 'linear-gradient(135deg, rgba(96, 200, 255, 0.88) 0%, rgba(2, 132, 199, 0.95) 100%)',
+    glow: 'rgba(2, 132, 199, 0.45)',
+    border: 'rgba(145, 215, 255, 0.8)',
+  },
+  {
+    name: 'rose',
+    background: 'linear-gradient(135deg, rgba(251, 113, 133, 0.88) 0%, rgba(225, 29, 72, 0.95) 100%)',
+    glow: 'rgba(225, 29, 72, 0.45)',
+    border: 'rgba(253, 164, 175, 0.8)',
   },
 ];
 
@@ -91,50 +97,37 @@ export default function GridTilesBackground() {
       return { cols, rows };
     };
 
-    // Normalized concurrent tiles to prevent compositor load and CPU spikes
+    // Rich concurrent tile population across the screen
     const getTargetCount = () => {
       const w = window.innerWidth;
-      if (w > 1200) return 5;
-      if (w > 768) return 4;
-      return 2;
+      if (w > 1440) return 26; // Widescreen / 4K
+      if (w > 1024) return 20; // Desktop / Laptops
+      if (w > 768) return 14;  // Tablets
+      return 8;                // Mobile
     };
 
-    // Spawn a single scattered 2D tile (autonomous only, no cursor triggering)
-    const spawnTile = () => {
+    // Spawn a 2D tile at a vacant cell, with optional companion twin
+    const spawnTile = (forceCol?: number, forceRow?: number) => {
       if (!mounted || (typeof document !== 'undefined' && document.hidden)) return;
 
       const { cols, rows } = getGridBounds();
       if (cols <= 0 || rows <= 0) return;
 
-      let targetCol: number | undefined;
-      let targetRow: number | undefined;
+      let targetCol = forceCol;
+      let targetRow = forceRow;
 
-      // Find a vacant cell that is well scattered
-      let found = false;
-      let attempts = 0;
+      if (targetCol === undefined || targetRow === undefined) {
+        let attempts = 0;
+        let found = false;
 
-      while (!found && attempts < 8) {
-        attempts++;
-        const col = Math.floor(Math.random() * cols);
-        const row = Math.floor(Math.random() * rows);
-        const key = `${col},${row}`;
+        while (!found && attempts < 16) {
+          attempts++;
+          const col = Math.floor(Math.random() * cols);
+          const row = Math.floor(Math.random() * rows);
+          const key = `${col},${row}`;
 
-        if (activeKeysRef.current.has(key)) continue;
+          if (activeKeysRef.current.has(key)) continue;
 
-        // Check if immediate neighbors are already active (to keep tiles scattered)
-        let hasNearNeighbor = false;
-        for (let dc = -2; dc <= 2; dc++) {
-          for (let dr = -2; dr <= 2; dr++) {
-            if (dc === 0 && dr === 0) continue;
-            if (activeKeysRef.current.has(`${col + dc},${row + dr}`)) {
-              hasNearNeighbor = true;
-              break;
-            }
-          }
-          if (hasNearNeighbor) break;
-        }
-
-        if (!hasNearNeighbor || attempts > 5) {
           targetCol = col;
           targetRow = row;
           found = true;
@@ -148,10 +141,10 @@ export default function GridTilesBackground() {
 
       activeKeysRef.current.add(key);
 
-      const id = `${key}-${Date.now()}`;
+      const id = `${key}-${Date.now()}-${Math.random()}`;
       const paletteIndex = Math.floor(Math.random() * THEME_PALETTES.length);
-      const durationMs = Math.floor(Math.random() * 1000) + 3200; // 3.2s to 4.2s gentle pacing
-      const hasMark = Math.random() < 0.25;
+      const durationMs = Math.floor(Math.random() * 1400) + 3400; // 3.4s to 4.8s smooth breathing pace
+      const hasMark = Math.random() < 0.28;
 
       const newTile: TileData = {
         id,
@@ -163,30 +156,47 @@ export default function GridTilesBackground() {
       };
 
       setTiles((prev) => [...prev, newTile]);
+
+      // 25% chance to spawn an adjacent twin tile for an elegant modern dual-cluster accent
+      if (!forceCol && Math.random() < 0.25) {
+        const offsetDirection = Math.random() < 0.5 ? [1, 0] : [0, 1];
+        const twinCol = targetCol + offsetDirection[0];
+        const twinRow = targetRow + offsetDirection[1];
+        if (twinCol < cols && twinRow < rows && !activeKeysRef.current.has(`${twinCol},${twinRow}`)) {
+          setTimeout(() => {
+            if (mounted) spawnTile(twinCol, twinRow);
+          }, 120);
+        }
+      }
     };
 
-    // Staggered gentle initial spawn
-    const initialTarget = Math.min(3, getTargetCount());
+    // Immediate initial population so the hero is vibrant right from the start
+    const initialTarget = Math.round(getTargetCount() * 0.75);
     for (let i = 0; i < initialTarget; i++) {
       setTimeout(() => {
         if (mounted) spawnTile();
-      }, (i + 1) * 400);
+      }, i * 50);
     }
 
-    // Normalized tick loop: spawns every 1.1s to 1.8s
+    // Dynamic tick loop: checks and replenishes tiles quickly
     const loop = () => {
       if (!mounted) return;
 
       const targetCount = getTargetCount();
-      if (activeKeysRef.current.size < targetCount) {
-        spawnTile();
+      const currentCount = activeKeysRef.current.size;
+
+      if (currentCount < targetCount) {
+        const toSpawn = Math.min(3, targetCount - currentCount);
+        for (let s = 0; s < toSpawn; s++) {
+          spawnTile();
+        }
       }
 
-      const nextDelay = Math.floor(Math.random() * 700) + 1100; // 1.1s - 1.8s
+      const nextDelay = Math.floor(Math.random() * 250) + 280; // 280ms - 530ms quick refresh
       timerId = setTimeout(loop, nextDelay);
     };
 
-    timerId = setTimeout(loop, 800);
+    timerId = setTimeout(loop, 400);
 
     return () => {
       mounted = false;
@@ -199,13 +209,13 @@ export default function GridTilesBackground() {
       className="fixed inset-0 z-0 pointer-events-none overflow-hidden select-none"
       aria-hidden="true"
     >
-      {/* 1. Underlying Technical Grid Lines (pure 48px square pattern) */}
+      {/* 1. Underlying Technical Grid Lines (pure 48px square pattern with crisp visibility) */}
       <div 
-        className="absolute inset-0 pointer-events-none opacity-40"
+        className="absolute inset-0 pointer-events-none opacity-60"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(15,23,42,0.035) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(15,23,42,0.035) 1px, transparent 1px)
+            linear-gradient(rgba(15,23,42,0.045) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(15,23,42,0.045) 1px, transparent 1px)
           `,
           backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px, ${CELL_SIZE}px ${CELL_SIZE}px`,
         }}
@@ -235,9 +245,9 @@ export default function GridTilesBackground() {
             >
               {/* Optional CatalytiX Brand Glyph subtle accent */}
               {tile.hasMark && (
-                <div className="absolute inset-0 flex items-center justify-center opacity-40 pointer-events-none">
+                <div className="absolute inset-0 flex items-center justify-center opacity-45 pointer-events-none">
                   <CatalytiXMark
-                    size={14}
+                    size={15}
                     fill="#FFFFFF"
                     rotate={45}
                     flipVertical={true}

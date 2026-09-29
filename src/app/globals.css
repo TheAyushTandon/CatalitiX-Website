@@ -251,10 +251,10 @@ html, body {
    ---------------------------------------------------- */
 .soft-2d-tile {
   position: absolute;
-  border-radius: 7px;
+  border-radius: 8px;
   border-width: 1px;
   border-style: solid;
-  box-shadow: 0 4px 12px -2px var(--tile-glow, rgba(0, 240, 255, 0.25)), inset 0 1px 1px rgba(255, 255, 255, 0.65);
+  box-shadow: 0 4px 16px -1px var(--tile-glow, rgba(0, 240, 255, 0.35)), inset 0 1px 1.5px rgba(255, 255, 255, 0.8);
   will-change: transform, opacity;
   animation-name: soft2DTileLifecycle;
   animation-timing-function: cubic-bezier(0.2, 0.9, 0.3, 1);
@@ -265,19 +265,19 @@ html, body {
 @keyframes soft2DTileLifecycle {
   0% {
     opacity: 0;
-    transform: scale(0.78);
+    transform: scale(0.72);
   }
-  16% {
-    opacity: 0.92;
+  14% {
+    opacity: 0.95;
     transform: scale(1);
   }
-  82% {
-    opacity: 0.88;
+  86% {
+    opacity: 0.92;
     transform: scale(1);
   }
   100% {
     opacity: 0;
-    transform: scale(0.78);
+    transform: scale(0.72);
   }
 }
 
