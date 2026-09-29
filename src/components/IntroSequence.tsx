@@ -7,7 +7,7 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import Aurora from './Aurora';
 import CatalytiXMark from './CatalytiXMark';
 import HeroWebsite from './HeroWebsite';
-import { ChevronDown, Sparkles } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import ClickSpark from './reactbits/ClickSpark';
 import Particles from './reactbits/Particles';
 import ShinyText from './reactbits/ShinyText';
@@ -27,6 +27,8 @@ export default function IntroSequence() {
   const subtitleBottomRef = useRef<HTMLParagraphElement>(null);
   const scrollPromptRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const lettersRef = useRef<(HTMLSpanElement | null)[]>([]);
+  const xEntranceRef = useRef<HTMLDivElement>(null);
   
   // Lock state: starts on the kinetic intro sequence, locks to inner webpage once scrolled
   const [isLocked, setIsLocked] = useState(false);
@@ -87,6 +89,9 @@ export default function IntroSequence() {
       const computeCenterDelta = () => {
         if (!singleXRef.current) return { deltaX: 0, deltaY: 0 };
         gsap.set(singleXRef.current, { x: 0, y: 0, rotation: 0, scale: 1 });
+        if (xEntranceRef.current) {
+          gsap.set(xEntranceRef.current, { x: 0, y: 0, opacity: 1 });
+        }
         const xRect = singleXRef.current.getBoundingClientRect();
         const screenCenterX = window.innerWidth / 2;
         const screenCenterY = window.innerHeight / 2;
@@ -112,6 +117,11 @@ export default function IntroSequence() {
           anticipatePin: 1,
           onUpdate: (self) => {
             const p = self.progress;
+
+            // If user starts scrolling during initial entrance, fast-forward entrance instantly
+            if (p > 0.005 && entranceTl.isActive()) {
+              entranceTl.progress(1);
+            }
 
             // When scrolled fully (p >= 0.985), lock to inner webpage and launch incoming transition!
             if (p >= 0.985 && !isLockedRef.current) {
@@ -145,6 +155,75 @@ export default function IntroSequence() {
         gsap.set(whiteBloomRef.current, {
           opacity: 0,
         });
+      }
+
+      // ─────────────────────────────────────────────────────────────
+      // ENTRANCE SEQUENCE: "Bennett Hatchery Presents" -> "CATALYTIX" letter-by-letter -> "Built to Begin, Catalized to Scale"
+      // ─────────────────────────────────────────────────────────────
+      const validLetters = lettersRef.current.filter(Boolean);
+
+      const entranceTl = gsap.timeline({
+        delay: 0.15,
+      });
+
+      // 1. "Bennett Hatchery Presents" reveals smoothly
+      if (subtitleTopRef.current) {
+        entranceTl.fromTo(
+          subtitleTopRef.current,
+          { y: 22, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out' }
+        );
+      }
+
+      // 2. Letter-by-letter smooth animation down to up of "CATALYTIX"
+      if (validLetters.length > 0) {
+        entranceTl.fromTo(
+          validLetters,
+          { y: 60, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            stagger: 0.055,
+            ease: 'power4.out',
+          },
+          '-=0.2'
+        );
+      }
+
+      // The "X" completes the wordmark in sequence with the letters
+      if (xEntranceRef.current) {
+        entranceTl.fromTo(
+          xEntranceRef.current,
+          { y: 60, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            ease: 'power4.out',
+          },
+          '<+=0.35'
+        );
+      }
+
+      // 3. "Built to Begin, Catalized to Scale" reveals smoothly
+      if (subtitleBottomRef.current) {
+        entranceTl.fromTo(
+          subtitleBottomRef.current,
+          { y: 18, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out' },
+          '-=0.25'
+        );
+      }
+
+      // 4. Scroll prompt reveals
+      if (scrollPromptRef.current) {
+        entranceTl.fromTo(
+          scrollPromptRef.current,
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' },
+          '-=0.3'
+        );
       }
 
       // ─────────────────────────────────────────────────────────────
@@ -347,11 +426,10 @@ export default function IntroSequence() {
                 <div className="flex flex-col items-center">
                   <span
                     ref={subtitleTopRef}
-                    className="font-mono text-xs uppercase tracking-[0.4em] text-white/70 mb-4 inline-flex items-center gap-2"
+                    className="font-mono text-xs uppercase tracking-[0.35em] text-cyan-300/80 mb-4 inline-flex items-center gap-2"
                     style={{ willChange: 'transform, opacity' }}
                   >
-                    <Sparkles className="w-3.5 h-3.5 text-[#00F0FF] animate-pulse" />
-                    <span>SYSTEMS KINETIC PROTOCOL</span>
+                    Bennett Hatchery Presents
                   </span>
 
                   {/* Wordmark Row */}
@@ -370,7 +448,7 @@ export default function IntroSequence() {
                         }}
                       />
                       <span
-                        className="relative z-10 font-asimovian gradient-text-playful select-none inline-block"
+                        className="relative z-10 font-asimovian select-none inline-flex items-center"
                         style={{
                           fontSize: 'clamp(3.5rem, 8vw, 7.5rem)',
                           lineHeight: 1,
@@ -378,17 +456,37 @@ export default function IntroSequence() {
                           textTransform: 'uppercase',
                         }}
                       >
-                        CATALYTI
+                        {"CATALYTI".split("").map((letter, idx) => (
+                          <span
+                            key={idx}
+                            ref={(el) => {
+                              lettersRef.current[idx] = el;
+                            }}
+                            className="inline-block transform-gpu"
+                            style={{
+                              background: 'linear-gradient(135deg, #FF2E93 0%, #FF8A00 30%, #7cff67 60%, #00F0FF 100%)',
+                              backgroundSize: '800% 100%',
+                              backgroundPosition: `${(idx / 7) * 100}% 0%`,
+                              WebkitBackgroundClip: 'text',
+                              WebkitTextFillColor: 'transparent',
+                              willChange: 'transform, opacity',
+                            }}
+                          >
+                            {letter}
+                          </span>
+                        ))}
                       </span>
                     </div>
 
                     {/* THE WHITE "X": Starts in wordmark, oriented as X, flipped vertically & increased size, spins & expands on scroll! */}
                     <div
+                      ref={xEntranceRef}
                       className="inline-flex items-center justify-center select-none"
                       style={{
                         width: 'clamp(95px, 15vw, 195px)',
                         height: 'clamp(95px, 15vw, 195px)',
                         position: 'relative',
+                        willChange: 'transform, opacity',
                       }}
                     >
                       <div
@@ -421,8 +519,8 @@ export default function IntroSequence() {
                     style={{ willChange: 'transform, opacity' }}
                   >
                     <ShinyText
-                      text="SYNCHRONIZING ARCHITECTURE"
-                      color="rgba(255, 255, 255, 0.5)"
+                      text="Built to Begin, Catalized to Scale"
+                      color="rgba(255, 255, 255, 0.6)"
                       shineColor="#00F0FF"
                       speed={2.6}
                     />
