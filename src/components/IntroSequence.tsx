@@ -327,7 +327,7 @@ export default function IntroSequence() {
                         <span
                           className="relative z-10 font-asimovian select-none inline-flex items-center"
                           style={{
-                            fontSize: 'clamp(3.5rem, 8vw, 7.5rem)',
+                            fontSize: 'clamp(2.8rem, 7vw, 6.2rem)',
                             lineHeight: 1,
                             letterSpacing: '0.04em',
                             textTransform: 'uppercase',
@@ -355,8 +355,8 @@ export default function IntroSequence() {
                         ref={xEntranceRef}
                         className="inline-flex items-center justify-center select-none"
                         style={{
-                          width: 'clamp(95px, 15vw, 195px)',
-                          height: 'clamp(95px, 15vw, 195px)',
+                          width: 'clamp(70px, 9vw, 150px)',
+                          height: 'clamp(70px, 9vw, 150px)',
                           position: 'relative',
                           willChange: 'transform, opacity',
                         }}

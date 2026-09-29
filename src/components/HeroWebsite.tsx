@@ -296,30 +296,30 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
       sparkColor={['#00F0FF', '#FF2E93', '#7cff67', '#0284c7', '#d97706']}
       sparkCount={10}
       sparkRadius={24}
-      className="relative w-full min-h-screen bg-white text-slate-900 font-sans selection:bg-[#FF2E93] selection:text-white"
+      className="relative w-full min-h-screen bg-white text-slate-900 font-sans selection:bg-[#FF2E93] selection:text-white select-none"
     >
       {/* 2D Soft Tiles Grid Background on pure white */}
       <GridTilesBackground />
 
-      {/* Floating Top Header Navigation */}
-      <div className="fixed top-3 left-0 right-0 z-40 w-full px-3 sm:px-6 pointer-events-none">
+      {/* Floating Top Header Navigation (Fitted to 1:1 square canvas) */}
+      <div className="fixed top-2.5 left-0 right-0 z-40 w-full px-3 pointer-events-none">
         <LiquidGlass
           as="header"
           ref={headerRef}
           style={initialHiddenStyle}
-          className="liquid-glass-header w-full max-w-[1780px] mx-auto rounded-2xl px-5 sm:px-8 py-3.5 transition-all shadow-sm pointer-events-auto"
+          className="liquid-glass-header w-full max-w-[min(100vw,100vh)] mx-auto rounded-2xl px-4 sm:px-6 py-2.5 transition-all shadow-sm pointer-events-auto"
         >
           <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-8 lg:gap-12">
-              <Magnet padding={40} magnetStrength={4}>
+            <div className="flex items-center gap-6">
+              <Magnet padding={30} magnetStrength={4}>
                 <button
                   onClick={() => setPresentationStep(0)}
                   className="cursor-pointer text-left"
                 >
-                  <Wordmark size="md" colorScheme="playful" markFill="#0f172a" />
+                  <Wordmark size="sm" colorScheme="playful" markFill="#0f172a" />
                 </button>
               </Magnet>
-              <nav className="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600">
+              <nav className="hidden sm:flex items-center gap-5 text-xs font-semibold text-slate-600">
                 <button
                   onClick={() => setPresentationStep(0)}
                   className="hover:text-slate-950 transition-colors cursor-pointer"
@@ -348,13 +348,13 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
                   onClick={() => setPresentationStep(1)}
                   className="hover:text-slate-950 transition-colors cursor-pointer"
                 >
-                  SpaceTech Cohort
+                  SpaceTech
                 </button>
               </nav>
             </div>
 
-            <div className="flex items-center gap-3">
-              <Magnet padding={35} magnetStrength={3}>
+            <div className="flex items-center gap-2">
+              <Magnet padding={25} magnetStrength={3}>
                 <StarBorder
                   color="#00B4D8"
                   speed="4.5s"
@@ -366,10 +366,10 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
                     href="https://forms.gle/bennett-incubation"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-liquid-glass-tinted-cyan text-xs sm:text-sm !py-2.5 !px-5 inline-flex items-center gap-2"
+                    className="btn-liquid-glass-tinted-cyan text-xs !py-1.5 !px-3.5 inline-flex items-center gap-1.5"
                   >
-                    <span>Apply for Incubation</span>
-                    <Icons8 name="externalLink" size={14} color="0284C7" />
+                    <span>Apply</span>
+                    <Icons8 name="externalLink" size={12} color="0284C7" />
                   </LiquidGlass>
                 </StarBorder>
               </Magnet>
@@ -379,34 +379,34 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
       </div>
 
       {/* ─────────────────────────────────────────────────────────────
-          SLIDE 1: Hero Section & 4 Value Pillars Bento
-          Fit to full page viewport
+          SLIDE 1: Hero Section & 2x2 Value Pillars Bento
+          Tailored for 1:1 Square Display
           ───────────────────────────────────────────────────────────── */}
       <section
         id="overview"
         ref={overviewRef}
-        className="relative z-10 w-full min-h-screen flex flex-col justify-between max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 pt-24 sm:pt-28 pb-8 text-center"
+        className="relative z-10 w-full max-w-[min(100vw,100vh)] min-h-screen max-h-screen mx-auto px-4 sm:px-6 flex flex-col justify-between pt-16 sm:pt-20 pb-4 text-center overflow-hidden"
       >
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center my-auto">
           {/* Release Pill Badge */}
-          <div ref={heroBadgeRef} style={initialHiddenStyle} className="mb-4">
-            <Magnet padding={30} magnetStrength={3.5}>
-              <div className="badge-pill-light cursor-pointer hover:border-cyan-400/50 transition-all shadow-sm border border-slate-200/90">
-                <span className="flex h-2 w-2 rounded-full bg-[#16A34A] animate-pulse" />
-                <span className="text-slate-700">Bennett Hatchery Foundation // DPIIT-Recognized</span>
-                <span className="text-[#0284C7] font-bold flex items-center gap-1.5">
+          <div ref={heroBadgeRef} style={initialHiddenStyle} className="mb-2">
+            <Magnet padding={25} magnetStrength={3}>
+              <div className="badge-pill-light cursor-pointer hover:border-cyan-400/50 transition-all shadow-sm border border-slate-200/90 text-xs py-1 px-3">
+                <span className="flex h-1.5 w-1.5 rounded-full bg-[#16A34A] animate-pulse" />
+                <span className="text-slate-700">Bennett Hatchery Foundation // DPIIT</span>
+                <span className="text-[#0284C7] font-bold flex items-center gap-1">
                   <span>Cohort 2026</span>
-                  <Icons8 name="chevronRight" size={13} color="0284C7" />
+                  <Icons8 name="chevronRight" size={11} color="0284C7" />
                 </span>
               </div>
             </Magnet>
           </div>
 
-          {/* Big Widescreen Headline */}
+          {/* Widescreen Headline */}
           <h1
             ref={heroTitleRef}
             style={initialHiddenStyle}
-            className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight max-w-6xl leading-[1.05] mb-5 text-slate-950"
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight max-w-xl leading-[1.08] mb-2 text-slate-950"
           >
             Incubation Program{' '}
             <span className="font-asimovian gradient-text-playful inline-block">
@@ -417,7 +417,7 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
           <p
             ref={heroSubtitleRef}
             style={initialHiddenStyle}
-            className="max-w-4xl text-base sm:text-lg text-slate-600 font-normal mb-8 leading-relaxed"
+            className="max-w-lg text-xs sm:text-sm text-slate-600 font-normal mb-4 leading-relaxed"
           >
             A comprehensive institutional venture runway empowering early and growth-stage startups with seed capital,
             state-of-the-art makerspaces, marquee mentorship, and direct access to top-tier venture funds.
@@ -427,66 +427,66 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
           <div
             ref={heroCtaRef}
             style={initialHiddenStyle}
-            className="flex flex-wrap items-center justify-center gap-5 mb-8"
+            className="flex flex-wrap items-center justify-center gap-3 mb-4"
           >
-            <Magnet padding={45} magnetStrength={3}>
-              <StarBorder color="#00F0FF" speed="3.5s" thickness={2} className="!rounded-full shadow-lg">
+            <Magnet padding={35} magnetStrength={3}>
+              <StarBorder color="#00F0FF" speed="3.5s" thickness={2} className="!rounded-full shadow-md">
                 <LiquidGlass
                   as="a"
                   displacement={true}
                   href="https://forms.gle/bennett-incubation"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-liquid-glass-tinted-cyan !py-3.5 !px-9 text-base shadow-md inline-flex items-center gap-2.5"
+                  className="btn-liquid-glass-tinted-cyan !py-2.5 !px-6 text-xs sm:text-sm shadow-sm inline-flex items-center gap-2"
                 >
-                  <Icons8 name="rocket" size={16} color="090D16" />
+                  <Icons8 name="rocket" size={14} color="090D16" />
                   <span>Apply for Incubation</span>
                 </LiquidGlass>
               </StarBorder>
             </Magnet>
 
-            <Magnet padding={40} magnetStrength={3}>
+            <Magnet padding={30} magnetStrength={3}>
               <LiquidGlass
                 as="a"
                 href="https://bennett-university-hatchery.vercel.app/portfolio"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-liquid-glass-crystal !py-3.5 !px-9 text-base border border-slate-200/90 inline-flex items-center gap-2.5 shadow-sm"
+                className="btn-liquid-glass-crystal !py-2.5 !px-6 text-xs sm:text-sm border border-slate-200/90 inline-flex items-center gap-2 shadow-sm"
               >
-                <Icons8 name="briefcase" size={15} color="0284C7" />
-                <span>Explore 80+ Incubated Startups</span>
+                <Icons8 name="briefcase" size={13} color="0284C7" />
+                <span>Explore 80+ Startups</span>
               </LiquidGlass>
             </Magnet>
           </div>
         </div>
 
-        {/* 4-Column Bento Grid: Core Value Pillars */}
+        {/* 2x2 Bento Grid: Core Value Pillars (Perfection for 1:1 Square Canvas!) */}
         <div
           ref={heroPillarsRef}
           style={initialHiddenStyle}
-          className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 xl:gap-5 text-left mb-2"
+          className="w-full grid grid-cols-2 gap-2.5 sm:gap-3 text-left mb-2"
         >
           {/* Pillar 1 */}
           <SpotlightCard
             spotlightColor="rgba(0, 180, 216, 0.16)"
             borderGlowColor="rgba(0, 180, 216, 0.4)"
-            className="rounded-3xl h-full border border-slate-200/80 shadow-sm"
+            className="rounded-2xl h-full border border-slate-200/80 shadow-sm"
           >
-            <LiquidGlass className="liquid-glass-card p-5 xl:p-6 rounded-3xl min-h-[165px] flex flex-col justify-between h-full border border-slate-200/90">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono text-[#0284C7] font-bold uppercase tracking-wider">
+            <LiquidGlass className="liquid-glass-card p-3 sm:p-4 rounded-2xl min-h-[95px] flex flex-col justify-between h-full border border-slate-200/90">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] font-mono text-[#0284C7] font-bold uppercase tracking-wider">
                   Framework
                 </span>
-                <div className="w-8 h-8 rounded-xl bg-cyan-50 border border-cyan-200/60 flex items-center justify-center">
-                  <Icons8 name="layers" size={16} color="0284C7" />
+                <div className="w-6 h-6 rounded-lg bg-cyan-50 border border-cyan-200/60 flex items-center justify-center">
+                  <Icons8 name="layers" size={13} color="0284C7" />
                 </div>
               </div>
               <div>
-                <h3 className="text-2xl font-extrabold text-slate-900 mb-1 flex items-baseline gap-1.5">
+                <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 flex items-baseline gap-1">
                   <CountUp to={5} duration={1.2} />
                   <span>Modules</span>
                 </h3>
-                <p className="text-xs text-slate-500 font-medium">Structured Roadmap // TRL 1 to 9</p>
+                <p className="text-[10px] text-slate-500 font-medium truncate">Roadmap // TRL 1 to 9</p>
               </div>
             </LiquidGlass>
           </SpotlightCard>
@@ -495,24 +495,24 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
           <SpotlightCard
             spotlightColor="rgba(22, 163, 74, 0.16)"
             borderGlowColor="rgba(22, 163, 74, 0.4)"
-            className="rounded-3xl h-full border border-slate-200/80 shadow-sm"
+            className="rounded-2xl h-full border border-slate-200/80 shadow-sm"
           >
-            <LiquidGlass className="liquid-glass-card p-5 xl:p-6 rounded-3xl min-h-[165px] flex flex-col justify-between h-full border border-slate-200/90">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono text-[#16A34A] font-bold uppercase tracking-wider">
+            <LiquidGlass className="liquid-glass-card p-3 sm:p-4 rounded-2xl min-h-[95px] flex flex-col justify-between h-full border border-slate-200/90">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] font-mono text-[#16A34A] font-bold uppercase tracking-wider">
                   Duration
                 </span>
-                <div className="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200/60 flex items-center justify-center">
-                  <Icons8 name="zap" size={16} color="16A34A" />
+                <div className="w-6 h-6 rounded-lg bg-emerald-50 border border-emerald-200/60 flex items-center justify-center">
+                  <Icons8 name="zap" size={13} color="16A34A" />
                 </div>
               </div>
               <div>
-                <h3 className="text-2xl font-extrabold text-slate-900 mb-1 flex items-baseline gap-1.5">
+                <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 flex items-baseline gap-1">
                   <span>Upto</span>
                   <CountUp to={12} duration={1.5} />
                   <span>Months</span>
                 </h3>
-                <p className="text-xs text-slate-500 font-medium">Acceleration Cycle // Makerspace Labs</p>
+                <p className="text-[10px] text-slate-500 font-medium truncate">Acceleration // Makerspace</p>
               </div>
             </LiquidGlass>
           </SpotlightCard>
@@ -521,23 +521,23 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
           <SpotlightCard
             spotlightColor="rgba(219, 39, 119, 0.16)"
             borderGlowColor="rgba(219, 39, 119, 0.4)"
-            className="rounded-3xl h-full border border-slate-200/80 shadow-sm"
+            className="rounded-2xl h-full border border-slate-200/80 shadow-sm"
           >
-            <LiquidGlass className="liquid-glass-card p-5 xl:p-6 rounded-3xl min-h-[165px] flex flex-col justify-between h-full border border-slate-200/90">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono text-[#DB2777] font-bold uppercase tracking-wider">
+            <LiquidGlass className="liquid-glass-card p-3 sm:p-4 rounded-2xl min-h-[95px] flex flex-col justify-between h-full border border-slate-200/90">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] font-mono text-[#DB2777] font-bold uppercase tracking-wider">
                   Mentorship
                 </span>
-                <div className="w-8 h-8 rounded-xl bg-pink-50 border border-pink-200/60 flex items-center justify-center">
-                  <Icons8 name="sparkles" size={16} color="DB2777" />
+                <div className="w-6 h-6 rounded-lg bg-pink-50 border border-pink-200/60 flex items-center justify-center">
+                  <Icons8 name="sparkles" size={13} color="DB2777" />
                 </div>
               </div>
               <div>
-                <h3 className="text-2xl font-extrabold text-slate-900 mb-1 flex items-baseline gap-1.5">
+                <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 flex items-baseline gap-1">
                   <CountUp to={120} duration={1.8} suffix="+" />
                   <span>Mentors</span>
                 </h3>
-                <p className="text-xs text-slate-500 font-medium">Fortnightly Progress Audits</p>
+                <p className="text-[10px] text-slate-500 font-medium truncate">Fortnightly Progress Audits</p>
               </div>
             </LiquidGlass>
           </SpotlightCard>
@@ -546,22 +546,22 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
           <SpotlightCard
             spotlightColor="rgba(217, 119, 6, 0.16)"
             borderGlowColor="rgba(217, 119, 6, 0.4)"
-            className="rounded-3xl h-full border border-slate-200/80 shadow-sm"
+            className="rounded-2xl h-full border border-slate-200/80 shadow-sm"
           >
-            <LiquidGlass className="liquid-glass-card p-5 xl:p-6 rounded-3xl min-h-[165px] flex flex-col justify-between h-full border border-slate-200/90">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono text-[#D97706] font-bold uppercase tracking-wider">
+            <LiquidGlass className="liquid-glass-card p-3 sm:p-4 rounded-2xl min-h-[95px] flex flex-col justify-between h-full border border-slate-200/90">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] font-mono text-[#D97706] font-bold uppercase tracking-wider">
                   Tech Readiness
                 </span>
-                <div className="w-8 h-8 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center justify-center">
-                  <Icons8 name="target" size={16} color="D97706" />
+                <div className="w-6 h-6 rounded-lg bg-amber-50 border border-amber-200/60 flex items-center justify-center">
+                  <Icons8 name="target" size={13} color="D97706" />
                 </div>
               </div>
               <div>
-                <h3 className="text-2xl font-extrabold text-slate-900 mb-1">
+                <h3 className="text-lg sm:text-xl font-extrabold text-slate-900">
                   TRL 3 - 6
                 </h3>
-                <p className="text-xs text-slate-500 font-medium">IP &amp; Tech Validation // SISFS Grants</p>
+                <p className="text-[10px] text-slate-500 font-medium truncate">IP &amp; SISFS Grants</p>
               </div>
             </LiquidGlass>
           </SpotlightCard>
@@ -570,45 +570,43 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
 
       {/* ─────────────────────────────────────────────────────────────
           SLIDE 2: Institutional Venture Engine + SpaceTech Flagship
-          All integrated into one clean full-page slide!
-          SpaceTech pulled up slightly so everything fits comfortably.
+          All integrated into one 1:1 Square View
+          SpaceTech pulled up tightly so everything fits seamlessly.
           ───────────────────────────────────────────────────────────── */}
       <section
         id="engine"
         ref={engineRef}
-        className="relative z-10 w-full min-h-screen flex flex-col justify-center max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 py-16 border-t border-slate-200/90"
+        className="relative z-10 w-full max-w-[min(100vw,100vh)] min-h-screen max-h-screen mx-auto px-4 sm:px-6 flex flex-col justify-center py-4 border-t border-slate-200/90 overflow-hidden"
       >
-        <div className="space-y-4">
-          {/* Row 1: Engine Thesis (7 cols) + Impact Telemetry (5 cols) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 xl:gap-5 items-stretch">
+        <div className="space-y-2.5 sm:space-y-3">
+          {/* Row 1: Engine Thesis & Impact Telemetry */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 items-stretch">
             {/* Left Engine Thesis */}
             <SpotlightCard
               spotlightColor="rgba(2, 132, 199, 0.12)"
               borderGlowColor="rgba(2, 132, 199, 0.35)"
-              className="lg:col-span-7 rounded-3xl border border-slate-200/90 shadow-sm"
+              className="rounded-2xl border border-slate-200/90 shadow-sm"
             >
-              <LiquidGlass className="liquid-glass-card p-6 sm:p-8 rounded-3xl flex flex-col justify-between h-full border border-slate-200/90">
-                <div className="space-y-4">
-                  <div className="badge-pill-light text-[#0284C7] font-bold inline-flex items-center gap-2 border border-slate-200/90 shadow-sm">
-                    <Icons8 name="building" size={14} color="0284C7" /> Institutional Venture Engine
+              <LiquidGlass className="liquid-glass-card p-4 sm:p-5 rounded-2xl flex flex-col justify-between h-full border border-slate-200/90">
+                <div className="space-y-2">
+                  <div className="badge-pill-light text-[#0284C7] font-bold inline-flex items-center gap-1.5 border border-slate-200/90 shadow-sm text-[11px] py-0.5 px-2.5">
+                    <Icons8 name="building" size={12} color="0284C7" /> Institutional Engine
                   </div>
-                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-tight text-slate-950">
+                  <h2 className="text-lg sm:text-xl font-extrabold leading-tight text-slate-950">
                     Building Scalable Enterprises with{' '}
                     <span className="gradient-text-cool">Deep Support</span>.
                   </h2>
-                  <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                  <p className="text-slate-600 text-[11px] sm:text-xs leading-relaxed">
                     The Bennett Hatchery Foundation (BHF) is a DPIIT-recognized, world-class incubator designed to take
                     high-potential concepts and early-stage ventures from TRL 1 validation all the way to commercial growth.
                   </p>
-                  <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                    Operating with government-backed funding mechanisms like the{' '}
-                    <strong className="text-slate-900">Startup India Seed Fund Scheme (SISFS)</strong> and{' '}
-                    <strong className="text-slate-900">UP StartinUP</strong>, we combine academic rigor, makerspace capabilities,
-                    and investor networks to de-risk venture scaling.
+                  <p className="text-slate-600 text-[10px] sm:text-[11px] leading-relaxed">
+                    Operating with funding like <strong className="text-slate-900">SISFS</strong> and{' '}
+                    <strong className="text-slate-900">UP StartinUP</strong>, we de-risk venture scaling with academic rigor and makerspaces.
                   </p>
                 </div>
 
-                <div className="pt-4 flex flex-wrap gap-2">
+                <div className="pt-2 flex flex-wrap gap-1.5">
                   {[
                     '✓ DPIIT Recognized',
                     '✓ SISFS Partner (Startup India)',
@@ -617,7 +615,7 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
                   ].map((chip, i) => (
                     <span
                       key={i}
-                      className="px-3 py-1 rounded-full bg-slate-100/90 border border-slate-200 text-xs font-mono font-semibold text-slate-800 cursor-default"
+                      className="px-2 py-0.5 rounded-full bg-slate-100/90 border border-slate-200 text-[10px] font-mono font-semibold text-slate-800 cursor-default"
                     >
                       {chip}
                     </span>
@@ -630,53 +628,53 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
             <SpotlightCard
               spotlightColor="rgba(0, 240, 255, 0.16)"
               borderGlowColor="rgba(0, 240, 255, 0.4)"
-              className="lg:col-span-5 rounded-3xl"
+              className="rounded-2xl"
             >
-              <LiquidGlass className="liquid-glass-card p-6 sm:p-7 rounded-3xl flex flex-col justify-between h-full border border-cyan-200/60 bg-gradient-to-br from-white via-slate-50/70 to-cyan-50/30">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                    <span className="text-xs font-mono text-slate-400 font-bold uppercase tracking-wider">
-                      Hatchery Impact Telemetry
+              <LiquidGlass className="liquid-glass-card p-4 sm:p-5 rounded-2xl flex flex-col justify-between h-full border border-cyan-200/60 bg-gradient-to-br from-white via-slate-50/70 to-cyan-50/30">
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
+                    <span className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">
+                      Impact Telemetry
                     </span>
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] animate-pulse" />
+                    <span className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse" />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="p-3.5 rounded-2xl bg-white/90 border border-slate-200/80 shadow-sm">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="p-2.5 rounded-xl bg-white/90 border border-slate-200/80 shadow-sm">
                       <CountUp
                         to={80}
                         duration={2}
                         suffix="+"
-                        className="font-mono text-3xl sm:text-4xl font-extrabold text-[#00B4D8] block mb-0.5"
+                        className="font-mono text-2xl sm:text-3xl font-extrabold text-[#00B4D8] block"
                       />
-                      <h4 className="text-xs font-bold text-slate-900">Startups Incubated</h4>
-                      <p className="text-[10px] text-slate-500">DeepTech, SaaS &amp; Space</p>
+                      <h4 className="text-[11px] font-bold text-slate-900">Startups</h4>
+                      <p className="text-[9px] text-slate-500">DeepTech &amp; Space</p>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-white/90 border border-slate-200/80 shadow-sm">
+                    <div className="p-2.5 rounded-xl bg-white/90 border border-slate-200/80 shadow-sm">
                       <CountUp
                         to={2}
                         duration={1.8}
                         prefix="₹"
                         suffix="+ Cr"
-                        className="font-mono text-3xl sm:text-4xl font-extrabold text-[#16A34A] block mb-0.5"
+                        className="font-mono text-2xl sm:text-3xl font-extrabold text-[#16A34A] block"
                       />
-                      <h4 className="text-xs font-bold text-slate-900">Grants Disbursed</h4>
-                      <p className="text-[10px] text-slate-500">Non-dilutive seed funds</p>
+                      <h4 className="text-[11px] font-bold text-slate-900">Grants</h4>
+                      <p className="text-[9px] text-slate-500">Non-dilutive seed</p>
                     </div>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-white/70 border border-slate-200/80">
-                    <p className="text-xs sm:text-sm italic text-slate-700 mb-1.5 leading-relaxed">
-                      &ldquo;A catalyst for disruptive innovation — turning ambitious ideas into market leaders with world-class labs, capital velocity, and governance.&rdquo;
+                  <div className="p-2.5 rounded-xl bg-white/70 border border-slate-200/80">
+                    <p className="text-[11px] italic text-slate-700 leading-snug">
+                      &ldquo;A catalyst for disruptive innovation — turning ambitious ideas into market leaders.&rdquo;
                     </p>
-                    <span className="text-[11px] font-mono text-[#0284C7] font-semibold block">
-                      — Bennett Hatchery Foundation Advisory Board
+                    <span className="text-[10px] font-mono text-[#0284C7] font-semibold block mt-1">
+                      — BHF Advisory Board
                     </span>
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-mono text-slate-500">
+                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] font-mono text-slate-500">
                   <ShinyText
                     text="STATUS: ADMISSIONS OPEN"
                     speed={3}
@@ -690,101 +688,75 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
             </SpotlightCard>
           </div>
 
-          {/* Row 2: Full-Width Telemetry Strip (4 items) */}
-          <LiquidGlass className="liquid-glass-card p-4 rounded-2xl w-full grid grid-cols-2 sm:grid-cols-4 gap-3 border border-slate-200/90 shadow-sm">
-            <SpotlightCard
-              spotlightColor="rgba(0, 180, 216, 0.12)"
-              borderGlowColor="rgba(0, 180, 216, 0.3)"
-              className="p-2.5 rounded-xl border border-slate-200/70"
-            >
-              <div className="flex items-center gap-3">
-                <Icons8 name="building" size={18} color="00B4D8" />
-                <div>
-                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Governance</span>
-                  <span className="text-xs font-bold text-slate-900">Bennett University &amp; CIE</span>
-                </div>
+          {/* Row 2: Telemetry Strip (4 items) */}
+          <LiquidGlass className="liquid-glass-card p-2.5 rounded-xl w-full grid grid-cols-4 gap-2 border border-slate-200/90 shadow-sm">
+            <div className="flex items-center gap-2 p-1.5 rounded-lg bg-slate-50 border border-slate-200/60">
+              <Icons8 name="building" size={14} color="00B4D8" />
+              <div className="truncate">
+                <span className="text-[9px] font-mono text-slate-400 uppercase block truncate">Governance</span>
+                <span className="text-[11px] font-bold text-slate-900 truncate block">Bennett &amp; CIE</span>
               </div>
-            </SpotlightCard>
+            </div>
 
-            <SpotlightCard
-              spotlightColor="rgba(22, 163, 74, 0.12)"
-              borderGlowColor="rgba(22, 163, 74, 0.3)"
-              className="p-2.5 rounded-xl border border-slate-200/70"
-            >
-              <div className="flex items-center gap-3">
-                <Icons8 name="cpu" size={18} color="16A34A" />
-                <div>
-                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Makerspace Suite</span>
-                  <span className="text-xs font-bold text-slate-900">12+ Engineering Labs</span>
-                </div>
+            <div className="flex items-center gap-2 p-1.5 rounded-lg bg-slate-50 border border-slate-200/60">
+              <Icons8 name="cpu" size={14} color="16A34A" />
+              <div className="truncate">
+                <span className="text-[9px] font-mono text-slate-400 uppercase block truncate">Makerspace</span>
+                <span className="text-[11px] font-bold text-slate-900 truncate block">12+ Labs</span>
               </div>
-            </SpotlightCard>
+            </div>
 
-            <SpotlightCard
-              spotlightColor="rgba(219, 39, 119, 0.12)"
-              borderGlowColor="rgba(219, 39, 119, 0.3)"
-              className="p-2.5 rounded-xl border border-slate-200/70"
-            >
-              <div className="flex items-center gap-3">
-                <Icons8 name="trendingUp" size={18} color="DB2777" />
-                <div>
-                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Active Cohort</span>
-                  <span className="text-xs font-bold text-slate-900">Rolling Quarterly Intake</span>
-                </div>
+            <div className="flex items-center gap-2 p-1.5 rounded-lg bg-slate-50 border border-slate-200/60">
+              <Icons8 name="trendingUp" size={14} color="DB2777" />
+              <div className="truncate">
+                <span className="text-[9px] font-mono text-slate-400 uppercase block truncate">Active Cohort</span>
+                <span className="text-[11px] font-bold text-slate-900 truncate block">Rolling Intake</span>
               </div>
-            </SpotlightCard>
+            </div>
 
-            <SpotlightCard
-              spotlightColor="rgba(217, 119, 6, 0.12)"
-              borderGlowColor="rgba(217, 119, 6, 0.3)"
-              className="p-2.5 rounded-xl border border-slate-200/70"
-            >
-              <div className="flex items-center gap-3">
-                <Icons8 name="shield" size={18} color="D97706" />
-                <div>
-                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Recognition</span>
-                  <span className="text-xs font-bold text-slate-900">DPIIT &amp; Startup India</span>
-                </div>
+            <div className="flex items-center gap-2 p-1.5 rounded-lg bg-slate-50 border border-slate-200/60">
+              <Icons8 name="shield" size={14} color="D97706" />
+              <div className="truncate">
+                <span className="text-[9px] font-mono text-slate-400 uppercase block truncate">Recognition</span>
+                <span className="text-[11px] font-bold text-slate-900 truncate block">DPIIT India</span>
               </div>
-            </SpotlightCard>
+            </div>
           </LiquidGlass>
 
-          {/* Row 3: SpaceTech Cohort Spotlight (Pulled up tightly to fit in one page) */}
+          {/* Row 3: SpaceTech Cohort Spotlight (Pulled up tightly) */}
           <SpotlightCard
             spotlightColor="rgba(255, 46, 147, 0.16)"
             borderGlowColor="rgba(255, 46, 147, 0.4)"
-            className="rounded-3xl border border-slate-200/90 shadow-md"
+            className="rounded-2xl border border-slate-200/90 shadow-sm"
           >
-            <LiquidGlass className="liquid-glass-card p-5 sm:p-7 rounded-3xl relative overflow-hidden border border-cyan-300/60 shadow-md">
-              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
-                <div className="space-y-2 max-w-4xl">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-100/80 border border-cyan-200 text-xs font-mono font-bold text-[#0284C7]">
-                    <span className="w-2 h-2 rounded-full bg-[#0284C7] animate-pulse" />
-                    <span>SpaceTech Flagship // Cohort 2026 Active</span>
+            <LiquidGlass className="liquid-glass-card p-3.5 sm:p-4 rounded-2xl relative overflow-hidden border border-cyan-300/60 shadow-sm">
+              <div className="flex items-center justify-between gap-3">
+                <div className="space-y-1 max-w-md">
+                  <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-cyan-100/80 border border-cyan-200 text-[10px] font-mono font-bold text-[#0284C7]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#0284C7] animate-pulse" />
+                    <span>SpaceTech Flagship // 2026</span>
                   </div>
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-950 tracking-tight">
+                  <h3 className="text-base sm:text-lg font-extrabold text-slate-950 tracking-tight leading-snug">
                     Bennett Hatchery SpaceTech Cohort
                   </h3>
-                  <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                    India&apos;s space sector is opening up. The next opportunity is to build. The SpaceTech Venture Cohort is
-                    a dedicated venture-building platform for students, researchers, and early-stage innovators to explore problems,
-                    validate technologies, and build scalable deeptech enterprises.
+                  <p className="text-slate-600 text-[10px] sm:text-[11px] leading-relaxed line-clamp-2">
+                    India&apos;s space sector is opening up. The SpaceTech Venture Cohort is a dedicated venture-building platform for innovators to validate technologies and build deeptech enterprises.
                   </p>
                 </div>
 
-                <Magnet padding={35} magnetStrength={3}>
-                  <StarBorder color="#FF2E93" speed="3.8s" thickness={2} className="!rounded-full shadow-md shrink-0 border border-pink-200/60">
+                <Magnet padding={25} magnetStrength={3}>
+                  <StarBorder color="#FF2E93" speed="3.8s" thickness={2} className="!rounded-full shadow-sm shrink-0 border border-pink-200/60">
                     <LiquidGlass
                       as="a"
                       displacement={true}
                       href="https://bennett-university-hatchery.vercel.app/programs/spacetech"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn-liquid-glass-tinted-pink whitespace-nowrap !py-3 !px-6 text-sm shadow-md shrink-0 block"
+                      className="btn-liquid-glass-tinted-pink whitespace-nowrap !py-2 !px-4 text-xs shadow-sm shrink-0 block"
                     >
-                      <span className="inline-flex items-center gap-2">
-                        <span>Explore the Space Cohort</span>
-                        <Icons8 name="arrowRight" size={14} color="FFFFFF" />
+                      <span className="inline-flex items-center gap-1.5">
+                        <span>Explore Space Cohort</span>
+                        <Icons8 name="arrowRight" size={12} color="FFFFFF" />
                       </span>
                     </LiquidGlass>
                   </StarBorder>
@@ -797,49 +769,46 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
 
       {/* ─────────────────────────────────────────────────────────────
           SLIDE 3: The CatalytiX Venture Curriculum
-          Interactive 5 Modules:
-          - Each left-click advances module: M1 -> M2 -> M3 -> M4 -> M5
-          - After 5th module, next click scrolls to Slide 4 (Lifecycle)
+          Interactive 5 Modules in 1:1 Square
           ───────────────────────────────────────────────────────────── */}
       <section
         id="curriculum"
         ref={curriculumRef}
-        className="relative z-10 w-full min-h-screen flex flex-col justify-center max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 py-16 border-t border-slate-200/90"
+        className="relative z-10 w-full max-w-[min(100vw,100vh)] min-h-screen max-h-screen mx-auto px-4 sm:px-6 flex flex-col justify-center py-4 border-t border-slate-200/90 overflow-hidden"
       >
-        <div className="text-center mb-8">
-          <div className="badge-pill-light mb-3 text-[#16A34A] font-bold inline-flex items-center gap-2 border border-slate-200/90 shadow-sm">
-            <Icons8 name="layers" size={14} color="16A34A" /> TRL 1 - 9 PIPELINE // Structured Roadmap
+        <div className="text-center mb-4">
+          <div className="badge-pill-light mb-1.5 text-[#16A34A] font-bold inline-flex items-center gap-1.5 border border-slate-200/90 shadow-sm text-xs py-0.5 px-3">
+            <Icons8 name="layers" size={12} color="16A34A" /> TRL 1 - 9 PIPELINE // Roadmap
           </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold mb-3 text-slate-950">
+          <h2 className="text-2xl sm:text-3xl font-extrabold mb-1 text-slate-950">
             The <span className="gradient-text-playful">CatalytiX</span> Venture Curriculum
           </h2>
-          <p className="text-slate-600 max-w-3xl mx-auto text-sm sm:text-base leading-relaxed">
-            A 5-stage progressive curriculum guiding founders from MVP prototyping and deeptech validation to traction and scale.
+          <p className="text-slate-600 max-w-md mx-auto text-xs leading-relaxed">
+            A 5-stage progressive curriculum guiding founders from MVP prototyping to traction and scale.
           </p>
         </div>
 
         {/* 5 Module Selector Tabs */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8 w-full">
+        <div className="grid grid-cols-5 gap-1.5 sm:gap-2 mb-4 w-full">
           {curriculumModules.map((m, idx) => (
-            <Magnet key={idx} padding={15} magnetStrength={4} wrapperClassName="w-full">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActiveModule(idx + 1);
-                  setPresentationStep(idx + 2);
-                }}
-                className={`w-full p-3.5 rounded-2xl font-mono text-xs sm:text-sm font-semibold transition-all cursor-pointer text-left flex flex-col justify-between min-h-[78px] border ${
-                  activeModule === idx + 1
-                    ? 'bg-white text-slate-950 border-slate-300 shadow-md ring-2 ring-cyan-400/40'
-                    : 'bg-slate-100/90 text-slate-600 hover:text-slate-900 border-slate-200/90 hover:bg-slate-200/60'
-                }`}
-              >
-                <span style={{ color: m.color }} className="font-bold text-xs uppercase tracking-wider block">
-                  MODULE {m.num}
-                </span>
-                <span className="text-xs truncate font-medium text-slate-800">{m.shortTitle}</span>
-              </button>
-            </Magnet>
+            <button
+              key={idx}
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveModule(idx + 1);
+                setPresentationStep(idx + 2);
+              }}
+              className={`p-2 rounded-xl font-mono text-[10px] sm:text-xs font-semibold transition-all cursor-pointer text-left flex flex-col justify-between min-h-[60px] border ${
+                activeModule === idx + 1
+                  ? 'bg-white text-slate-950 border-slate-300 shadow-sm ring-2 ring-cyan-400/40'
+                  : 'bg-slate-100/90 text-slate-600 hover:text-slate-900 border-slate-200/90 hover:bg-slate-200/60'
+              }`}
+            >
+              <span style={{ color: m.color }} className="font-bold text-[9px] uppercase tracking-wider block">
+                MOD {m.num}
+              </span>
+              <span className="text-[10px] truncate font-medium text-slate-800">{m.shortTitle}</span>
+            </button>
           ))}
         </div>
 
@@ -850,44 +819,44 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
             <SpotlightCard
               spotlightColor={`${mod.color}1e`}
               borderGlowColor={`${mod.color}55`}
-              className="rounded-3xl w-full border border-slate-200/90 shadow-md"
+              className="rounded-2xl w-full border border-slate-200/90 shadow-sm"
             >
-              <LiquidGlass className="liquid-glass-card p-6 sm:p-10 rounded-3xl border border-slate-200/90 shadow-lg w-full min-h-[360px] flex flex-col justify-between">
+              <LiquidGlass className="liquid-glass-card p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-md w-full flex flex-col justify-between">
                 <div>
-                  <div className="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-slate-100 mb-6">
+                  <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-100 mb-4">
                     <div>
                       <span
-                        className="font-mono text-xs uppercase tracking-widest px-3 py-1 rounded-full bg-slate-100 font-bold mr-3 inline-block border border-slate-200/70"
+                        className="font-mono text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-100 font-bold mr-2 inline-block border border-slate-200/70"
                         style={{ color: mod.color }}
                       >
                         MODULE {mod.num}
                       </span>
-                      <span className="font-mono text-xs text-slate-500 uppercase tracking-wider font-semibold">
+                      <span className="font-mono text-[10px] text-slate-500 uppercase font-semibold">
                         {mod.tag}
                       </span>
-                      <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-950 mt-1.5">
+                      <h3 className="text-lg sm:text-xl font-extrabold text-slate-950 mt-1">
                         {mod.title}
                       </h3>
                     </div>
 
                     <div className="text-right">
-                      <span className="text-xs font-mono text-slate-400 block font-semibold">PRIMARY FOCUS AREA</span>
-                      <span className="text-sm sm:text-base font-bold text-slate-800">
+                      <span className="text-[9px] font-mono text-slate-400 block font-semibold">PRIMARY FOCUS</span>
+                      <span className="text-xs font-bold text-slate-800">
                         {mod.focus}
                       </span>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
                     {/* Masterclasses */}
-                    <div className="space-y-3">
-                      <h4 className="font-mono text-xs uppercase tracking-wider text-slate-500 font-bold flex items-center gap-2">
-                        <Icons8 name="terminal" size={15} color="00B4D8" /> Masterclasses
+                    <div className="space-y-1.5">
+                      <h4 className="font-mono text-[10px] uppercase tracking-wider text-slate-500 font-bold flex items-center gap-1.5">
+                        <Icons8 name="terminal" size={13} color="00B4D8" /> Masterclasses
                       </h4>
-                      <ul className="space-y-2">
+                      <ul className="space-y-1">
                         {mod.masterclasses.map((item, i) => (
-                          <li key={i} className="text-xs sm:text-sm text-slate-700 flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#00B4D8]" />
+                          <li key={i} className="text-[11px] text-slate-700 flex items-center gap-1.5">
+                            <span className="w-1 h-1 rounded-full bg-[#00B4D8]" />
                             {item}
                           </li>
                         ))}
@@ -895,15 +864,15 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
                     </div>
 
                     {/* Workshops / Activities */}
-                    <div className="space-y-3">
-                      <h4 className="font-mono text-xs uppercase tracking-wider text-slate-500 font-bold flex items-center gap-2">
-                        <Icons8 name="activity" size={15} color="16A34A" /> Workshops &amp; Sprints
+                    <div className="space-y-1.5">
+                      <h4 className="font-mono text-[10px] uppercase tracking-wider text-slate-500 font-bold flex items-center gap-1.5">
+                        <Icons8 name="activity" size={13} color="16A34A" /> Workshops &amp; Sprints
                       </h4>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1">
                         {mod.activities.map((item, i) => (
                           <span
                             key={i}
-                            className="px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-mono font-medium text-slate-700"
+                            className="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-[10px] font-mono font-medium text-slate-700"
                           >
                             {item}
                           </span>
@@ -912,22 +881,22 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
                     </div>
 
                     {/* Review & Deliverable */}
-                    <div className="space-y-3">
-                      <h4 className="font-mono text-xs uppercase tracking-wider text-slate-500 font-bold flex items-center gap-2">
-                        <Icons8 name="shield" size={15} color="D91B74" /> Milestone Review Gate
+                    <div className="space-y-1.5">
+                      <h4 className="font-mono text-[10px] uppercase tracking-wider text-slate-500 font-bold flex items-center gap-1.5">
+                        <Icons8 name="shield" size={13} color="D91B74" /> Review Gate
                       </h4>
-                      <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/90 shadow-sm">
-                        <p className="text-xs font-semibold text-slate-800 mb-1">Evaluation Gate:</p>
-                        <p className="text-xs text-slate-600 leading-relaxed">{mod.review}</p>
+                      <div className="p-2 rounded-lg bg-slate-50 border border-slate-200/90 shadow-sm">
+                        <p className="text-[10px] font-semibold text-slate-800">Gate:</p>
+                        <p className="text-[10px] text-slate-600 leading-snug">{mod.review}</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Policy Footer Notes */}
-                <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs font-mono text-slate-500">
-                  <span>• Program can be renewed subject to approval from BHF governance</span>
-                  <span>• Progress to next stage depends on current stage completion &amp; diagnostic audit</span>
+                <div className="pt-2.5 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 text-[10px] font-mono text-slate-500">
+                  <span>• Subject to approval from BHF governance</span>
+                  <span>• Progress depends on stage completion &amp; audit</span>
                 </div>
               </LiquidGlass>
             </SpotlightCard>
@@ -937,73 +906,73 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
 
       {/* ─────────────────────────────────────────────────────────────
           SLIDE 4: The 4-Stage Incubation Lifecycle
-          Fit to full page viewport
+          Tailored as a 2x2 Bento Grid for 1:1 Square
           ───────────────────────────────────────────────────────────── */}
       <section
         id="lifecycle"
         ref={lifecycleRef}
-        className="relative z-10 w-full min-h-screen flex flex-col justify-center max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 py-16 border-t border-slate-200/90"
+        className="relative z-10 w-full max-w-[min(100vw,100vh)] min-h-screen max-h-screen mx-auto px-4 sm:px-6 flex flex-col justify-center py-4 border-t border-slate-200/90 overflow-hidden"
       >
-        <div className="text-center mb-10">
-          <div className="badge-pill-light mb-3 text-[#0284C7] font-bold inline-flex items-center gap-2 border border-slate-200/90 shadow-sm">
-            <Icons8 name="compass" size={14} color="0284C7" /> Structured Timeline // Quarterly Rolling Admissions
+        <div className="text-center mb-3">
+          <div className="badge-pill-light mb-1.5 text-[#0284C7] font-bold inline-flex items-center gap-1.5 border border-slate-200/90 shadow-sm text-xs py-0.5 px-3">
+            <Icons8 name="compass" size={12} color="0284C7" /> Timeline // Admissions
           </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold mb-3 text-slate-950">
+          <h2 className="text-2xl sm:text-3xl font-extrabold mb-1 text-slate-950">
             The 4-Stage <span className="gradient-text-cool">Incubation Lifecycle</span>
           </h2>
-          <p className="text-slate-600 max-w-3xl mx-auto text-sm sm:text-base leading-relaxed">
-            A disciplined transition model guiding startups from initial screening and diagnostic validation to demo day syndication.
+          <p className="text-slate-600 max-w-md mx-auto text-xs leading-relaxed">
+            A transition model guiding startups from initial screening to demo day syndication.
           </p>
         </div>
 
-        {/* 4 Locked Bento Columns spanning full width */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 xl:gap-5 w-full">
+        {/* 2x2 Bento Grid: 4 Lifecycle Phases (Perfect for 1:1 Square!) */}
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-3 w-full">
           {lifecycleStages.map((stage, idx) => (
             <SpotlightCard
               key={idx}
               spotlightColor={`${stage.badgeColor}18`}
               borderGlowColor={`${stage.badgeColor}44`}
-              className="rounded-3xl h-full border border-slate-200/90 shadow-sm"
+              className="rounded-2xl h-full border border-slate-200/90 shadow-sm"
             >
               <LiquidGlass
-                className="liquid-glass-card p-5 xl:p-6 rounded-3xl relative overflow-hidden flex flex-col justify-between min-h-[380px] h-full border border-slate-200/90 hover:border-slate-300 hover:shadow-lg transition-all"
+                className="liquid-glass-card p-3 sm:p-4 rounded-2xl relative overflow-hidden flex flex-col justify-between min-h-[140px] h-full border border-slate-200/90 transition-all"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center justify-between mb-1.5">
                     <span
-                      className="font-mono text-xs font-bold px-3 py-1 rounded-full bg-slate-100 border border-slate-200/70"
+                      className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200/70"
                       style={{ color: stage.badgeColor }}
                     >
                       PHASE {stage.step}
                     </span>
                     <span
-                      className="text-xs font-mono font-semibold px-2 py-0.5 rounded border border-slate-200 bg-white"
+                      className="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded border border-slate-200 bg-white"
                       style={{ color: stage.badgeColor }}
                     >
                       {stage.stageTag}
                     </span>
                   </div>
 
-                  <h3 className="text-base sm:text-lg font-bold text-slate-950 mb-2 leading-snug">{stage.title}</h3>
-                  <p className="text-xs text-slate-600 mb-4 leading-relaxed">{stage.subtitle}</p>
+                  <h3 className="text-xs sm:text-sm font-bold text-slate-950 mb-1 leading-snug">{stage.title}</h3>
+                  <p className="text-[10px] text-slate-600 mb-2 leading-snug line-clamp-2">{stage.subtitle}</p>
 
-                  <div className="space-y-2.5 pt-3 border-t border-slate-100">
-                    <span className="font-mono text-[11px] text-slate-400 uppercase tracking-wider block font-semibold">
-                      Key Milestones:
+                  <div className="space-y-1 pt-1.5 border-t border-slate-100">
+                    <span className="font-mono text-[9px] text-slate-400 uppercase tracking-wider block font-semibold">
+                      Milestones:
                     </span>
-                    <ul className="space-y-1.5">
-                      {stage.milestones.map((m, mIdx) => (
-                        <li key={mIdx} className="text-xs text-slate-700 flex items-start gap-2 leading-relaxed">
-                          <Icons8 name="check" size={13} color="00B4D8" className="mt-0.5 shrink-0" />
-                          <span>{m}</span>
+                    <ul className="space-y-1">
+                      {stage.milestones.slice(0, 2).map((m, mIdx) => (
+                        <li key={mIdx} className="text-[10px] text-slate-700 flex items-start gap-1 leading-snug">
+                          <Icons8 name="check" size={11} color="00B4D8" className="mt-0.5 shrink-0" />
+                          <span className="truncate">{m}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
                 </div>
 
-                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono text-slate-500">
-                  <span>GATEWAY: BHF COUNCIL</span>
+                <div className="mt-2 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9px] font-mono text-slate-500">
+                  <span>BHF COUNCIL</span>
                   <span className="text-[#16A34A] font-bold">{stage.badge}</span>
                 </div>
               </LiquidGlass>
@@ -1014,68 +983,68 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
 
       {/* ─────────────────────────────────────────────────────────────
           SLIDE 5: Build What's Next with CatalytiX + Ecosystem Links
-          Fit to full page viewport
+          Fit into 1:1 Square
           ───────────────────────────────────────────────────────────── */}
       <section
         id="cta"
         ref={ctaRef}
-        className="relative z-10 w-full min-h-screen flex flex-col justify-center max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 py-16 border-t border-slate-200/90"
+        className="relative z-10 w-full max-w-[min(100vw,100vh)] min-h-screen max-h-screen mx-auto px-4 sm:px-6 flex flex-col justify-center py-4 border-t border-slate-200/90 overflow-hidden"
       >
-        <div className="space-y-8">
+        <div className="space-y-3 sm:space-y-4">
           {/* Top CTA Banner */}
           <SpotlightCard
             spotlightColor="rgba(0, 240, 255, 0.16)"
             borderGlowColor="rgba(0, 240, 255, 0.4)"
-            className="rounded-3xl shadow-xl border border-slate-200/90"
+            className="rounded-2xl shadow-md border border-slate-200/90"
           >
-            <LiquidGlass className="liquid-glass-card p-8 sm:p-12 xl:p-14 rounded-3xl relative overflow-hidden text-center border border-slate-200/90 bg-gradient-to-b from-white via-slate-50/60 to-white">
-              <div className="relative z-10 max-w-4xl mx-auto space-y-4">
-                <span className="badge-pill-light text-[#16A34A] font-bold border border-slate-200/90 shadow-sm">
-                  Quarterly Rolling Admissions Active
+            <LiquidGlass className="liquid-glass-card p-5 sm:p-7 rounded-2xl relative overflow-hidden text-center border border-slate-200/90 bg-gradient-to-b from-white via-slate-50/60 to-white">
+              <div className="relative z-10 max-w-md mx-auto space-y-2.5">
+                <span className="badge-pill-light text-[#16A34A] font-bold border border-slate-200/90 shadow-sm text-xs py-0.5 px-3">
+                  Quarterly Admissions Active
                 </span>
-                <h2 className="text-3xl sm:text-5xl font-extrabold leading-tight text-slate-950 tracking-tight">
+                <h2 className="text-2xl sm:text-4xl font-extrabold leading-tight text-slate-950 tracking-tight">
                   Build What&apos;s Next with{' '}
                   <span className="font-asimovian gradient-text-playful">CatalytiX</span>
                 </h2>
-                <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
                   Take your deeptech, software, or hardware venture from TRL validation to scalable institutional growth.
                 </p>
 
-                <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-                  <Magnet padding={40} magnetStrength={3}>
-                    <StarBorder color="#00F0FF" speed="3.5s" thickness={2} className="!rounded-full shadow-lg border border-cyan-200/60">
+                <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
+                  <Magnet padding={30} magnetStrength={3}>
+                    <StarBorder color="#00F0FF" speed="3.5s" thickness={2} className="!rounded-full shadow-md border border-cyan-200/60">
                       <LiquidGlass
                         as="a"
                         displacement={true}
                         href="https://forms.gle/bennett-incubation"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="btn-liquid-glass-tinted-cyan !py-3.5 !px-8 text-sm sm:text-base shadow-lg inline-flex items-center gap-2"
+                        className="btn-liquid-glass-tinted-cyan !py-2.5 !px-6 text-xs sm:text-sm shadow-sm inline-flex items-center gap-2"
                       >
-                        <Icons8 name="rocket" size={16} color="090D16" />
+                        <Icons8 name="rocket" size={14} color="090D16" />
                         <span>Apply for Incubation</span>
                       </LiquidGlass>
                     </StarBorder>
                   </Magnet>
 
-                  <Magnet padding={35} magnetStrength={3}>
+                  <Magnet padding={25} magnetStrength={3}>
                     <LiquidGlass
                       as="a"
                       href="https://bennett-university-hatchery.vercel.app/portfolio"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn-liquid-glass-crystal !py-3.5 !px-8 text-sm sm:text-base border border-slate-200/90 inline-flex items-center gap-2 shadow-sm"
+                      className="btn-liquid-glass-crystal !py-2.5 !px-6 text-xs sm:text-sm border border-slate-200/90 inline-flex items-center gap-2 shadow-sm"
                     >
-                      <Icons8 name="briefcase" size={15} color="0284C7" />
-                      <span>Explore Portfolio Startups</span>
+                      <Icons8 name="briefcase" size={13} color="0284C7" />
+                      <span>Explore Portfolio</span>
                     </LiquidGlass>
                   </Magnet>
                 </div>
 
-                <div className="pt-4 flex items-center justify-center gap-2 text-xs font-mono text-slate-500">
-                  <span className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse" />
+                <div className="pt-2 flex items-center justify-center gap-1.5 text-[10px] font-mono text-slate-500">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A] animate-pulse" />
                   <ShinyText
-                    text="BENNETT HATCHERY FOUNDATION // DPIIT RECOGNIZED INCUBATOR"
+                    text="BENNETT HATCHERY // DPIIT RECOGNIZED INCUBATOR"
                     speed={3}
                     color="#64748b"
                     shineColor="#00F0FF"
@@ -1086,44 +1055,44 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
             </LiquidGlass>
           </SpotlightCard>
 
-          {/* 4 Ecosystem & Program Navigation Columns */}
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6 rounded-3xl bg-slate-50/70 border border-slate-200/90 text-xs text-slate-500 font-mono">
-            <div className="space-y-3">
-              <span className="font-bold text-slate-900 uppercase tracking-wider text-xs block">
-                Bennett Hatchery Foundation
+          {/* 4 Ecosystem & Program Navigation Columns in 1:1 Square (2x2 or 4 compact columns) */}
+          <div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-3.5 rounded-2xl bg-slate-50/70 border border-slate-200/90 text-xs text-slate-500 font-mono">
+            <div className="space-y-1">
+              <span className="font-bold text-slate-900 uppercase tracking-wider text-[11px] block">
+                Bennett Hatchery
               </span>
-              <p className="text-slate-600 leading-relaxed text-[11px]">
-                Bennett Hatchery Foundation (BHF) — A DPIIT-recognized institutional incubator supporting deeptech, space, hardware, and scalable technology startups.
+              <p className="text-slate-600 leading-snug text-[10px] line-clamp-3">
+                DPIIT-recognized institutional incubator supporting deeptech, space, hardware, and scalable technology startups.
               </p>
             </div>
 
             <div>
-              <h5 className="font-bold text-slate-900 uppercase tracking-wider text-xs mb-3">Program</h5>
-              <ul className="space-y-2 text-[11px]">
-                <li><a href="#overview" className="hover:text-slate-950 transition-colors">Incubation Overview</a></li>
-                <li><a href="#curriculum" className="hover:text-slate-950 transition-colors">5-Stage Curriculum</a></li>
-                <li><a href="#lifecycle" className="hover:text-slate-950 transition-colors">4-Phase Lifecycle</a></li>
-                <li><a href="#engine" className="hover:text-slate-950 transition-colors">SpaceTech Cohort</a></li>
+              <h5 className="font-bold text-slate-900 uppercase tracking-wider text-[10px] mb-1.5">Program</h5>
+              <ul className="space-y-1 text-[10px]">
+                <li><a href="#overview" className="hover:text-slate-950 transition-colors">Overview</a></li>
+                <li><a href="#curriculum" className="hover:text-slate-950 transition-colors">Curriculum</a></li>
+                <li><a href="#lifecycle" className="hover:text-slate-950 transition-colors">Lifecycle</a></li>
+                <li><a href="#engine" className="hover:text-slate-950 transition-colors">SpaceTech</a></li>
               </ul>
             </div>
 
             <div>
-              <h5 className="font-bold text-slate-900 uppercase tracking-wider text-xs mb-3">Ecosystem</h5>
-              <ul className="space-y-2 text-[11px]">
-                <li><a href="https://bennett-university-hatchery.vercel.app/portfolio" target="_blank" rel="noopener noreferrer" className="hover:text-slate-950 transition-colors">80+ Portfolio Startups</a></li>
+              <h5 className="font-bold text-slate-900 uppercase tracking-wider text-[10px] mb-1.5">Ecosystem</h5>
+              <ul className="space-y-1 text-[10px]">
+                <li><a href="https://bennett-university-hatchery.vercel.app/portfolio" target="_blank" rel="noopener noreferrer" className="hover:text-slate-950 transition-colors">80+ Startups</a></li>
                 <li><a href="https://forms.gle/bennett-incubation" target="_blank" rel="noopener noreferrer" className="hover:text-slate-950 transition-colors">Application Portal</a></li>
-                <li><a href="#engine" className="hover:text-slate-950 transition-colors">SISFS &amp; UP StartinUP</a></li>
+                <li><a href="#engine" className="hover:text-slate-950 transition-colors">SISFS Grants</a></li>
                 <li><a href="#engine" className="hover:text-slate-950 transition-colors">Makerspace Labs</a></li>
               </ul>
             </div>
 
             <div>
-              <h5 className="font-bold text-slate-900 uppercase tracking-wider text-xs mb-3">Governance</h5>
-              <ul className="space-y-2 text-[11px]">
-                <li><span className="text-slate-700">Bennett University, Greater Noida</span></li>
-                <li><span className="text-slate-700">DPIIT Recognized Incubator</span></li>
-                <li><span className="text-slate-700">CIE Leadership Advisory</span></li>
-                <li><span className="text-[#0284C7] font-semibold">Cohort 2026 Admissions Open</span></li>
+              <h5 className="font-bold text-slate-900 uppercase tracking-wider text-[10px] mb-1.5">Governance</h5>
+              <ul className="space-y-1 text-[10px]">
+                <li><span className="text-slate-700">Bennett University</span></li>
+                <li><span className="text-slate-700">DPIIT Recognized</span></li>
+                <li><span className="text-slate-700">CIE Leadership</span></li>
+                <li><span className="text-[#0284C7] font-semibold">Cohort 2026 Open</span></li>
               </ul>
             </div>
           </div>
@@ -1132,27 +1101,27 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
 
       {/* ─────────────────────────────────────────────────────────────
           SLIDE 6: Big Bold Footer Wordmark & Venture Copyright
-          "then click again to scroll a little bit more for the big footer..."
+          Centered inside 1:1 Square
           ───────────────────────────────────────────────────────────── */}
       <footer
         id="footer"
         ref={footerRef}
-        className="relative z-10 w-full min-h-screen flex flex-col justify-center items-center max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 py-12 border-t border-slate-200/90 text-xs text-slate-500 font-mono bg-slate-50/80"
+        className="relative z-10 w-full max-w-[min(100vw,100vh)] min-h-screen max-h-screen mx-auto px-4 sm:px-6 flex flex-col justify-center items-center py-6 border-t border-slate-200/90 text-xs text-slate-500 font-mono bg-slate-50/80 text-center overflow-hidden"
       >
-        <div className="w-full flex flex-col items-center justify-center space-y-12">
+        <div className="w-full flex flex-col items-center justify-center space-y-8 my-auto">
           {/* Big Bold CatalytiX Display Banner */}
-          <div className="w-full flex items-center justify-center select-none overflow-hidden py-8">
-            <Magnet padding={60} magnetStrength={2.5}>
+          <div className="w-full flex items-center justify-center select-none overflow-hidden py-4">
+            <Magnet padding={40} magnetStrength={2.5}>
               <Wordmark size="footer" colorScheme="playful" markFill="#090D16" />
             </Magnet>
           </div>
 
-          <div className="w-full pt-8 border-t border-slate-200/90 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+          <div className="w-full pt-4 border-t border-slate-200/90 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left text-[11px]">
             <p>© 2026 Bennett Hatchery Foundation (CatalytiX). All venture rights reserved.</p>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4">
               <a href="https://forms.gle/bennett-incubation" target="_blank" rel="noopener noreferrer" className="hover:text-slate-950 transition-colors">Apply Now</a>
               <a href="https://bennett-university-hatchery.vercel.app/portfolio" target="_blank" rel="noopener noreferrer" className="hover:text-slate-950 transition-colors">Portfolio</a>
-              <a href="#" className="hover:text-slate-950 transition-colors">Privacy &amp; Terms</a>
+              <a href="#" className="hover:text-slate-950 transition-colors">Privacy</a>
             </div>
           </div>
         </div>

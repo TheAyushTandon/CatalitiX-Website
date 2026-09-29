@@ -21,7 +21,7 @@ export default function Wordmark({
     md: { font: '2rem', icon: 58, gap: '8px' },
     lg: { font: '3.2rem', icon: 96, gap: '10px' },
     hero: { font: 'clamp(3.5rem, 8vw, 7.5rem)', icon: 'clamp(116px, 18vw, 240px)', gap: '14px' },
-    footer: { font: 'clamp(3.8rem, 13.5vw, 13rem)', icon: 'clamp(68px, 13.5vw, 195px)', gap: 'clamp(8px, 1.8vw, 24px)' },
+    footer: { font: 'clamp(2.6rem, 7vw, 6.4rem)', icon: 'clamp(50px, 7.5vw, 115px)', gap: 'clamp(8px, 1.4vw, 18px)' },
   };
 
   const currentSize = sizeMap[size];
