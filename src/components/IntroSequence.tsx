@@ -10,7 +10,6 @@ import HeroWebsite from './HeroWebsite';
 import { ChevronDown, Play, Sparkles } from 'lucide-react';
 import ClickSpark from './reactbits/ClickSpark';
 import Particles from './reactbits/Particles';
-import DecryptedText from './reactbits/DecryptedText';
 import ShinyText from './reactbits/ShinyText';
 import Magnet from './reactbits/Magnet';
 
@@ -397,13 +396,7 @@ export default function IntroSequence() {
                     style={{ willChange: 'transform, opacity' }}
                   >
                     <Sparkles className="w-3.5 h-3.5 text-[#00F0FF] animate-pulse" />
-                    <DecryptedText
-                      text="SYSTEMS KINETIC PROTOCOL"
-                      speed={35}
-                      sequential={true}
-                      encryptedClassName="text-[#00F0FF] font-bold"
-                      animateOn="both"
-                    />
+                    <span>SYSTEMS KINETIC PROTOCOL</span>
                   </span>
 
                   {/* Wordmark Row */}
@@ -514,14 +507,7 @@ export default function IntroSequence() {
                   <div className="hidden sm:block h-3 w-[1px] bg-white/20" />
 
                   <span className="hidden sm:inline text-white/90 font-semibold tracking-wide min-w-[170px]">
-                    <DecryptedText
-                      key={phaseLabel}
-                      text={phaseLabel}
-                      speed={22}
-                      sequential={true}
-                      encryptedClassName="text-[#7cff67] font-bold"
-                      animateOn="view"
-                    />
+                    {phaseLabel}
                   </span>
 
                   <div className="h-3 w-[1px] bg-white/20" />

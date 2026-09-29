@@ -9,7 +9,6 @@ import ClickSpark from './reactbits/ClickSpark';
 import SpotlightCard from './reactbits/SpotlightCard';
 import Magnet from './reactbits/Magnet';
 import ShinyText from './reactbits/ShinyText';
-import DecryptedText from './reactbits/DecryptedText';
 import CountUp from './reactbits/CountUp';
 import StarBorder from './reactbits/StarBorder';
 import { 
@@ -290,20 +289,14 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
 
       {/* 1. Hero Section & Locked Value Pillars Bento (Expansive Full Width ~96vw) */}
       <main id="overview" className="relative z-10 w-full max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 pt-10 sm:pt-14 pb-20 flex flex-col items-center text-center">
-        {/* Release Pill Badge with ReactBits Magnet & DecryptedText */}
+        {/* Release Pill Badge with ReactBits Magnet */}
         <div ref={heroBadgeRef} style={initialHiddenStyle} className="mb-6">
           <Magnet padding={30} magnetStrength={3.5}>
             <div className="badge-pill-light cursor-pointer hover:border-cyan-400/50 transition-all shadow-sm">
               <span className="flex h-2 w-2 rounded-full bg-[#16A34A] animate-pulse" />
               <span className="text-slate-700">Bennett Hatchery Foundation // DPIIT-Recognized</span>
               <span className="text-[#0284C7] font-bold flex items-center gap-1">
-                <DecryptedText
-                  text="Cohort 2026"
-                  speed={28}
-                  sequential={true}
-                  encryptedClassName="text-[#16A34A]"
-                  animateOn="both"
-                />
+                <span>Cohort 2026</span>
                 <ChevronRight className="w-3.5 h-3.5" />
               </span>
             </div>
@@ -466,13 +459,7 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
               </div>
               <div>
                 <h3 className="text-2xl font-extrabold text-slate-900 mb-1">
-                  <DecryptedText
-                    text="TRL 3 - 6"
-                    speed={30}
-                    sequential={true}
-                    encryptedClassName="text-[#D97706]"
-                    animateOn="both"
-                  />
+                  TRL 3 - 6
                 </h3>
                 <p className="text-xs text-slate-500 font-medium">IP &amp; Tech Validation // SISFS Grants</p>
               </div>
@@ -667,13 +654,7 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
               <div className="space-y-4 max-w-4xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-100/80 border border-cyan-200 text-xs font-mono font-bold text-[#0284C7]">
                   <span className="w-2 h-2 rounded-full bg-[#0284C7] animate-pulse" />
-                  <DecryptedText
-                    text="SpaceTech Flagship // Cohort 2026 Active"
-                    speed={25}
-                    sequential={true}
-                    encryptedClassName="text-[#DB2777]"
-                    animateOn="both"
-                  />
+                  <span>SpaceTech Flagship // Cohort 2026 Active</span>
                 </div>
                 <h3 className="text-3xl sm:text-5xl font-extrabold text-slate-950 tracking-tight">
                   Bennett Hatchery SpaceTech Cohort
@@ -759,12 +740,7 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
                         className="font-mono text-xs uppercase tracking-widest px-3 py-1 rounded-full bg-slate-100 font-bold mr-3 inline-block"
                         style={{ color: mod.color }}
                       >
-                        <DecryptedText
-                          key={mod.num}
-                          text={`MODULE ${mod.num}`}
-                          speed={25}
-                          sequential={true}
-                        />
+                        MODULE {mod.num}
                       </span>
                       <span className="font-mono text-xs text-slate-500 uppercase tracking-wider font-semibold">
                         {mod.tag}
@@ -871,11 +847,7 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
                       className="font-mono text-xs font-bold px-3 py-1 rounded-full bg-slate-100"
                       style={{ color: stage.badgeColor }}
                     >
-                      <DecryptedText
-                        text={`PHASE ${stage.step}`}
-                        speed={28}
-                        sequential={true}
-                      />
+                      PHASE {stage.step}
                     </span>
                     <span
                       className="text-xs font-mono font-semibold px-2 py-0.5 rounded border border-slate-200 bg-white"
@@ -923,11 +895,7 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
           <LiquidGlass className="liquid-glass-card p-10 sm:p-16 xl:p-20 rounded-3xl relative overflow-hidden text-center border border-slate-200 bg-gradient-to-b from-white via-slate-50/60 to-white">
             <div className="relative z-10 max-w-4xl mx-auto space-y-6">
               <span className="badge-pill-light text-[#16A34A] font-bold">
-                <DecryptedText
-                  text="Quarterly Rolling Admissions Active"
-                  speed={24}
-                  sequential={true}
-                />
+                Quarterly Rolling Admissions Active
               </span>
               <h2 className="text-3xl sm:text-6xl font-extrabold leading-tight text-slate-950 tracking-tight">
                 Build What&apos;s Next with{' '}
