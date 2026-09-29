@@ -165,47 +165,47 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
           </Magnet>
 
           {/* FLOATING QUOTE: Completely borderless, no container box, floating pure typography */}
-          <div className="max-w-xl mx-auto space-y-4 py-2">
+          <div className="max-w-2xl mx-auto space-y-5 py-2">
             <span
-              className="text-[11px] font-mono uppercase tracking-[0.3em] font-semibold block transition-colors duration-1000"
+              className="text-xs sm:text-sm font-mono uppercase tracking-[0.3em] font-extrabold block transition-colors duration-1000"
               style={{
-                color: isColorized ? '#00F0FF' : 'rgba(255, 255, 255, 0.45)',
+                color: isColorized ? '#00F0FF' : 'rgba(255, 255, 255, 0.7)',
               }}
             >
               Institutional Venture Protocol
             </span>
 
-            <blockquote className="text-2xl sm:text-3xl md:text-4xl font-medium text-white leading-relaxed italic tracking-tight">
+            <blockquote className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight italic tracking-tight">
               &ldquo;A catalyst for disruptive innovation — turning ambitious ideas into market leaders with world-class labs, capital velocity, and governance.&rdquo;
             </blockquote>
 
-            <div className="space-y-1 pt-1">
+            <div className="space-y-1.5 pt-2">
               <p
-                className="text-xs sm:text-sm font-mono font-semibold transition-colors duration-1000"
+                className="text-sm sm:text-base font-mono font-bold transition-colors duration-1000"
                 style={{
-                  color: isColorized ? '#5EEAD4' : 'rgba(255, 255, 255, 0.65)',
+                  color: isColorized ? '#5EEAD4' : 'rgba(255, 255, 255, 0.9)',
                 }}
               >
                 — Bennett Hatchery Foundation Advisory Board
               </p>
-              <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">
+              <p className="text-xs sm:text-sm font-mono uppercase tracking-widest font-semibold text-white/60">
                 DPIIT &amp; SISFS Accredited
               </p>
             </div>
           </div>
 
           {/* Launch Button: Starts B&W, fills with radiant gradient colors when clicked */}
-          <div className="pt-2">
+          <div className="pt-3">
             <Magnet padding={45} magnetStrength={3.5}>
               <StarBorder
                 color={isColorized ? '#00F0FF' : '#FFFFFF'}
                 speed="3s"
-                thickness={2}
+                thickness={2.5}
                 className="!rounded-full transition-all duration-1000"
               >
                 <button
                   onClick={handleLaunchClick}
-                  className="px-10 sm:px-12 py-4 sm:py-5 rounded-full font-extrabold text-base sm:text-lg tracking-wider uppercase shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3.5 cursor-pointer"
+                  className="px-12 sm:px-14 py-4 sm:py-5 rounded-full font-black text-lg sm:text-xl tracking-wider uppercase shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3.5 cursor-pointer"
                   style={{
                     background: isColorized
                       ? 'linear-gradient(90deg, #00F0FF 0%, #8B5CF6 50%, #FF2E93 100%)'
@@ -213,12 +213,12 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
                     color: isColorized ? '#FFFFFF' : '#090D16',
                     boxShadow: isColorized
                       ? '0 0 50px rgba(0, 240, 255, 0.5), 0 0 25px rgba(255, 46, 147, 0.3)'
-                      : '0 0 30px rgba(255, 255, 255, 0.25)',
+                      : '0 0 30px rgba(255, 255, 255, 0.35)',
                   }}
                 >
                   <Icons8
                     name="rocket"
-                    size={22}
+                    size={24}
                     color={isColorized ? 'FFFFFF' : '090D16'}
                   />
                   <span>Launch CatalytiX</span>
@@ -227,11 +227,11 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
             </Magnet>
           </div>
 
-          <div className="pt-2 text-xs font-mono">
+          <div className="pt-2 text-xs sm:text-sm font-mono font-bold">
             <ShinyText
               text="CLICK TO INITIATE SYSTEM LAUNCH SEQUENCE"
               speed={2.5}
-              color={isColorized ? '#64748b' : 'rgba(255, 255, 255, 0.35)'}
+              color={isColorized ? '#94a3b8' : 'rgba(255, 255, 255, 0.6)'}
               shineColor={isColorized ? '#00F0FF' : '#FFFFFF'}
             />
           </div>
@@ -246,17 +246,17 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
           {/* Massive, pure floating countdown number without any container box or circle */}
           <div
             ref={numberRef}
-            className="font-mono text-8xl sm:text-9xl md:text-[13rem] font-black breathing-gradient-text select-none leading-none tracking-tight"
+            className="font-mono text-9xl sm:text-[11rem] md:text-[14rem] font-black breathing-gradient-text select-none leading-none tracking-tight"
             style={{ willChange: 'transform, opacity' }}
           >
             {count > 0 ? count : 'GO'}
           </div>
 
-          <div className="space-y-1.5">
-            <span className="font-mono text-xs sm:text-sm uppercase tracking-[0.35em] text-cyan-300 font-bold block">
+          <div className="space-y-2">
+            <span className="font-mono text-sm sm:text-base uppercase tracking-[0.35em] text-cyan-300 font-black block">
               {count > 0 ? 'IGNITING CATALYTIX KINETIC PROTOCOL' : 'LAUNCH COMMENCED'}
             </span>
-            <p className="text-xs font-mono text-slate-400">
+            <p className="text-xs sm:text-sm font-mono font-bold text-slate-300">
               Bennett Hatchery Foundation // DeepTech Venture Engine
             </p>
           </div>

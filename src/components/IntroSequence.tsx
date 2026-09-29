@@ -303,7 +303,7 @@ export default function IntroSequence() {
                   <div className="flex flex-col items-center">
                     <span
                       ref={subtitleTopRef}
-                      className="font-mono text-xs uppercase tracking-[0.35em] text-cyan-300/80 mb-4 inline-flex items-center gap-2"
+                      className="font-mono text-xs sm:text-sm uppercase tracking-[0.35em] text-cyan-300 font-extrabold mb-4 inline-flex items-center gap-2"
                       style={{ willChange: 'transform, opacity' }}
                     >
                       Bennett Hatchery Presents
@@ -387,12 +387,12 @@ export default function IntroSequence() {
 
                     <div
                       ref={subtitleBottomRef}
-                      className="mt-4 text-xs font-mono tracking-widest uppercase inline-flex items-center gap-2"
+                      className="mt-4 text-xs sm:text-sm font-mono tracking-widest uppercase font-bold inline-flex items-center gap-2"
                       style={{ willChange: 'transform, opacity' }}
                     >
                       <ShinyText
                         text="Built to Begin, Catalized to Scale"
-                        color="rgba(255, 255, 255, 0.6)"
+                        color="rgba(255, 255, 255, 0.85)"
                         shineColor="#00F0FF"
                         speed={2.6}
                       />
