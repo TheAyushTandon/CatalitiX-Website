@@ -7,11 +7,10 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import Aurora from './Aurora';
 import CatalytiXMark from './CatalytiXMark';
 import HeroWebsite from './HeroWebsite';
-import { ChevronDown, Play, Sparkles } from 'lucide-react';
+import { ChevronDown, Sparkles } from 'lucide-react';
 import ClickSpark from './reactbits/ClickSpark';
 import Particles from './reactbits/Particles';
 import ShinyText from './reactbits/ShinyText';
-import Magnet from './reactbits/Magnet';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -27,12 +26,7 @@ export default function IntroSequence() {
   const subtitleTopRef = useRef<HTMLSpanElement>(null);
   const subtitleBottomRef = useRef<HTMLParagraphElement>(null);
   const scrollPromptRef = useRef<HTMLDivElement>(null);
-  const statusBadgeRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
-
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [phaseLabel, setPhaseLabel] = useState('1. KINETIC INCEPTION');
-  const [isPlayingDemo, setIsPlayingDemo] = useState(false);
   
   // Lock state: starts on the kinetic intro sequence, locks to inner webpage once scrolled
   const [isLocked, setIsLocked] = useState(false);
@@ -70,8 +64,6 @@ export default function IntroSequence() {
     isLockedRef.current = false;
     setIsIncoming(false);
     setIsLocked(false);
-    setScrollProgress(0);
-    setPhaseLabel('1. KINETIC INCEPTION');
     if ((window as unknown as { lenis?: { scrollTo: (target: number, opts?: { immediate?: boolean }) => void } }).lenis) {
       (window as unknown as { lenis?: { scrollTo: (target: number, opts?: { immediate?: boolean }) => void } }).lenis?.scrollTo(0, { immediate: true });
     } else {
@@ -120,17 +112,6 @@ export default function IntroSequence() {
           anticipatePin: 1,
           onUpdate: (self) => {
             const p = self.progress;
-            setScrollProgress(Math.round(p * 100));
-
-            if (p < 0.22) {
-              setPhaseLabel('1. KINETIC INCEPTION');
-            } else if (p < 0.55) {
-              setPhaseLabel('2. VORTEX FLIGHT & FOCUS');
-            } else if (p < 0.92) {
-              setPhaseLabel('3. SUPERNOVA WHITE BLOOM');
-            } else {
-              setPhaseLabel('4. UNLOCKING WEBPAGE');
-            }
 
             // When scrolled fully (p >= 0.985), lock to inner webpage and launch incoming transition!
             if (p >= 0.985 && !isLockedRef.current) {
@@ -266,19 +247,7 @@ export default function IntroSequence() {
         );
       }
 
-      // 5. Fade out telemetry HUD as we near full expansion (85 -> 95)
-      if (statusBadgeRef.current) {
-        tl.to(
-          statusBadgeRef.current,
-          {
-            opacity: 0,
-            y: 20,
-            duration: 10,
-            ease: 'power1.out',
-          },
-          85
-        );
-      }
+
 
     }, containerRef);
 
@@ -295,21 +264,7 @@ export default function IntroSequence() {
     };
   }, [isLocked, lockToWebpage]);
 
-  // Quick auto-scrub demo to watch the full transition
-  const runAutoPlay = () => {
-    if (isPlayingDemo) return;
-    setIsPlayingDemo(true);
 
-    gsap.to(window, {
-      scrollTo: { y: 3400, autoKill: false },
-      duration: 3.8,
-      ease: 'power2.inOut',
-      onComplete: () => {
-        setIsPlayingDemo(false);
-        lockToWebpage();
-      },
-    });
-  };
 
   return (
     <div className="relative w-full bg-white">
@@ -492,39 +447,7 @@ export default function IntroSequence() {
               </div>
             </div>
 
-            {/* FLOATING TELEMETRY HUD / CONTROLLER WITH REACTBITS MAGNET */}
-            <div
-              ref={statusBadgeRef}
-              className="fixed bottom-6 right-6 z-50 pointer-events-auto"
-            >
-              <Magnet padding={50} magnetStrength={3.2}>
-                <div className="flex items-center gap-3 p-2 px-3.5 rounded-full bg-black/85 border border-white/20 backdrop-blur-xl shadow-2xl text-xs font-mono hover:border-cyan-400/50 transition-colors">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#00F0FF] animate-ping" />
-                    <span className="text-[#00F0FF] font-bold">{scrollProgress}%</span>
-                  </div>
 
-                  <div className="hidden sm:block h-3 w-[1px] bg-white/20" />
-
-                  <span className="hidden sm:inline text-white/90 font-semibold tracking-wide min-w-[170px]">
-                    {phaseLabel}
-                  </span>
-
-                  <div className="h-3 w-[1px] bg-white/20" />
-
-                  <Magnet padding={30} magnetStrength={4}>
-                    <button
-                      onClick={runAutoPlay}
-                      className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer border border-transparent hover:border-lime-400/40"
-                      title="Auto-scrub through animation sequence"
-                    >
-                      <Play className="w-3 h-3 fill-current text-[#7cff67]" />
-                      <span className="text-[11px] font-semibold">Auto Play</span>
-                    </button>
-                  </Magnet>
-                </div>
-              </Magnet>
-            </div>
           </ClickSpark>
         </div>
       </div>
