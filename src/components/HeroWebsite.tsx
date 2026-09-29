@@ -1108,11 +1108,9 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
             </div>
           </div>
 
-          {/* BIG BOLD CATALYTIX WORDMARK IN THIS SECTION FITTING IN 1:1 */}
-          <div className="w-full flex items-center justify-center select-none overflow-hidden py-3">
-            <Magnet padding={40} magnetStrength={2.5}>
-              <Wordmark size="footer" colorScheme="playful" markFill="#090D16" />
-            </Magnet>
+          {/* BIG BOLD CATALYTIX WORDMARK TAKING FULL 1:1 WIDTH */}
+          <div className="w-full flex items-center justify-center select-none overflow-hidden py-2 sm:py-3 transition-transform duration-300 hover:scale-[1.01]">
+            <Wordmark size="footer" colorScheme="playful" markFill="#090D16" className="w-full" />
           </div>
 
           <div className="w-full pt-2.5 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left text-xs font-bold text-slate-700">

@@ -3,7 +3,7 @@ import CatalytiXMark from './CatalytiXMark';
 
 interface WordmarkProps {
   className?: string;
-  size?: 'sm' | 'md' | 'lg' | 'hero' | 'footer';
+  size?: 'sm' | 'md' | 'lg' | 'hero' | 'footer' | 'full';
   showSubtitle?: boolean;
   colorScheme?: 'playful' | 'subtle' | 'white' | 'dark';
   markFill?: string;
@@ -16,12 +16,23 @@ export default function Wordmark({
   colorScheme = 'playful',
   markFill,
 }: WordmarkProps) {
+  const isFull = size === 'footer' || size === 'full';
+
   const sizeMap = {
     sm: { font: '1.4rem', icon: 40, gap: '6px' },
     md: { font: '2rem', icon: 58, gap: '8px' },
     lg: { font: '3.2rem', icon: 96, gap: '10px' },
     hero: { font: 'clamp(3.5rem, 8vw, 7.5rem)', icon: 'clamp(116px, 18vw, 240px)', gap: '14px' },
-    footer: { font: 'clamp(2.6rem, 7vw, 6.4rem)', icon: 'clamp(50px, 7.5vw, 115px)', gap: 'clamp(8px, 1.4vw, 18px)' },
+    footer: {
+      font: 'clamp(3.2rem, 15.6vmin, 15.5rem)',
+      icon: 'clamp(50px, 15.6vmin, 155px)',
+      gap: 'clamp(8px, 2.5vmin, 32px)',
+    },
+    full: {
+      font: 'clamp(3.2rem, 15.6vmin, 15.5rem)',
+      icon: 'clamp(50px, 15.6vmin, 155px)',
+      gap: 'clamp(8px, 2.5vmin, 32px)',
+    },
   };
 
   const currentSize = sizeMap[size];
@@ -29,8 +40,8 @@ export default function Wordmark({
   const textStyle: React.CSSProperties = {
     fontFamily: "var(--font-asimovian), sans-serif",
     fontSize: currentSize.font,
-    lineHeight: 1,
-    letterSpacing: '0.04em',
+    lineHeight: 0.95,
+    letterSpacing: isFull ? '0.035em' : '0.04em',
     fontWeight: 900,
     textTransform: 'uppercase',
   };
@@ -46,11 +57,10 @@ export default function Wordmark({
   );
 
   return (
-    <div className={`inline-flex flex-col items-center ${className}`}>
+    <div className={`flex flex-col items-center ${isFull ? 'w-full' : 'inline-flex'} ${className}`}>
       <div
+        className={`${isFull ? 'w-full flex items-center justify-center' : 'inline-flex items-center'} select-none whitespace-nowrap`}
         style={{
-          display: 'inline-flex',
-          alignItems: 'center',
           gap: currentSize.gap,
           userSelect: 'none',
         }}
@@ -69,7 +79,7 @@ export default function Wordmark({
         >
           CATALYTI
         </span>
-        <div style={{ display: 'inline-flex', alignItems: 'center' }}>
+        <div className="shrink-0 inline-flex items-center">
           <CatalytiXMark
             size={currentSize.icon}
             fill={resolvedMarkFill}
