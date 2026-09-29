@@ -100,7 +100,7 @@ html, body {
 
 /* Playful Gradient Text */
 .gradient-text-playful {
-  background: linear-gradient(135deg, #FF2E93 0%, #FF8A00 30%, #7cff67 60%, #00F0FF 100%);
+  background: linear-gradient(to top, #FF8A00 0%, #FF2E93 32%, #7cff67 68%, #00F0FF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -298,16 +298,16 @@ html, body {
 
 .liquid-glass-card {
   position: relative;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.84) 0%, rgba(255, 255, 255, 0.58) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.65) 100%);
   backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(203, 213, 225, 0.75);
   box-shadow:
     0 12px 30px -4px rgba(15, 23, 42, 0.04),
     0 4px 8px -2px rgba(15, 23, 42, 0.02),
     inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.95),
     inset 0 -3px 8px 0 rgba(15, 23, 42, 0.02),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.4);
   will-change: transform;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),

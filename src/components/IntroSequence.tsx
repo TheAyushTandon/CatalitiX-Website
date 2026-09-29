@@ -7,7 +7,7 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import Aurora from './Aurora';
 import CatalytiXMark from './CatalytiXMark';
 import HeroWebsite from './HeroWebsite';
-import { ChevronDown } from 'lucide-react';
+import Icons8 from './Icons8';
 import ClickSpark from './reactbits/ClickSpark';
 import Particles from './reactbits/Particles';
 import ShinyText from './reactbits/ShinyText';
@@ -62,16 +62,6 @@ export default function IntroSequence() {
     }
   }, []);
 
-  const handleReplay = useCallback(() => {
-    isLockedRef.current = false;
-    setIsIncoming(false);
-    setIsLocked(false);
-    if ((window as unknown as { lenis?: { scrollTo: (target: number, opts?: { immediate?: boolean }) => void } }).lenis) {
-      (window as unknown as { lenis?: { scrollTo: (target: number, opts?: { immediate?: boolean }) => void } }).lenis?.scrollTo(0, { immediate: true });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'instant' });
-    }
-  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'scrollRestoration' in history) {
@@ -464,7 +454,7 @@ export default function IntroSequence() {
                             }}
                             className="inline-block transform-gpu"
                             style={{
-                              background: 'linear-gradient(135deg, #FF2E93 0%, #FF8A00 30%, #7cff67 60%, #00F0FF 100%)',
+                              background: 'linear-gradient(to top, #FF8A00 0%, #FF2E93 32%, #7cff67 68%, #00F0FF 100%)',
                               backgroundSize: '800% 100%',
                               backgroundPosition: `${(idx / 7) * 100}% 0%`,
                               WebkitBackgroundClip: 'text',
@@ -541,7 +531,7 @@ export default function IntroSequence() {
                   speed={2.2}
                   className="text-xs font-mono tracking-widest uppercase"
                 />
-                <ChevronDown className="w-5 h-5 text-[#00F0FF] animate-bounce" />
+                <Icons8 name="chevronDown" size={18} color="00F0FF" className="animate-bounce mt-1" />
               </div>
             </div>
 
@@ -555,7 +545,7 @@ export default function IntroSequence() {
         style={{ display: isLocked ? 'block' : 'none' }}
         className="w-full min-h-screen bg-white"
       >
-        <HeroWebsite isIncoming={isIncoming} onReplayIntro={handleReplay} />
+        <HeroWebsite isIncoming={isIncoming} />
       </div>
     </div>
   );

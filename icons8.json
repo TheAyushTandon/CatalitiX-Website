@@ -1,0 +1,37 @@
+{
+  "version": 2,
+  "icons": {
+    "pack": "m_outlined",
+    "sizes": [14, 16, 18, 20, 24, 32, 48],
+    "color": "currentColor",
+    "items": {
+      "rocket": { "id": "86792", "commonName": "rocket" },
+      "chevronRight": { "id": "85770", "commonName": "chevron-right" },
+      "chevronDown": { "id": "87345", "commonName": "chevron-down" },
+      "arrowRight": { "id": "86087", "commonName": "arrow" },
+      "check": { "id": "82766", "commonName": "checked" },
+      "layers": { "id": "113299", "commonName": "layers" },
+      "zap": { "id": "86554", "commonName": "lightning-bolt" },
+      "compass": { "id": "88004", "commonName": "compass" },
+      "target": { "id": "85453", "commonName": "goal" },
+      "externalLink": { "id": "82787", "commonName": "external-link" },
+      "terminal": { "id": "120387", "commonName": "console" },
+      "activity": { "id": "86553", "commonName": "line-chart" },
+      "shield": { "id": "85778", "commonName": "security-checked" },
+      "building": { "id": "86967", "commonName": "company" },
+      "cpu": { "id": "103594", "commonName": "processor" },
+      "briefcase": { "id": "82466", "commonName": "briefcase" },
+      "trendingUp": { "id": "85933", "commonName": "positive-dynamic" },
+      "sparkles": { "id": "7FRSm1RlZ1SV", "commonName": "sparkles" }
+    }
+  },
+  "illustrations": {
+    "style": "notion-line-art",
+    "slots": {}
+  },
+  "tokens": {
+    "iconColor": "--foreground",
+    "accent": "--primary",
+    "radius": "--radius"
+  }
+}
