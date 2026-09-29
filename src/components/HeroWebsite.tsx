@@ -413,15 +413,17 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
             </Magnet>
           </div>
 
-          {/* Big Bold Headline taking full 1:1 width without max-w restrictions */}
+          {/* Big Bold CatalytiX Title with Small Incubation Program Label (Swapped Places) */}
           <h1
             ref={heroTitleRef}
             style={initialHiddenStyle}
-            className="w-full text-4xl sm:text-6xl md:text-7xl lg:text-[5.4rem] font-black tracking-tight leading-[1.03] mb-3 text-slate-950"
+            className="w-full text-center mb-3.5 select-none"
           >
-            Incubation Program{' '}
-            <span className="font-asimovian gradient-text-playful inline-block">
+            <span className="font-asimovian gradient-text-playful block text-5xl sm:text-7xl md:text-8xl lg:text-[6.8rem] xl:text-[7.8rem] font-black tracking-tight leading-[0.95] mb-2">
               CatalytiX
+            </span>
+            <span className="block text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
+              Incubation Program
             </span>
           </h1>
 
