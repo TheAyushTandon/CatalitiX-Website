@@ -22,6 +22,7 @@ export default function IntroSequence() {
   const overlayRef = useRef<HTMLDivElement>(null);
   const lettersRef = useRef<(HTMLSpanElement | null)[]>([]);
   const xEntranceRef = useRef<HTMLDivElement>(null);
+  const maskLayerRef = useRef<HTMLDivElement>(null);
   
   // Launch Countdown screen state
   const [showCountdown, setShowCountdown] = useState(true);
@@ -62,11 +63,62 @@ export default function IntroSequence() {
     };
   }, []);
 
+  const entranceTlRef = useRef<gsap.core.Timeline | null>(null);
+
+  // Measure natural resting geometry to calculate center shifts
+  const measureOffsets = useCallback(() => {
+    if (!xEntranceRef.current || !catalytiTextRef.current) {
+      return { shiftToCenter: -280, textSlideStart: 280 };
+    }
+    // Temporarily clear transforms to measure natural resting positions
+    gsap.set([xEntranceRef.current, catalytiTextRef.current], { x: 0, y: 0, scale: 1, rotation: 0 });
+    const xRect = xEntranceRef.current.getBoundingClientRect();
+    const catRect = catalytiTextRef.current.getBoundingClientRect();
+    const screenCenterX = window.innerWidth / 2;
+    const currentXCenter = xRect.left + xRect.width / 2;
+
+    // How far X must shift to be centered at screenCenterX (negative value)
+    const shiftToCenter = screenCenterX - currentXCenter;
+
+    // CATALYTI starts with its left edge ('C') at the screen center (behind the centered X),
+    // so it slides out from the left of the X into resting position
+    const textSlideStart = screenCenterX - catRect.left;
+
+    return { shiftToCenter, textSlideStart };
+  }, []);
+
+  // Invisible layer mask: clips CATALYTI at the boundary of the X so text only emerges to the left!
+  const updateMask = useCallback(() => {
+    if (!catalytiTextRef.current || !xEntranceRef.current) return;
+    const xRect = xEntranceRef.current.getBoundingClientRect();
+    const catRect = catalytiTextRef.current.getBoundingClientRect();
+
+    // The emergence boundary is at the center/left of the X mark
+    const boundaryX = xRect.left + (xRect.width * 0.45);
+    const localCutoff = boundaryX - catRect.left;
+
+    if (localCutoff <= 0) {
+      catalytiTextRef.current.style.clipPath = 'polygon(0 0, 0 0, 0 0, 0 0)';
+    } else {
+      catalytiTextRef.current.style.clipPath = `polygon(-150px -100px, ${localCutoff}px -100px, ${localCutoff}px calc(100% + 100px), -150px calc(100% + 100px))`;
+    }
+  }, []);
+
   // Cinematic X transition triggered on click:
   // "when clicked the x animation will start leading to inner main page"
   const playXTransition = useCallback(() => {
     if (isTransitioningRef.current || isLockedRef.current) return;
     isTransitioningRef.current = true;
+
+    // Stop entrance timeline if still animating
+    if (entranceTlRef.current) {
+      entranceTlRef.current.kill();
+    }
+    // Ensure resting positions and clear any clip-path
+    if (catalytiTextRef.current) {
+      catalytiTextRef.current.style.clipPath = 'none';
+    }
+    gsap.set([xEntranceRef.current, catalytiTextRef.current], { x: 0, opacity: 1 });
 
     const { deltaX, deltaY } = computeCenterDelta();
 
@@ -138,112 +190,136 @@ export default function IntroSequence() {
     }
   }, [computeCenterDelta, lockToWebpage]);
 
-  // Entrance animation: First X appears in center, then CATALYTI emerges to left shifting X to right
+  // Run the entrance animation:
+  // 1. X appears in center alone
+  // 2. X shifts towards right while CATALYTI emerges from the X towards left
+  // 3. Invisible mask layer at zIndex 5 ensures nothing is seen to the right of the X
+  const runEntrance = useCallback(() => {
+    if (!xEntranceRef.current || !catalytiTextRef.current || !singleXRef.current) return;
+
+    if (entranceTlRef.current) {
+      entranceTlRef.current.kill();
+    }
+
+    const { shiftToCenter, textSlideStart } = measureOffsets();
+
+    // Set initial stances before animation begins
+    gsap.set(xEntranceRef.current, {
+      x: shiftToCenter,
+      opacity: 0,
+      scale: 0.5,
+      rotation: -90,
+    });
+
+    gsap.set(catalytiTextRef.current, {
+      x: textSlideStart,
+      opacity: 0,
+    });
+
+    // Prime mask right away
+    updateMask();
+
+    if (subtitleTopRef.current) gsap.set(subtitleTopRef.current, { opacity: 0, y: 18 });
+    if (subtitleBottomRef.current) gsap.set(subtitleBottomRef.current, { opacity: 0, y: -18 });
+
+    const entranceTl = gsap.timeline({ delay: 0.05 });
+    entranceTlRef.current = entranceTl;
+
+    // STEP 1: X comes in middle alone!
+    entranceTl.to(xEntranceRef.current, {
+      opacity: 1,
+      scale: 1,
+      rotation: 0,
+      duration: 0.85,
+      ease: 'back.out(1.6)',
+      onUpdate: updateMask,
+    });
+
+    // STEP 2: The X shifts towards the right, while CATALYTI emerges through the left of the X!
+    // Invisible mask ensures no letters are ever seen to the right of the X!
+    entranceTl.to(
+      xEntranceRef.current,
+      {
+        x: 0,
+        duration: 1.25,
+        ease: 'power3.inOut',
+      },
+      '+=0.25'
+    );
+
+    entranceTl.to(
+      catalytiTextRef.current,
+      {
+        x: 0,
+        duration: 1.25,
+        ease: 'power3.inOut',
+        onUpdate: updateMask,
+        onComplete: () => {
+          if (catalytiTextRef.current) {
+            catalytiTextRef.current.style.clipPath = 'none';
+          }
+        },
+      },
+      '<'
+    );
+
+    // CATALYTI fades in right as the leftward slide begins
+    entranceTl.to(
+      catalytiTextRef.current,
+      {
+        opacity: 1,
+        duration: 0.25,
+        ease: 'power2.out',
+      },
+      '<'
+    );
+
+    // STEP 3: Subtitles reveal smoothly once aligned
+    if (subtitleTopRef.current) {
+      entranceTl.fromTo(
+        subtitleTopRef.current,
+        { y: 18, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' },
+        '-=0.45'
+      );
+    }
+
+    if (subtitleBottomRef.current) {
+      entranceTl.fromTo(
+        subtitleBottomRef.current,
+        { y: -18, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' },
+        '-=0.55'
+      );
+    }
+  }, [measureOffsets, updateMask]);
+
+  // Setup initial hidden state immediately on mount so there is ZERO pop
+  useEffect(() => {
+    if (!xEntranceRef.current || !catalytiTextRef.current) return;
+    const { shiftToCenter, textSlideStart } = measureOffsets();
+    gsap.set(xEntranceRef.current, {
+      x: shiftToCenter,
+      opacity: 0,
+      scale: 0.5,
+      rotation: -90,
+    });
+    gsap.set(catalytiTextRef.current, {
+      x: textSlideStart,
+      opacity: 0,
+    });
+    updateMask();
+    if (subtitleTopRef.current) gsap.set(subtitleTopRef.current, { opacity: 0, y: 18 });
+    if (subtitleBottomRef.current) gsap.set(subtitleBottomRef.current, { opacity: 0, y: -18 });
+  }, [measureOffsets, updateMask]);
+
+  // Entrance animation trigger when countdown finishes
   useEffect(() => {
     if (showCountdown || isLocked) return;
 
-    let activeTl: gsap.core.Timeline | null = null;
+    runEntrance();
 
-    const runEntrance = () => {
-      if (!catalytiTextRef.current || !xEntranceRef.current || !singleXRef.current) return;
-
-      // 1. Reset all transforms and ensure no clipPath cuts off CATALYTI
-      gsap.set(xEntranceRef.current, { x: 0, opacity: 0 });
-      gsap.set(catalytiTextRef.current, { opacity: 0, x: 0, clipPath: 'none' });
-      gsap.set([subtitleTopRef.current, subtitleBottomRef.current], { opacity: 0 });
-
-      // Measure unshifted positions
-      const xRect = xEntranceRef.current.getBoundingClientRect();
-      const screenCenterX = window.innerWidth / 2;
-      const currentXCenter = xRect.left + xRect.width / 2;
-      
-      // Distance X needs to shift to be positioned dead center on screen
-      const shiftToCenter = screenCenterX - currentXCenter;
-
-      // CATALYTI starts behind the X at the center (shifted right by shiftToCenter),
-      // then glides out to the left into its resting position (x: 0).
-      const textStartShift = shiftToCenter;
-
-      // Set initial positions
-      gsap.set(xEntranceRef.current, {
-        x: shiftToCenter,
-        opacity: 0,
-        scale: 0.5,
-        rotation: -90,
-      });
-
-      gsap.set(catalytiTextRef.current, {
-        opacity: 0,
-        x: textStartShift,
-        clipPath: 'none',
-      });
-
-      const entranceTl = gsap.timeline({ delay: 0.1 });
-      activeTl = entranceTl;
-
-      // 2. First: The X appears alone in the exact center of the screen
-      entranceTl.to(xEntranceRef.current, {
-        opacity: 1,
-        scale: 1,
-        rotation: 0,
-        duration: 0.8,
-        ease: 'back.out(1.7)',
-      });
-
-      // 3. Next: CATALYTI emerges from behind the X to the left, while X shifts to the right!
-      entranceTl.to(
-        xEntranceRef.current,
-        {
-          x: 0,
-          duration: 1.0,
-          ease: 'power3.inOut',
-        },
-        '+=0.2'
-      );
-
-      entranceTl.to(
-        catalytiTextRef.current,
-        {
-          opacity: 1,
-          x: 0,
-          duration: 1.0,
-          ease: 'power3.inOut',
-        },
-        '<'
-      );
-
-      // 4. Subtitles reveal smoothly once wordmark is in place
-      if (subtitleTopRef.current) {
-        entranceTl.fromTo(
-          subtitleTopRef.current,
-          { y: 18, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' },
-          '-=0.35'
-        );
-      }
-
-      if (subtitleBottomRef.current) {
-        entranceTl.fromTo(
-          subtitleBottomRef.current,
-          { y: -18, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' },
-          '-=0.45'
-        );
-      }
-    };
-
-    // Run when countdown finishes (showCountdown becomes false)
-    const timeoutId = setTimeout(() => {
-      if (typeof document !== 'undefined' && document.fonts) {
-        document.fonts.ready.then(() => {
-          requestAnimationFrame(runEntrance);
-        });
-      } else {
-        runEntrance();
-      }
-    }, 50);
-
-    // Listen for left click or key press to ignite X animation
+    // Listen for click or key press to ignite X transition
     const handleClick = (e: MouseEvent) => {
       if (e.button === 0) {
         playXTransition();
@@ -261,12 +337,11 @@ export default function IntroSequence() {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      clearTimeout(timeoutId);
       window.removeEventListener('click', handleClick);
       window.removeEventListener('keydown', handleKeyDown);
-      if (activeTl) activeTl.kill();
+      if (entranceTlRef.current) entranceTlRef.current.kill();
     };
-  }, [showCountdown, isLocked, playXTransition]);
+  }, [showCountdown, isLocked, runEntrance, playXTransition]);
 
   return (
     <div className="relative w-full bg-white select-none">
@@ -326,16 +401,14 @@ export default function IntroSequence() {
                     />
                   </div>
 
+                  {/* Ambient Deep Glow (NO GRID BACKGROUND) */}
                   <div
-                    className="absolute inset-0"
+                    className="absolute inset-0 pointer-events-none"
                     style={{
                       backgroundImage: `
-                        radial-gradient(circle at 50% 40%, rgba(0, 240, 255, 0.22) 0%, rgba(255, 46, 147, 0.16) 40%, transparent 75%),
-                        radial-gradient(circle at 40% 60%, rgba(124, 255, 103, 0.16) 0%, transparent 65%),
-                        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)
+                        radial-gradient(circle at 50% 45%, rgba(0, 240, 255, 0.22) 0%, rgba(255, 46, 147, 0.16) 40%, transparent 75%),
+                        radial-gradient(circle at 40% 60%, rgba(124, 255, 103, 0.16) 0%, transparent 65%)
                       `,
-                      backgroundSize: '100% 100%, 100% 100%, 48px 48px, 48px 48px',
                     }}
                   />
                 </div>
@@ -346,37 +419,38 @@ export default function IntroSequence() {
                   className="absolute inset-0 bg-white pointer-events-none opacity-0"
                   style={{ zIndex: 15, willChange: 'opacity' }}
                 />
-                {/* Hero Wordmark: "Bennett Hatchery Presents" + "CATALYTI" + The Spinning White "X" */}
+
+                {/* Hero Wordmark: "Bennett Hatchery Presents" + "CATALYTI" + The Spinning White "X" (1:1 Stage) */}
                 <div
-                  ref={stageRef}
                   className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none px-4 sm:px-6 w-full h-full"
                   style={{ zIndex: 30 }}
                 >
-                  <div className="w-full flex flex-col items-center justify-center text-center">
+                  <div className="w-full max-w-[min(100vw,100vh)] aspect-square flex flex-col items-center justify-center text-center p-4">
                     <span
                       ref={subtitleTopRef}
-                      className="font-mono text-sm sm:text-base md:text-lg lg:text-xl uppercase tracking-[0.4em] text-sky-400 font-black mb-6 sm:mb-8 inline-flex items-center gap-2 select-none"
+                      className="font-mono text-base sm:text-lg md:text-xl lg:text-2xl uppercase tracking-[0.45em] sm:tracking-[0.55em] text-sky-400 font-black mb-6 sm:mb-10 inline-flex items-center gap-2 select-none"
                       style={{ opacity: 0, willChange: 'transform, opacity' }}
                     >
                       Bennett Hatchery Presents
                     </span>
 
-                    {/* Pure uncontainerized Wordmark Row */}
+                    {/* Pure uncontainerized Wordmark Row: Entity 1 (CATALYTI) + Invisible Mask Layer + Entity 2 (X) */}
                     <div
-                      className="w-full flex items-center justify-center whitespace-nowrap select-none overflow-visible"
-                      style={{ gap: 'clamp(2px, 0.6vmin, 8px)' }}
+                      className="w-full flex items-center justify-center whitespace-nowrap select-none overflow-visible relative"
+                      style={{ gap: 'clamp(2px, 0.5vmin, 6px)' }}
                     >
+                      {/* Entity 1: CATALYTI (zIndex: 1 - lowest layer) */}
                       <div
                         ref={catalytiTextRef}
                         className="relative inline-flex items-center justify-center select-none"
-                        style={{ opacity: 0, zIndex: 1, willChange: 'transform, opacity' }}
+                        style={{ opacity: 0, zIndex: 1, willChange: 'transform, opacity, clip-path' }}
                       >
                         <span
                           className="relative z-10 font-asimovian select-none inline-flex items-center"
                           style={{
-                            fontSize: 'clamp(3.8rem, 15.2vmin, 15.5rem)',
+                            fontSize: 'clamp(4.2rem, 16.5vmin, 16.8rem)',
                             lineHeight: 0.95,
-                            letterSpacing: '0.035em',
+                            letterSpacing: '0.03em',
                             textTransform: 'uppercase',
                           }}
                         >
@@ -397,15 +471,24 @@ export default function IntroSequence() {
                         </span>
                       </div>
 
-                      {/* The White "X" - Sized bigger & brought closer so space between all is identical */}
+                      {/* Mid Layer: The Invisible Masking Layer (zIndex: 5) */}
+                      {/* Situated behind the X and above CATALYTI, ensuring text only passes out to the left of the X */}
+                      <div
+                        ref={maskLayerRef}
+                        className="pointer-events-none select-none absolute"
+                        style={{ zIndex: 5 }}
+                        aria-hidden="true"
+                      />
+
+                      {/* Entity 2: The White "X" (zIndex: 10 - top layer) */}
                       <div
                         ref={xEntranceRef}
                         className="shrink-0 inline-flex items-center justify-center select-none"
                         style={{
                           opacity: 0,
                           zIndex: 10,
-                          width: 'clamp(58px, 15.6vmin, 160px)',
-                          height: 'clamp(58px, 15.6vmin, 160px)',
+                          width: 'clamp(62px, 16.8vmin, 172px)',
+                          height: 'clamp(62px, 16.8vmin, 172px)',
                           position: 'relative',
                           willChange: 'transform, opacity',
                         }}
@@ -436,12 +519,12 @@ export default function IntroSequence() {
 
                     <div
                       ref={subtitleBottomRef}
-                      className="mt-6 sm:mt-8 text-sm sm:text-base md:text-lg lg:text-xl font-mono tracking-[0.28em] uppercase font-black inline-flex items-center gap-2 select-none"
+                      className="mt-6 sm:mt-10 text-base sm:text-lg md:text-xl lg:text-2xl font-mono tracking-[0.25em] sm:tracking-[0.32em] uppercase font-black inline-flex items-center gap-2 select-none"
                       style={{ opacity: 0, willChange: 'transform, opacity' }}
                     >
                       <ShinyText
                         text="Built to Begin, Catalized to Scale"
-                        color="rgba(255, 255, 255, 0.9)"
+                        color="rgba(255, 255, 255, 0.95)"
                         shineColor="#38BDF8"
                         speed={2.6}
                       />
