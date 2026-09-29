@@ -11,33 +11,13 @@ import Magnet from './reactbits/Magnet';
 import ShinyText from './reactbits/ShinyText';
 import CountUp from './reactbits/CountUp';
 import StarBorder from './reactbits/StarBorder';
-import {
-  ArrowRight,
-  Layers,
-  ChevronRight,
-  Terminal,
-  Activity,
-  ShieldCheck,
-  RotateCcw,
-  CheckCircle2,
-  Rocket,
-  ExternalLink,
-  Briefcase,
-  Building2,
-  Compass,
-  Sparkles,
-  Zap,
-  TrendingUp,
-  Cpu,
-  Target
-} from 'lucide-react';
+import Icons8 from './Icons8';
 
 interface HeroWebsiteProps {
-  onReplayIntro?: () => void;
   isIncoming?: boolean;
 }
 
-export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWebsiteProps) {
+export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
   const [activeModule, setActiveModule] = useState<number>(1);
 
   const headerRef = useRef<HTMLElement>(null);
@@ -254,31 +234,17 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
             </div>
 
             <div className="flex items-center gap-3">
-              {onReplayIntro && (
-                <Magnet padding={25} magnetStrength={3.5}>
-                  <LiquidGlass
-                    as="button"
-                    onClick={onReplayIntro}
-                    className="btn-liquid-glass-pill-cyan cursor-pointer"
-                    title="Re-play the X Scroll Sequence"
-                  >
-                    <RotateCcw className="w-3.5 h-3.5 text-[#00B4D8]" />
-                    <span className="hidden sm:inline">Replay Intro</span>
-                  </LiquidGlass>
-                </Magnet>
-              )}
-
               <Magnet padding={35} magnetStrength={3}>
-                <StarBorder color="#00B4D8" speed="4.5s" thickness={1.5} className="!rounded-full">
+                <StarBorder color="#00B4D8" speed="4.5s" thickness={1.5} className="!rounded-full border border-cyan-200/60 shadow-sm">
                   <LiquidGlass
                     as="a"
                     href="https://forms.gle/bennett-incubation"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-liquid-glass-tinted-cyan text-xs sm:text-sm !py-2.5 !px-5"
+                    className="btn-liquid-glass-tinted-cyan text-xs sm:text-sm !py-2.5 !px-5 inline-flex items-center gap-2"
                   >
                     <span>Apply for Incubation</span>
-                    <ExternalLink className="w-4 h-4" />
+                    <Icons8 name="externalLink" size={14} color="0284C7" />
                   </LiquidGlass>
                 </StarBorder>
               </Magnet>
@@ -292,12 +258,12 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
         {/* Release Pill Badge with ReactBits Magnet */}
         <div ref={heroBadgeRef} style={initialHiddenStyle} className="mb-6">
           <Magnet padding={30} magnetStrength={3.5}>
-            <div className="badge-pill-light cursor-pointer hover:border-cyan-400/50 transition-all shadow-sm">
+            <div className="badge-pill-light cursor-pointer hover:border-cyan-400/50 transition-all shadow-sm border border-slate-200/90">
               <span className="flex h-2 w-2 rounded-full bg-[#16A34A] animate-pulse" />
               <span className="text-slate-700">Bennett Hatchery Foundation // DPIIT-Recognized</span>
-              <span className="text-[#0284C7] font-bold flex items-center gap-1">
+              <span className="text-[#0284C7] font-bold flex items-center gap-1.5">
                 <span>Cohort 2026</span>
-                <ChevronRight className="w-3.5 h-3.5" />
+                <Icons8 name="chevronRight" size={13} color="0284C7" />
               </span>
             </div>
           </Magnet>
@@ -338,9 +304,9 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
                 href="https://forms.gle/bennett-incubation"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-liquid-glass-tinted-cyan !py-3.5 !px-9 text-base shadow-md"
+                className="btn-liquid-glass-tinted-cyan !py-3.5 !px-9 text-base shadow-md inline-flex items-center gap-2.5"
               >
-                <Rocket className="w-4 h-4 fill-current" />
+                <Icons8 name="rocket" size={16} color="090D16" />
                 <span>Apply for Incubation</span>
               </LiquidGlass>
             </StarBorder>
@@ -352,9 +318,9 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
               href="https://bennett-university-hatchery.vercel.app/portfolio"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-liquid-glass-crystal !py-3.5 !px-9 text-base"
+              className="btn-liquid-glass-crystal !py-3.5 !px-9 text-base border border-slate-200/90 inline-flex items-center gap-2.5 shadow-sm"
             >
-              <Briefcase className="w-4 h-4 text-[#0284C7]" />
+              <Icons8 name="briefcase" size={15} color="0284C7" />
               <span>Explore 80+ Incubated Startups</span>
             </LiquidGlass>
           </Magnet>
@@ -370,15 +336,15 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
           <SpotlightCard
             spotlightColor="rgba(0, 180, 216, 0.16)"
             borderGlowColor="rgba(0, 180, 216, 0.4)"
-            className="rounded-3xl h-full"
+            className="rounded-3xl h-full border border-slate-200/80 shadow-sm"
           >
-            <LiquidGlass className="liquid-glass-card p-6 xl:p-8 rounded-3xl min-h-[185px] flex flex-col justify-between h-full">
+            <LiquidGlass className="liquid-glass-card p-6 xl:p-8 rounded-3xl min-h-[185px] flex flex-col justify-between h-full border border-slate-200/90">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-mono text-[#0284C7] font-bold uppercase tracking-wider">
                   Framework
                 </span>
                 <div className="w-8 h-8 rounded-xl bg-cyan-50 border border-cyan-200/60 flex items-center justify-center">
-                  <Layers className="w-4 h-4 text-[#0284C7]" />
+                  <Icons8 name="layers" size={16} color="0284C7" />
                 </div>
               </div>
               <div>
@@ -395,15 +361,15 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
           <SpotlightCard
             spotlightColor="rgba(22, 163, 74, 0.16)"
             borderGlowColor="rgba(22, 163, 74, 0.4)"
-            className="rounded-3xl h-full"
+            className="rounded-3xl h-full border border-slate-200/80 shadow-sm"
           >
-            <LiquidGlass className="liquid-glass-card p-6 xl:p-8 rounded-3xl min-h-[185px] flex flex-col justify-between h-full">
+            <LiquidGlass className="liquid-glass-card p-6 xl:p-8 rounded-3xl min-h-[185px] flex flex-col justify-between h-full border border-slate-200/90">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-mono text-[#16A34A] font-bold uppercase tracking-wider">
                   Duration
                 </span>
                 <div className="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200/60 flex items-center justify-center">
-                  <Zap className="w-4 h-4 text-[#16A34A]" />
+                  <Icons8 name="zap" size={16} color="16A34A" />
                 </div>
               </div>
               <div>
@@ -421,15 +387,15 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
           <SpotlightCard
             spotlightColor="rgba(219, 39, 119, 0.16)"
             borderGlowColor="rgba(219, 39, 119, 0.4)"
-            className="rounded-3xl h-full"
+            className="rounded-3xl h-full border border-slate-200/80 shadow-sm"
           >
-            <LiquidGlass className="liquid-glass-card p-6 xl:p-8 rounded-3xl min-h-[185px] flex flex-col justify-between h-full">
+            <LiquidGlass className="liquid-glass-card p-6 xl:p-8 rounded-3xl min-h-[185px] flex flex-col justify-between h-full border border-slate-200/90">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-mono text-[#DB2777] font-bold uppercase tracking-wider">
                   Mentorship
                 </span>
                 <div className="w-8 h-8 rounded-xl bg-pink-50 border border-pink-200/60 flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-[#DB2777]" />
+                  <Icons8 name="sparkles" size={16} color="DB2777" />
                 </div>
               </div>
               <div>
@@ -446,15 +412,15 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
           <SpotlightCard
             spotlightColor="rgba(217, 119, 6, 0.16)"
             borderGlowColor="rgba(217, 119, 6, 0.4)"
-            className="rounded-3xl h-full"
+            className="rounded-3xl h-full border border-slate-200/80 shadow-sm"
           >
-            <LiquidGlass className="liquid-glass-card p-6 xl:p-8 rounded-3xl min-h-[185px] flex flex-col justify-between h-full">
+            <LiquidGlass className="liquid-glass-card p-6 xl:p-8 rounded-3xl min-h-[185px] flex flex-col justify-between h-full border border-slate-200/90">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-mono text-[#D97706] font-bold uppercase tracking-wider">
                   Tech Readiness
                 </span>
                 <div className="w-8 h-8 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center justify-center">
-                  <Target className="w-4 h-4 text-[#D97706]" />
+                  <Icons8 name="target" size={16} color="D97706" />
                 </div>
               </div>
               <div>
@@ -469,19 +435,19 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
       </main>
 
       {/* 2. Institutional Venture Engine: Asymmetric Locked Bento Grid with ReactBits SpotlightCard & CountUp */}
-      <section id="engine" className="relative z-10 w-full max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 py-20 border-t border-slate-200">
+      <section id="engine" className="relative z-10 w-full max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 py-20 border-t border-slate-200/90">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
 
           {/* Bento Tile 1: 7-Column Left Engine Thesis */}
           <SpotlightCard
             spotlightColor="rgba(2, 132, 199, 0.12)"
             borderGlowColor="rgba(2, 132, 199, 0.35)"
-            className="lg:col-span-7 rounded-3xl"
+            className="lg:col-span-7 rounded-3xl border border-slate-200/90 shadow-sm"
           >
-            <LiquidGlass className="liquid-glass-card p-8 sm:p-12 rounded-3xl flex flex-col justify-between min-h-[440px] h-full">
+            <LiquidGlass className="liquid-glass-card p-8 sm:p-12 rounded-3xl flex flex-col justify-between min-h-[440px] h-full border border-slate-200/90">
               <div className="space-y-6">
-                <div className="badge-pill-light text-[#0284C7] font-bold">
-                  <Building2 className="w-3.5 h-3.5" /> Institutional Venture Engine
+                <div className="badge-pill-light text-[#0284C7] font-bold inline-flex items-center gap-2 border border-slate-200/90 shadow-sm">
+                  <Icons8 name="building" size={14} color="0284C7" /> Institutional Venture Engine
                 </div>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-slate-950">
                   Building Scalable Enterprises with{' '}
@@ -581,14 +547,14 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
 
           {/* Bento Tile 3: 12-Column Full-Width Telemetry Strip with ReactBits SpotlightCard */}
           <div className="lg:col-span-12">
-            <LiquidGlass className="liquid-glass-card p-5 sm:p-6 rounded-2xl w-full grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <LiquidGlass className="liquid-glass-card p-5 sm:p-6 rounded-2xl w-full grid grid-cols-2 sm:grid-cols-4 gap-4 border border-slate-200/90 shadow-sm">
               <SpotlightCard
                 spotlightColor="rgba(0, 180, 216, 0.12)"
                 borderGlowColor="rgba(0, 180, 216, 0.3)"
-                className="p-3 rounded-xl"
+                className="p-3 rounded-xl border border-slate-200/70"
               >
                 <div className="flex items-center gap-3.5 pr-2">
-                  <Building2 className="w-5 h-5 text-[#00B4D8] shrink-0" />
+                  <Icons8 name="building" size={20} color="00B4D8" />
                   <div>
                     <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Governance</span>
                     <span className="text-xs font-bold text-slate-900">Bennett University &amp; CIE</span>
@@ -599,10 +565,10 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
               <SpotlightCard
                 spotlightColor="rgba(22, 163, 74, 0.12)"
                 borderGlowColor="rgba(22, 163, 74, 0.3)"
-                className="p-3 rounded-xl"
+                className="p-3 rounded-xl border border-slate-200/70"
               >
                 <div className="flex items-center gap-3.5 pr-2">
-                  <Cpu className="w-5 h-5 text-[#16A34A] shrink-0" />
+                  <Icons8 name="cpu" size={20} color="16A34A" />
                   <div>
                     <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Makerspace Suite</span>
                     <span className="text-xs font-bold text-slate-900">12+ Engineering Labs</span>
@@ -613,10 +579,10 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
               <SpotlightCard
                 spotlightColor="rgba(219, 39, 119, 0.12)"
                 borderGlowColor="rgba(219, 39, 119, 0.3)"
-                className="p-3 rounded-xl"
+                className="p-3 rounded-xl border border-slate-200/70"
               >
                 <div className="flex items-center gap-3.5 pr-2">
-                  <TrendingUp className="w-5 h-5 text-[#DB2777] shrink-0" />
+                  <Icons8 name="trendingUp" size={20} color="DB2777" />
                   <div>
                     <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Active Cohort</span>
                     <span className="text-xs font-bold text-slate-900">Rolling Quarterly Intake</span>
@@ -627,10 +593,10 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
               <SpotlightCard
                 spotlightColor="rgba(217, 119, 6, 0.12)"
                 borderGlowColor="rgba(217, 119, 6, 0.3)"
-                className="p-3 rounded-xl"
+                className="p-3 rounded-xl border border-slate-200/70"
               >
                 <div className="flex items-center gap-3.5">
-                  <ShieldCheck className="w-5 h-5 text-[#D97706] shrink-0" />
+                  <Icons8 name="shield" size={20} color="D97706" />
                   <div>
                     <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Recognition</span>
                     <span className="text-xs font-bold text-slate-900">DPIIT &amp; Startup India</span>
@@ -647,7 +613,7 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
         <SpotlightCard
           spotlightColor="rgba(255, 46, 147, 0.16)"
           borderGlowColor="rgba(255, 46, 147, 0.4)"
-          className="rounded-3xl"
+          className="rounded-3xl border border-slate-200/90 shadow-md"
         >
           <LiquidGlass className="liquid-glass-card p-8 sm:p-12 xl:p-14 rounded-3xl relative overflow-hidden border border-cyan-300/60 shadow-md">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
@@ -667,7 +633,7 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
               </div>
 
               <Magnet padding={45} magnetStrength={3}>
-                <StarBorder color="#FF2E93" speed="3.8s" thickness={2} className="!rounded-full shadow-md shrink-0">
+                <StarBorder color="#FF2E93" speed="3.8s" thickness={2} className="!rounded-full shadow-md shrink-0 border border-pink-200/60">
                   <LiquidGlass
                     as="a"
                     displacement={true}
@@ -678,7 +644,7 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
                   >
                     <span className="inline-flex items-center gap-2">
                       <span>Explore the Space Cohort</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <Icons8 name="arrowRight" size={15} color="FFFFFF" />
                     </span>
                   </LiquidGlass>
                 </StarBorder>
@@ -689,10 +655,10 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
       </section>
 
       {/* 4. The CatalytiX Venture Curriculum: Locked Full-Width Bento Pipeline */}
-      <section id="curriculum" className="relative z-10 w-full max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 py-20 border-t border-slate-200">
+      <section id="curriculum" className="relative z-10 w-full max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 py-20 border-t border-slate-200/90">
         <div className="text-center mb-16">
-          <div className="badge-pill-light mb-4 text-[#16A34A] font-bold">
-            <Layers className="w-3.5 h-3.5" /> TRL 1 - 9 PIPELINE // Structured Roadmap
+          <div className="badge-pill-light mb-4 text-[#16A34A] font-bold inline-flex items-center gap-2 border border-slate-200/90 shadow-sm">
+            <Icons8 name="layers" size={14} color="16A34A" /> TRL 1 - 9 PIPELINE // Structured Roadmap
           </div>
           <h2 className="text-3xl sm:text-6xl font-extrabold mb-4 text-slate-950">
             The <span className="gradient-text-playful">CatalytiX</span> Venture Curriculum
@@ -708,10 +674,11 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
             <Magnet key={idx} padding={18} magnetStrength={5} wrapperClassName="w-full">
               <button
                 onClick={() => setActiveModule(idx + 1)}
-                className={`w-full p-3.5 rounded-2xl font-mono text-xs sm:text-sm font-semibold transition-all cursor-pointer text-left flex flex-col justify-between min-h-[82px] ${activeModule === idx + 1
-                  ? 'bg-white text-slate-950 border border-slate-300 shadow-md ring-2 ring-cyan-400/40'
-                  : 'bg-slate-100/90 text-slate-600 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-200/60'
-                  }`}
+                className={`w-full p-3.5 rounded-2xl font-mono text-xs sm:text-sm font-semibold transition-all cursor-pointer text-left flex flex-col justify-between min-h-[82px] border ${
+                  activeModule === idx + 1
+                    ? 'bg-white text-slate-950 border-slate-300 shadow-md ring-2 ring-cyan-400/40'
+                    : 'bg-slate-100/90 text-slate-600 hover:text-slate-900 border-slate-200/90 hover:bg-slate-200/60'
+                }`}
               >
                 <span style={{ color: m.color }} className="font-bold text-xs uppercase tracking-wider block">
                   MODULE {m.num}
@@ -729,14 +696,14 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
             <SpotlightCard
               spotlightColor={`${mod.color}1e`}
               borderGlowColor={`${mod.color}55`}
-              className="rounded-3xl w-full"
+              className="rounded-3xl w-full border border-slate-200/90 shadow-md"
             >
-              <LiquidGlass className="liquid-glass-card p-8 sm:p-12 rounded-3xl border border-slate-200 shadow-lg w-full min-h-[380px] flex flex-col justify-between">
+              <LiquidGlass className="liquid-glass-card p-8 sm:p-12 rounded-3xl border border-slate-200/90 shadow-lg w-full min-h-[380px] flex flex-col justify-between">
                 <div>
                   <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-100 mb-8">
                     <div>
                       <span
-                        className="font-mono text-xs uppercase tracking-widest px-3 py-1 rounded-full bg-slate-100 font-bold mr-3 inline-block"
+                        className="font-mono text-xs uppercase tracking-widest px-3 py-1 rounded-full bg-slate-100 font-bold mr-3 inline-block border border-slate-200/70"
                         style={{ color: mod.color }}
                       >
                         MODULE {mod.num}
@@ -761,7 +728,7 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
                     {/* Masterclasses */}
                     <div className="space-y-4">
                       <h4 className="font-mono text-xs uppercase tracking-wider text-slate-500 font-bold flex items-center gap-2">
-                        <Terminal className="w-4 h-4 text-[#00B4D8]" /> Masterclasses
+                        <Icons8 name="terminal" size={15} color="00B4D8" /> Masterclasses
                       </h4>
                       <ul className="space-y-2.5">
                         {mod.masterclasses.map((item, i) => (
@@ -776,7 +743,7 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
                     {/* Workshops / Activities */}
                     <div className="space-y-4">
                       <h4 className="font-mono text-xs uppercase tracking-wider text-slate-500 font-bold flex items-center gap-2">
-                        <Activity className="w-4 h-4 text-[#16A34A]" /> Workshops &amp; Sprints
+                        <Icons8 name="activity" size={15} color="16A34A" /> Workshops &amp; Sprints
                       </h4>
                       <div className="flex flex-wrap gap-2">
                         {mod.activities.map((item, i) => (
@@ -793,9 +760,9 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
                     {/* Review & Deliverable */}
                     <div className="space-y-4">
                       <h4 className="font-mono text-xs uppercase tracking-wider text-slate-500 font-bold flex items-center gap-2">
-                        <ShieldCheck className="w-4 h-4 text-[#D91B74]" /> Milestone Review Gate
+                        <Icons8 name="shield" size={15} color="D91B74" /> Milestone Review Gate
                       </h4>
-                      <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                      <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/90 shadow-sm">
                         <p className="text-xs font-semibold text-slate-800 mb-1">Evaluation Gate:</p>
                         <p className="text-xs text-slate-600 leading-relaxed">{mod.review}</p>
                       </div>
@@ -815,10 +782,10 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
       </section>
 
       {/* 5. The 4-Stage Incubation Lifecycle: Locked 4-Column Bento Grid with ReactBits SpotlightCard */}
-      <section id="lifecycle" className="relative z-10 w-full max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 py-20 border-t border-slate-200">
+      <section id="lifecycle" className="relative z-10 w-full max-w-[1780px] mx-auto px-4 sm:px-8 xl:px-12 py-20 border-t border-slate-200/90">
         <div className="text-center mb-16">
-          <div className="badge-pill-light mb-4 text-[#0284C7] font-bold">
-            <Compass className="w-3.5 h-3.5" /> Structured Timeline // Quarterly Rolling Admissions
+          <div className="badge-pill-light mb-4 text-[#0284C7] font-bold inline-flex items-center gap-2 border border-slate-200/90 shadow-sm">
+            <Icons8 name="compass" size={14} color="0284C7" /> Structured Timeline // Quarterly Rolling Admissions
           </div>
           <h2 className="text-3xl sm:text-6xl font-extrabold mb-4 text-slate-950">
             The 4-Stage <span className="gradient-text-cool">Incubation Lifecycle</span>
@@ -835,15 +802,15 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
               key={idx}
               spotlightColor={`${stage.badgeColor}18`}
               borderGlowColor={`${stage.badgeColor}44`}
-              className="rounded-3xl h-full"
+              className="rounded-3xl h-full border border-slate-200/90 shadow-sm"
             >
               <LiquidGlass
-                className="liquid-glass-card p-6 xl:p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between min-h-[420px] h-full hover:border-slate-300 hover:shadow-lg transition-all"
+                className="liquid-glass-card p-6 xl:p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between min-h-[420px] h-full border border-slate-200/90 hover:border-slate-300 hover:shadow-lg transition-all"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span
-                      className="font-mono text-xs font-bold px-3 py-1 rounded-full bg-slate-100"
+                      className="font-mono text-xs font-bold px-3 py-1 rounded-full bg-slate-100 border border-slate-200/70"
                       style={{ color: stage.badgeColor }}
                     >
                       PHASE {stage.step}
@@ -866,7 +833,7 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
                     <ul className="space-y-2">
                       {stage.milestones.map((m, mIdx) => (
                         <li key={mIdx} className="text-xs text-slate-700 flex items-start gap-2 leading-relaxed hover:translate-x-0.5 transition-transform">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#00B4D8] mt-0.5 shrink-0" />
+                          <Icons8 name="check" size={14} color="00B4D8" className="mt-0.5 shrink-0" />
                           <span>{m}</span>
                         </li>
                       ))}
@@ -889,11 +856,11 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
         <SpotlightCard
           spotlightColor="rgba(0, 240, 255, 0.16)"
           borderGlowColor="rgba(0, 240, 255, 0.4)"
-          className="rounded-3xl shadow-xl"
+          className="rounded-3xl shadow-xl border border-slate-200/90"
         >
-          <LiquidGlass className="liquid-glass-card p-10 sm:p-16 xl:p-20 rounded-3xl relative overflow-hidden text-center border border-slate-200 bg-gradient-to-b from-white via-slate-50/60 to-white">
+          <LiquidGlass className="liquid-glass-card p-10 sm:p-16 xl:p-20 rounded-3xl relative overflow-hidden text-center border border-slate-200/90 bg-gradient-to-b from-white via-slate-50/60 to-white">
             <div className="relative z-10 max-w-4xl mx-auto space-y-6">
-              <span className="badge-pill-light text-[#16A34A] font-bold">
+              <span className="badge-pill-light text-[#16A34A] font-bold border border-slate-200/90 shadow-sm">
                 Quarterly Rolling Admissions Active
               </span>
               <h2 className="text-3xl sm:text-6xl font-extrabold leading-tight text-slate-950 tracking-tight">
@@ -906,16 +873,16 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
 
               <div className="flex flex-wrap items-center justify-center gap-5 pt-4">
                 <Magnet padding={50} magnetStrength={3}>
-                  <StarBorder color="#00F0FF" speed="3.5s" thickness={2} className="!rounded-full shadow-lg">
+                  <StarBorder color="#00F0FF" speed="3.5s" thickness={2} className="!rounded-full shadow-lg border border-cyan-200/60">
                     <LiquidGlass
                       as="a"
                       displacement={true}
                       href="https://forms.gle/bennett-incubation"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn-liquid-glass-tinted-cyan !py-4 !px-10 text-base shadow-lg"
+                      className="btn-liquid-glass-tinted-cyan !py-4 !px-10 text-base shadow-lg inline-flex items-center gap-2.5"
                     >
-                      <Rocket className="w-4 h-4 fill-current" />
+                      <Icons8 name="rocket" size={16} color="090D16" />
                       <span>Apply for Incubation</span>
                     </LiquidGlass>
                   </StarBorder>
@@ -927,9 +894,9 @@ export default function HeroWebsite({ onReplayIntro, isIncoming = true }: HeroWe
                     href="https://bennett-university-hatchery.vercel.app/portfolio"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-liquid-glass-crystal !py-4 !px-10 text-base"
+                    className="btn-liquid-glass-crystal !py-4 !px-10 text-base border border-slate-200/90 inline-flex items-center gap-2.5 shadow-sm"
                   >
-                    <Briefcase className="w-4 h-4 text-[#0284C7]" />
+                    <Icons8 name="briefcase" size={15} color="0284C7" />
                     <span>Explore Portfolio Startups</span>
                   </LiquidGlass>
                 </Magnet>
