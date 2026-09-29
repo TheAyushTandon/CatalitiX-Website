@@ -31,10 +31,13 @@ export default function CatalytiXMark({
   const computedWidth = width ?? size;
   const computedHeight = height ?? (isPercent ? size : size);
 
+  // When rotated 45°, the bounding box is exactly -234.4 to +234.4. Tight viewBox removes empty padding so X is bigger and close to letters
+  const viewBox = rotate === 45 ? "-238 -238 476 476" : "-350 -350 700 700";
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="-350 -350 700 700"
+      viewBox={viewBox}
       width={computedWidth}
       height={computedHeight}
       preserveAspectRatio="xMidYMid meet"

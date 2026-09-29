@@ -25,13 +25,13 @@ export default function Wordmark({
     hero: { font: 'clamp(3.5rem, 8vw, 7.5rem)', icon: 'clamp(116px, 18vw, 240px)', gap: '14px' },
     footer: {
       font: 'clamp(3.2rem, 15.6vmin, 15.5rem)',
-      icon: 'clamp(50px, 15.6vmin, 155px)',
-      gap: 'clamp(8px, 2.5vmin, 32px)',
+      icon: 'clamp(58px, 15.6vmin, 160px)',
+      gap: 'clamp(2px, 0.6vmin, 8px)',
     },
     full: {
       font: 'clamp(3.2rem, 15.6vmin, 15.5rem)',
-      icon: 'clamp(50px, 15.6vmin, 155px)',
-      gap: 'clamp(8px, 2.5vmin, 32px)',
+      icon: 'clamp(58px, 15.6vmin, 160px)',
+      gap: 'clamp(2px, 0.6vmin, 8px)',
     },
   };
 

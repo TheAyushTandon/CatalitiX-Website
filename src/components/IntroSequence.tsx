@@ -313,7 +313,7 @@ export default function IntroSequence() {
                     {/* Big Wordmark Row Fitting 1:1 Screen */}
                     <div
                       className="w-full flex items-center justify-center whitespace-nowrap select-none"
-                      style={{ gap: 'clamp(8px, 2.5vmin, 32px)' }}
+                      style={{ gap: 'clamp(2px, 0.6vmin, 8px)' }}
                     >
                       <div
                         ref={catalytiTextRef}
@@ -354,13 +354,13 @@ export default function IntroSequence() {
                         </span>
                       </div>
 
-                      {/* The White "X" - Sized to match the massive CATALYTI */}
+                      {/* The White "X" - Sized bigger & brought closer so space between all is identical */}
                       <div
                         ref={xEntranceRef}
                         className="shrink-0 inline-flex items-center justify-center select-none"
                         style={{
-                          width: 'clamp(55px, 15.2vmin, 155px)',
-                          height: 'clamp(55px, 15.2vmin, 155px)',
+                          width: 'clamp(58px, 15.6vmin, 160px)',
+                          height: 'clamp(58px, 15.6vmin, 160px)',
                           position: 'relative',
                           willChange: 'transform, opacity',
                         }}
