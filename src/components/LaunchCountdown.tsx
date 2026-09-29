@@ -126,7 +126,7 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
     >
       {/* ─────────────────────────────────────────────────────────────
           LAYER 1: MONOCHROME BLACK & WHITE (Initial State)
-          Pure high-contrast black and white typography and particles
+          Pure high-contrast black and white typography and particles (No Grid)
           ───────────────────────────────────────────────────────────── */}
       <div
         ref={bwLayerRef}
@@ -144,16 +144,11 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
           />
         </div>
 
-        {/* Monochrome Ambient Radial Vignette */}
+        {/* Monochrome Ambient Radial Vignette (NO GRID) */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: `
-              radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 45%, transparent 75%),
-              linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)
-            `,
-            backgroundSize: '100% 100%, 48px 48px, 48px 48px',
+            backgroundImage: `radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.015) 50%, transparent 80%)`,
           }}
         />
 
@@ -170,10 +165,6 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
 
             {/* Clean Floating Quote */}
             <div className="max-w-2xl mx-auto space-y-5 py-2">
-              <span className="text-xs sm:text-sm font-mono uppercase tracking-[0.3em] font-extrabold block text-white/70">
-                Institutional Venture Protocol
-              </span>
-
               <blockquote className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight italic tracking-tight">
                 &ldquo;A catalyst for disruptive innovation — turning ambitious ideas into market leaders with world-class labs, capital velocity, and governance.&rdquo;
               </blockquote>
@@ -213,9 +204,9 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
 
             <div className="pt-2 text-xs sm:text-sm font-mono font-bold">
               <ShinyText
-                text="CLICK TO INITIATE SYSTEM LAUNCH SEQUENCE"
+                text="Click To Launch CatalytiX"
                 speed={2.5}
-                color="rgba(255, 255, 255, 0.6)"
+                color="rgba(255, 255, 255, 0.7)"
                 shineColor="#FFFFFF"
               />
             </div>
@@ -226,7 +217,7 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
       {/* ─────────────────────────────────────────────────────────────
           LAYER 2: PRESTIGIOUS COLOR LAYER (Middle-to-Out Reveal)
           Rich Royal Sapphire, Warm Solar Amber & Mint Emerald palette
-          Revealed smoothly via circle clipPath expanding from center!
+          Revealed smoothly via circle clipPath expanding from center! (No Grid)
           ───────────────────────────────────────────────────────────── */}
       <div
         ref={colorLayerRef}
@@ -248,16 +239,11 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
           />
         </div>
 
-        {/* Sophisticated Royal Sapphire & Amber Radial Glow */}
+        {/* Sophisticated Royal Sapphire & Amber Radial Glow (NO GRID) */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: `
-              radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.32) 0%, rgba(245, 158, 11, 0.18) 45%, rgba(16, 185, 129, 0.1) 70%, transparent 85%),
-              linear-gradient(rgba(56, 189, 248, 0.04) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(56, 189, 248, 0.04) 1px, transparent 1px)
-            `,
-            backgroundSize: '100% 100%, 48px 48px, 48px 48px',
+            backgroundImage: `radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.35) 0%, rgba(245, 158, 11, 0.18) 45%, rgba(16, 185, 129, 0.08) 70%, transparent 85%)`,
           }}
         />
 
@@ -274,10 +260,6 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
 
             {/* Glowing Colored Quote */}
             <div className="max-w-2xl mx-auto space-y-5 py-2">
-              <span className="text-xs sm:text-sm font-mono uppercase tracking-[0.3em] font-black block text-sky-400">
-                Institutional Venture Protocol
-              </span>
-
               <blockquote className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight italic tracking-tight drop-shadow-[0_2px_20px_rgba(37,99,235,0.3)]">
                 &ldquo;A catalyst for disruptive innovation — turning ambitious ideas into market leaders with world-class labs, capital velocity, and governance.&rdquo;
               </blockquote>
@@ -318,7 +300,7 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
 
             <div className="pt-2 text-xs sm:text-sm font-mono font-bold">
               <ShinyText
-                text="SYSTEM LAUNCH SEQUENCE INITIATED"
+                text="Click To Launch CatalytiX"
                 speed={2}
                 color="#94a3b8"
                 shineColor="#38BDF8"
@@ -365,12 +347,12 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
           {count > 0 ? count : 'GO'}
         </div>
 
-        <div className="space-y-2">
-          <span className="font-mono text-sm sm:text-base uppercase tracking-[0.35em] text-sky-400 font-black block">
-            {count > 0 ? 'IGNITING CATALYTIX VENTURE RUNWAY' : 'LAUNCH COMMENCED'}
+        <div className="space-y-1.5">
+          <span className="font-mono text-sm sm:text-base uppercase tracking-[0.3em] text-sky-400 font-black block">
+            {count > 0 ? 'CATALYTIX COHORT 2026' : 'WELCOME TO CATALYTIX'}
           </span>
           <p className="text-xs sm:text-sm font-mono font-bold text-slate-300">
-            Bennett Hatchery Foundation // DeepTech Venture Engine
+            Bennett Hatchery Foundation
           </p>
         </div>
       </div>

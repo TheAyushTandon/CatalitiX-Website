@@ -295,41 +295,45 @@ export default function IntroSequence() {
                   style={{ zIndex: 15, willChange: 'opacity' }}
                 />
 
-                {/* Hero Wordmark: "Bennett Hatchery Presents" + "CATALYTI" + The Spinning White "X" */}
+                {/* Hero Wordmark: "Bennett Hatchery Presents" + "CATALYTI" + The Spinning White "X" (BIG TO FIT 1:1 SCREEN) */}
                 <div
-                  className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none"
+                  ref={stageRef}
+                  className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none px-4 sm:px-6"
                   style={{ zIndex: 30 }}
                 >
-                  <div className="flex flex-col items-center">
+                  <div className="w-full max-w-[min(100vw,100vh)] aspect-square flex flex-col items-center justify-center text-center">
                     <span
                       ref={subtitleTopRef}
-                      className="font-mono text-xs sm:text-sm uppercase tracking-[0.35em] text-cyan-300 font-extrabold mb-4 inline-flex items-center gap-2"
+                      className="font-mono text-sm sm:text-base md:text-lg lg:text-xl uppercase tracking-[0.4em] text-sky-400 font-black mb-6 sm:mb-8 inline-flex items-center gap-2 select-none"
                       style={{ willChange: 'transform, opacity' }}
                     >
                       Bennett Hatchery Presents
                     </span>
 
-                    {/* Wordmark Row */}
-                    <div className="inline-flex items-center gap-1 sm:gap-3">
+                    {/* Big Wordmark Row Fitting 1:1 Screen */}
+                    <div
+                      className="w-full flex items-center justify-center whitespace-nowrap select-none"
+                      style={{ gap: 'clamp(8px, 2.5vmin, 32px)' }}
+                    >
                       <div
                         ref={catalytiTextRef}
                         className="relative inline-flex items-center justify-center"
                         style={{ willChange: 'transform, opacity' }}
                       >
                         <div
-                          className="absolute -inset-16 rounded-full pointer-events-none"
+                          className="absolute -inset-20 rounded-full pointer-events-none"
                           style={{
                             background:
-                              'radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.28) 0%, rgba(124, 255, 103, 0.2) 40%, rgba(255, 46, 147, 0.16) 60%, transparent 78%)',
+                              'radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.35) 0%, rgba(245, 158, 11, 0.22) 45%, transparent 75%)',
                             filter: 'blur(50px)',
                           }}
                         />
                         <span
                           className="relative z-10 font-asimovian select-none inline-flex items-center"
                           style={{
-                            fontSize: 'clamp(2.8rem, 7vw, 6.2rem)',
-                            lineHeight: 1,
-                            letterSpacing: '0.04em',
+                            fontSize: 'clamp(3.8rem, 15.2vmin, 15.5rem)',
+                            lineHeight: 0.95,
+                            letterSpacing: '0.035em',
                             textTransform: 'uppercase',
                           }}
                         >
@@ -350,13 +354,13 @@ export default function IntroSequence() {
                         </span>
                       </div>
 
-                      {/* The White "X" */}
+                      {/* The White "X" - Sized to match the massive CATALYTI */}
                       <div
                         ref={xEntranceRef}
-                        className="inline-flex items-center justify-center select-none"
+                        className="shrink-0 inline-flex items-center justify-center select-none"
                         style={{
-                          width: 'clamp(70px, 9vw, 150px)',
-                          height: 'clamp(70px, 9vw, 150px)',
+                          width: 'clamp(55px, 15.2vmin, 155px)',
+                          height: 'clamp(55px, 15.2vmin, 155px)',
                           position: 'relative',
                           willChange: 'transform, opacity',
                         }}
@@ -387,13 +391,13 @@ export default function IntroSequence() {
 
                     <div
                       ref={subtitleBottomRef}
-                      className="mt-4 text-xs sm:text-sm font-mono tracking-widest uppercase font-bold inline-flex items-center gap-2"
+                      className="mt-6 sm:mt-8 text-sm sm:text-base md:text-lg lg:text-xl font-mono tracking-[0.28em] uppercase font-black inline-flex items-center gap-2 select-none"
                       style={{ willChange: 'transform, opacity' }}
                     >
                       <ShinyText
                         text="Built to Begin, Catalized to Scale"
-                        color="rgba(255, 255, 255, 0.85)"
-                        shineColor="#00F0FF"
+                        color="rgba(255, 255, 255, 0.9)"
+                        shineColor="#38BDF8"
                         speed={2.6}
                       />
                     </div>
