@@ -147,29 +147,24 @@ export default function IntroSequence() {
     const runEntrance = () => {
       if (!catalytiTextRef.current || !xEntranceRef.current || !singleXRef.current) return;
 
-      // Accurately measure screen center vs resting center of the X element
-      // Temporarily reset any transforms to get pure unshifted bounding boxes
+      // 1. Reset all transforms and ensure no clipPath cuts off CATALYTI
       gsap.set(xEntranceRef.current, { x: 0, opacity: 0 });
-      gsap.set(catalytiTextRef.current, { opacity: 0, x: 0, clipPath: 'inset(0 0% 0 100%)' });
+      gsap.set(catalytiTextRef.current, { opacity: 0, x: 0, clipPath: 'none' });
       gsap.set([subtitleTopRef.current, subtitleBottomRef.current], { opacity: 0 });
 
       // Measure unshifted positions
       const xRect = xEntranceRef.current.getBoundingClientRect();
-      const textRect = catalytiTextRef.current.getBoundingClientRect();
       const screenCenterX = window.innerWidth / 2;
       const currentXCenter = xRect.left + xRect.width / 2;
       
-      // Exact distance X needs to shift to be positioned dead center on screen
+      // Distance X needs to shift to be positioned dead center on screen
       const shiftToCenter = screenCenterX - currentXCenter;
 
-      // When the X is at screen center, its center is at (xRect.left + shiftToCenter + xRect.width / 2) = screenCenterX.
-      // In the resting state, CATALYTI's right edge is at textRect.right.
-      // To place CATALYTI directly behind/tucked at the center X initially, its right edge
-      // should align with screenCenterX:
-      // initial text offset = screenCenterX - textRect.right
-      const textShiftToX = screenCenterX - textRect.right;
+      // CATALYTI starts behind the X at the center (shifted right by shiftToCenter),
+      // then glides out to the left into its resting position (x: 0).
+      const textStartShift = shiftToCenter;
 
-      // 1. Initial state: X appears in center
+      // Set initial positions
       gsap.set(xEntranceRef.current, {
         x: shiftToCenter,
         opacity: 0,
@@ -177,13 +172,13 @@ export default function IntroSequence() {
         rotation: -90,
       });
 
-      // CATALYTI starts uncontainerized, positioned tucked directly under/behind the X at screen center
       gsap.set(catalytiTextRef.current, {
         opacity: 0,
-        x: textShiftToX,
+        x: textStartShift,
+        clipPath: 'none',
       });
 
-      const entranceTl = gsap.timeline({ delay: 0.15 });
+      const entranceTl = gsap.timeline({ delay: 0.1 });
       activeTl = entranceTl;
 
       // 2. First: The X appears alone in the exact center of the screen
@@ -191,20 +186,19 @@ export default function IntroSequence() {
         opacity: 1,
         scale: 1,
         rotation: 0,
-        duration: 0.85,
-        ease: 'back.out(1.8)',
+        duration: 0.8,
+        ease: 'back.out(1.7)',
       });
 
-      // 3. Next: "CATALYTI" emerges from behind the X, coming out to the left of the X
-      // while the X shifts to the right into its final spot!
+      // 3. Next: CATALYTI emerges from behind the X to the left, while X shifts to the right!
       entranceTl.to(
         xEntranceRef.current,
         {
           x: 0,
-          duration: 1.1,
+          duration: 1.0,
           ease: 'power3.inOut',
         },
-        '+=0.25'
+        '+=0.2'
       );
 
       entranceTl.to(
@@ -212,19 +206,19 @@ export default function IntroSequence() {
         {
           opacity: 1,
           x: 0,
-          duration: 1.1,
+          duration: 1.0,
           ease: 'power3.inOut',
         },
         '<'
       );
 
-      // 4. Subtitles reveal smoothly once wordmark locks in place
+      // 4. Subtitles reveal smoothly once wordmark is in place
       if (subtitleTopRef.current) {
         entranceTl.fromTo(
           subtitleTopRef.current,
           { y: 18, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out' },
-          '-=0.4'
+          { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' },
+          '-=0.35'
         );
       }
 
@@ -232,20 +226,22 @@ export default function IntroSequence() {
         entranceTl.fromTo(
           subtitleBottomRef.current,
           { y: -18, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out' },
-          '-=0.5'
+          { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' },
+          '-=0.45'
         );
       }
     };
 
-    if (typeof document !== 'undefined' && document.fonts) {
-      document.fonts.ready.then(() => {
-        // Small rAF tick to allow DOM layout to settle
-        requestAnimationFrame(runEntrance);
-      });
-    } else {
-      setTimeout(runEntrance, 80);
-    }
+    // Run when countdown finishes (showCountdown becomes false)
+    const timeoutId = setTimeout(() => {
+      if (typeof document !== 'undefined' && document.fonts) {
+        document.fonts.ready.then(() => {
+          requestAnimationFrame(runEntrance);
+        });
+      } else {
+        runEntrance();
+      }
+    }, 50);
 
     // Listen for left click or key press to ignite X animation
     const handleClick = (e: MouseEvent) => {
@@ -265,6 +261,7 @@ export default function IntroSequence() {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
+      clearTimeout(timeoutId);
       window.removeEventListener('click', handleClick);
       window.removeEventListener('keydown', handleKeyDown);
       if (activeTl) activeTl.kill();
