@@ -5,7 +5,8 @@ interface WordmarkProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg' | 'hero';
   showSubtitle?: boolean;
-  colorScheme?: 'playful' | 'subtle' | 'white';
+  colorScheme?: 'playful' | 'subtle' | 'white' | 'dark';
+  markFill?: string;
 }
 
 export default function Wordmark({
@@ -13,12 +14,13 @@ export default function Wordmark({
   size = 'md',
   showSubtitle = false,
   colorScheme = 'playful',
+  markFill,
 }: WordmarkProps) {
   const sizeMap = {
-    sm: { font: '1.4rem', icon: 34, gap: '4px' },
-    md: { font: '2rem', icon: 50, gap: '6px' },
-    lg: { font: '3.2rem', icon: 84, gap: '8px' },
-    hero: { font: 'clamp(3.5rem, 8vw, 7.5rem)', icon: 'clamp(96px, 16vw, 210px)', gap: '10px' },
+    sm: { font: '1.4rem', icon: 40, gap: '6px' },
+    md: { font: '2rem', icon: 58, gap: '8px' },
+    lg: { font: '3.2rem', icon: 96, gap: '10px' },
+    hero: { font: 'clamp(3.5rem, 8vw, 7.5rem)', icon: 'clamp(116px, 18vw, 240px)', gap: '14px' },
   };
 
   const currentSize = sizeMap[size];
@@ -30,6 +32,16 @@ export default function Wordmark({
     letterSpacing: '0.04em',
     textTransform: 'uppercase',
   };
+
+  const resolvedMarkFill = markFill ?? (
+    colorScheme === 'dark'
+      ? '#090d16'
+      : colorScheme === 'white'
+      ? '#FFFFFF'
+      : colorScheme === 'playful'
+      ? '#090d16'
+      : '#FFFFFF'
+  );
 
   return (
     <div className={`inline-flex flex-col items-center ${className}`}>
@@ -48,6 +60,8 @@ export default function Wordmark({
               ? 'gradient-text-playful'
               : colorScheme === 'subtle'
               ? 'text-white/40'
+              : colorScheme === 'dark'
+              ? 'text-slate-900'
               : 'text-white'
           }
         >
@@ -56,7 +70,7 @@ export default function Wordmark({
         <div style={{ display: 'inline-flex', alignItems: 'center' }}>
           <CatalytiXMark
             size={currentSize.icon}
-            fill="#FFFFFF"
+            fill={resolvedMarkFill}
           />
         </div>
       </div>

@@ -3,26 +3,41 @@ import React from 'react';
 interface CatalytiXMarkProps {
   className?: string;
   size?: number | string;
+  width?: number | string;
+  height?: number | string;
   fill?: string;
   gradientId?: string;
+  rotate?: number;
+  flipVertical?: boolean;
+  scale?: number;
   style?: React.CSSProperties;
 }
 
 export default function CatalytiXMark({
   className = '',
   size = 100,
+  width,
+  height,
   fill = 'currentColor',
   gradientId,
+  rotate = 45,
+  flipVertical = true,
+  scale = 1,
   style = {},
 }: CatalytiXMarkProps) {
   const actualFill = gradientId ? `url(#${gradientId})` : fill;
 
+  const isPercent = typeof size === 'string' && size.includes('%');
+  const computedWidth = width ?? size;
+  const computedHeight = height ?? (isPercent ? size : size);
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="8 8 84 84"
-      width={size}
-      height={size}
+      viewBox="-350 -350 700 700"
+      width={computedWidth}
+      height={computedHeight}
+      preserveAspectRatio="xMidYMid meet"
       className={className}
       style={{ ...style, shapeRendering: 'geometricPrecision' }}
       shapeRendering="geometricPrecision"
@@ -43,19 +58,22 @@ export default function CatalytiXMark({
         </defs>
       )}
 
-      {/* Full-size diagonal line with sword-like triangular tips */}
-      <path
-        d="M 14 86 L 17 77 L 77 17 L 86 14 L 83 23 L 23 83 Z"
-        fill={actualFill}
-        shapeRendering="geometricPrecision"
-      />
-
-      {/* Half-size diagonal line (centered and vertically flipped) with sword-like triangular tips */}
-      <path
-        d="M 29 29 L 38 32 L 68 62 L 71 71 L 62 68 L 32 38 Z"
-        fill={actualFill}
-        shapeRendering="geometricPrecision"
-      />
+      {/* The 16-point cross polygon rotated 45° by default to form the iconic sword-point 'X' */}
+      <g
+        transform={[
+          flipVertical ? 'scale(1, -1)' : '',
+          rotate !== 0 ? `rotate(${rotate})` : '',
+          scale !== 1 ? `scale(${scale})` : '',
+        ]
+          .filter(Boolean)
+          .join(' ') || undefined}
+      >
+        <path
+          d="M 0 -192.5 L 27.5 -140.5 L 27.5 -27.5 L 279.5 -27.5 L 331.5 0 L 279.5 27.5 L 27.5 27.5 L 27.5 140.5 L 0 192.5 L -27.5 140.5 L -27.5 27.5 L -279.5 27.5 L -331.5 0 L -279.5 -27.5 L -27.5 -27.5 L -27.5 -140.5 Z"
+          fill={actualFill}
+          shapeRendering="geometricPrecision"
+        />
+      </g>
     </svg>
   );
 }
