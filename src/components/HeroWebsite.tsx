@@ -14,6 +14,7 @@ import Icons8 from './Icons8';
 import ModuleOutcomesStaircase from './ModuleOutcomesStaircase';
 import CatalytixPuzzle from './CatalytixPuzzle';
 import Lifecycle3DPieChart from './Lifecycle3DPieChart';
+import CatalytiXMark from './CatalytiXMark';
 
 interface HeroWebsiteProps {
   isIncoming?: boolean;
@@ -412,11 +413,10 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
             {/* Release Pill Badge: Wider, bolder, full visibility */}
             <div ref={heroBadgeRef} style={initialHiddenStyle} className="mb-2.5 sm:mb-3 w-full flex justify-center">
               <Magnet padding={25} magnetStrength={3}>
-                <div className="badge-pill-light cursor-pointer hover:border-cyan-400/50 transition-all shadow-sm border border-slate-200/90 text-xs sm:text-xs md:text-sm font-black py-1.5 px-4 sm:px-6">
+                <div className="badge-pill-light cursor-pointer hover:border-cyan-400/50 transition-all shadow-sm border border-slate-200/90 text-xs sm:text-xs md:text-sm font-black py-1.5 px-4 sm:px-6 flex items-center gap-2">
                   <span className="flex h-2.5 w-2.5 rounded-full bg-[#16A34A] animate-pulse shrink-0" />
                   <span className="text-slate-900 font-extrabold tracking-wide">BENNETT HATCHERY FOUNDATION // DPIIT</span>
-                  <span className="text-[#0284C7] font-black flex items-center gap-1.5 shrink-0">
-                    <span>COHORT 2026</span>
+                  <span className="text-[#0284C7] font-black flex items-center shrink-0">
                     <Icons8 name="chevronRight" size={15} color="0284C7" />
                   </span>
                 </div>
@@ -431,9 +431,27 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
             >
               <span
                 style={{ fontFamily: "var(--font-wordmark), 'Montserrat', 'Plus Jakarta Sans', sans-serif" }}
-                className="font-black gradient-text-playful block text-4xl sm:text-6xl md:text-7xl lg:text-[5rem] xl:text-[5.6rem] tracking-tight leading-[1.15] pb-2 mb-0.5 overflow-visible"
+                className="font-black block text-4xl sm:text-6xl md:text-7xl lg:text-[5rem] xl:text-[5.6rem] tracking-tight leading-[1.15] pb-2 mb-0.5 overflow-visible"
               >
-                CATALYTIX
+                <span className="inline-flex items-center justify-center gap-1 sm:gap-2">
+                  <span className="gradient-text-playful">CATALYTI</span>
+                  <span className="inline-flex items-center justify-center shrink-0 w-[0.88em] h-[0.88em] -ml-0.5">
+                    <CatalytiXMark
+                      size="100%"
+                      gradientId="hero-title-catalytix-mark-grad"
+                      animated={true}
+                      gradientStops={[
+                        { offset: '0%', stopColor: '#FF2E93' },
+                        { offset: '25%', stopColor: '#C026D3' },
+                        { offset: '50%', stopColor: '#8B5CF6' },
+                        { offset: '75%', stopColor: '#00F0FF' },
+                        { offset: '100%', stopColor: '#7cff67' },
+                      ]}
+                      rotate={45}
+                      flipVertical={true}
+                    />
+                  </span>
+                </span>
               </span>
               <span className="block text-lg sm:text-xl md:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight">
                 Incubation Program
@@ -511,7 +529,7 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
                 <div>
                   <h3 className="text-xl sm:text-2xl font-black text-slate-950 flex items-baseline gap-1.5">
                     <CountUp to={5} duration={1.2} />
-                    <span>Modules</span>
+                    <span>Building Blocks</span>
                   </h3>
                   <p className="text-[11px] sm:text-xs font-bold text-slate-600 truncate">Roadmap // TRL 1 to 9</p>
                 </div>
@@ -588,26 +606,10 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
                   <h3 className="text-xl sm:text-2xl font-black text-slate-950">
                     TRL 1 - 6
                   </h3>
-                  <p className="text-[11px] sm:text-xs font-bold text-slate-600 truncate">IP &amp; Tech Validation // SISFS Grants</p>
+                  <p className="text-[11px] sm:text-xs font-bold text-slate-600 truncate">Start of Venture to Scale</p>
                 </div>
               </LiquidGlass>
             </SpotlightCard>
-          </div>
-
-          {/* Slide 1 Bottom Advance Prompt / Button */}
-          <div className="w-full flex items-center justify-center pt-1.5 sm:pt-2.5 pb-1">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                advanceStep();
-              }}
-              className="group cursor-pointer inline-flex items-center gap-2 px-5 py-1.5 sm:py-2 rounded-full bg-slate-900/90 hover:bg-slate-950 text-white font-mono text-xs sm:text-sm font-black transition-all shadow-md hover:shadow-xl hover:scale-105 active:scale-95 border border-slate-700/80"
-            >
-              <span className="text-cyan-400 group-hover:translate-x-0.5 transition-transform">✦</span>
-              <span>NEXT: 5-STAGE VENTURE CURRICULUM</span>
-              <span className="text-pink-400 group-hover:translate-x-1 transition-transform">→</span>
-            </button>
           </div>
         </section>
 
@@ -618,7 +620,7 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
           style={{ opacity: 0, transform: 'translateY(36px)', willChange: 'opacity, transform' }}
           className="relative z-10 w-full min-h-screen border-t border-slate-200/90 overflow-hidden"
         >
-          <div className="w-full max-w-[min(100vw,100vh)] h-screen mx-auto px-3 sm:px-6 flex flex-col justify-between pt-6 sm:pt-8 pb-4 sm:pb-6">
+          <div className="w-full max-w-[min(100vw,1180px)] h-screen mx-auto px-3 sm:px-6 flex flex-col justify-between pt-5 sm:pt-7 pb-4 sm:pb-6">
             <CatalytixPuzzle
               presentationStep={presentationStep}
               onStepChange={setPresentationStep}
@@ -638,7 +640,7 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
           style={{ opacity: 0, transform: 'translateY(36px)', willChange: 'opacity, transform' }}
           className="relative z-10 w-full min-h-screen border-t border-slate-200/90 overflow-hidden"
         >
-          <div className="w-full max-w-[min(100vw,100vh)] h-screen mx-auto px-3 sm:px-6 flex flex-col justify-between pt-4 sm:pt-6 pb-3 sm:pb-4">
+          <div className="w-full max-w-[min(100vw,1180px)] h-screen mx-auto px-3 sm:px-6 flex flex-col justify-between pt-3 sm:pt-5 pb-3 sm:pb-4">
             <ModuleOutcomesStaircase
               activeIdx={activeOutcomeModule}
               isSectionReached={isOutcomesReached}
@@ -691,9 +693,27 @@ export default function HeroWebsite({ isIncoming = true }: HeroWebsiteProps) {
                     Build What&apos;s Next with{' '}
                     <span
                       style={{ fontFamily: "var(--font-wordmark), 'Montserrat', 'Plus Jakarta Sans', sans-serif" }}
-                      className="font-black gradient-text-playful inline-block pb-1 leading-[1.15]"
+                      className="inline-flex items-center gap-1 align-baseline"
                     >
-                      CATALYTIX
+                      <span className="font-black gradient-text-playful inline-block pb-1 leading-[1.15]">
+                        CATALYTI
+                      </span>
+                      <span className="inline-flex items-center justify-center shrink-0 w-[0.88em] h-[0.88em] -ml-0.5">
+                        <CatalytiXMark
+                          size="100%"
+                          gradientId="cta-catalytix-mark-grad"
+                          animated={true}
+                          gradientStops={[
+                            { offset: '0%', stopColor: '#FF2E93' },
+                            { offset: '25%', stopColor: '#C026D3' },
+                            { offset: '50%', stopColor: '#8B5CF6' },
+                            { offset: '75%', stopColor: '#00F0FF' },
+                            { offset: '100%', stopColor: '#7cff67' },
+                          ]}
+                          rotate={45}
+                          flipVertical={true}
+                        />
+                      </span>
                     </span>
                   </h2>
                   <p className="text-slate-700 text-xs sm:text-sm font-semibold leading-relaxed">

@@ -19,7 +19,7 @@ export interface JourneyStage {
   color: string;
   darkColor: string;
   glowColor: string;
-  // Sub-pixel verified coordinates on public/stickman-journey-v2.png (1215 x 701)
+  // Sub-pixel verified coordinates on public/stickman-journey-v2.png (1360 x 701)
   dotPxX: number;
   dotPxY: number;
   xPct: number;
@@ -47,7 +47,7 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     color: "#00B4D8",
     darkColor: "#0284C7",
     glowColor: "rgba(0, 180, 216, 0.5)",
-    dotPxX: 75.0,
+    dotPxX: 84.0,
     dotPxY: 670.0,
     xPct: 6.17,
     yPct: 95.58,
@@ -67,29 +67,29 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     modNumber: 1,
     label: "MODULE 01",
     pillLabel: "MOD 01",
-    title: "Applied Prototyping & Lab Sprint",
-    shortTitle: "Prototyping",
-    focusTitle: "Alpha MVP",
+    title: "Idea Validation & Venture Direction",
+    shortTitle: "Direction",
+    focusTitle: "Signpost Gate",
     trl: "TRL 2–3",
-    fromState: "IDEA / CONCEPT",
-    toState: "WORKING ALPHA MVP",
-    transition: "IDEA → WORKING ALPHA MVP",
+    fromState: "RAW HYPOTHESIS",
+    toState: "VALIDATED BLUEPRINT",
+    transition: "HYPOTHESIS → VALIDATED BLUEPRINT",
     color: "#10B981",
     darkColor: "#059669",
     glowColor: "rgba(16, 185, 129, 0.5)",
-    dotPxX: 232.0,
-    dotPxY: 672.9,
-    xPct: 19.09,
-    yPct: 96.00,
+    dotPxX: 254.7,
+    dotPxY: 678.5,
+    xPct: 18.72,
+    yPct: 96.79,
     barHeightPct: 52,
-    stickmanDescription: "Signpost: Deciding Direction",
-    focus: "Hardware / Software Alpha Fabrication",
-    tagline: "Architect technical blueprints and fabricate tangible hardware or software alpha builds in Hatchery Labs.",
+    stickmanDescription: "Signpost: Deciding Direction (IDEA? STARTUP? NEXT?)",
+    focus: "Hypothesis De-biasing & Venture Roadmapping",
+    tagline: "Evaluate pathways at the critical crossroads—framing lean canvases, IP landscapes, and product roadmaps.",
     outcomes: [
-      "Product architecture & system schematics",
-      "Physical alpha prototype / functional MVP built",
-      "Initial IP discovery & patent search matrix",
-      "Rapid maker-lab sprint in Hatchery Labs",
+      "Decision matrix: Market opportunity vs technical viability",
+      "Lean Canvas & venture hypothesis de-biasing",
+      "Initial IP landscape & patent classification check",
+      "Roadmap sign-off for prototype fabrication",
     ],
   },
   {
@@ -97,24 +97,54 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     modNumber: 2,
     label: "MODULE 02",
     pillLabel: "MOD 02",
-    title: "TRL & Innovation Verification",
-    shortTitle: "Verification",
-    focusTitle: "TRL Verified",
+    title: "Applied Prototyping & Lab Sprint",
+    shortTitle: "Prototyping",
+    focusTitle: "Alpha MVP",
     trl: "TRL 3–4",
-    fromState: "ALPHA PROTOTYPE",
-    toState: "VALIDATED PRODUCT",
-    transition: "PROTOTYPE → VALIDATED PRODUCT",
+    fromState: "BLUEPRINT",
+    toState: "WORKING ALPHA MVP",
+    transition: "BLUEPRINT → WORKING ALPHA MVP",
     color: "#EC4899",
     darkColor: "#DB2777",
     glowColor: "rgba(236, 72, 153, 0.5)",
-    dotPxX: 463.2,
-    dotPxY: 619.8,
-    xPct: 38.12,
-    yPct: 88.41,
+    dotPxX: 517.7,
+    dotPxY: 625.5,
+    xPct: 38.07,
+    yPct: 89.23,
     barHeightPct: 62,
-    stickmanDescription: "Running Founder with Venture Backpack",
-    focus: "Lab Benchmarking & Risk De-biasing",
-    tagline: "Execute rigorous lab stress tests, performance benchmarking, and compliance mapping.",
+    stickmanDescription: "Founder at Laptop with Glowing Lightbulb",
+    focus: "Hardware / Software Alpha Fabrication",
+    tagline: "Turn ideas into code & hardware—fabricating functional alpha prototypes in Bennett Hatchery Labs.",
+    outcomes: [
+      "Physical alpha prototype / functional software MVP built",
+      "Product architecture & technical system schematics",
+      "Rapid maker-lab prototyping sprint completed",
+      "First functional test run & engineering demo",
+    ],
+  },
+  {
+    id: 3,
+    modNumber: 3,
+    label: "MODULE 03",
+    pillLabel: "MOD 03",
+    title: "TRL & Innovation Verification",
+    shortTitle: "Verification",
+    focusTitle: "TRL Verified",
+    trl: "TRL 4–5",
+    fromState: "ALPHA PROTOTYPE",
+    toState: "BENCHMARKED TECH",
+    transition: "PROTOTYPE → BENCHMARKED TECH",
+    color: "#8B5CF6",
+    darkColor: "#7C3AED",
+    glowColor: "rgba(139, 92, 246, 0.5)",
+    dotPxX: 716.9,
+    dotPxY: 536.5,
+    xPct: 52.72,
+    yPct: 76.53,
+    barHeightPct: 72,
+    stickmanDescription: "Founder Inspecting Traction with Magnifier",
+    focus: "Lab Stress-Testing & Risk De-biasing",
+    tagline: "Rigorous inspection under the glass—benchmarking technology feasibility and de-biasing assumptions.",
     outcomes: [
       "TRL level assessed & verified by advisory committee",
       "Stress-testing & reliability benchmarks completed",
@@ -123,63 +153,33 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     ],
   },
   {
-    id: 3,
-    modNumber: 3,
-    label: "MODULE 03",
-    pillLabel: "MOD 03",
-    title: "Market Fit & Seed Grant Pipeline",
-    shortTitle: "PMF & Grants",
-    focusTitle: "Seed Grants",
-    trl: "TRL 4–5",
-    fromState: "VALIDATED PRODUCT",
-    toState: "MARKET-READY VENTURE",
-    transition: "VALIDATED PRODUCT → MARKET-READY",
-    color: "#8B5CF6",
-    darkColor: "#7C3AED",
-    glowColor: "rgba(139, 92, 246, 0.5)",
-    dotPxX: 638.3,
-    dotPxY: 535.5,
-    xPct: 52.54,
-    yPct: 76.39,
-    barHeightPct: 72,
-    stickmanDescription: "Founder at Laptop with Glowing Lightbulb",
-    focus: "Customer Discovery & Unit Economics",
-    tagline: "Validate customer demand, finalize financial unit economics, and secure grant pipelines.",
-    outcomes: [
-      "ICP validation & customer willingness-to-pay",
-      "Unit economics & revenue model finalized",
-      "SISFS & external grant applications submitted",
-      "Initial investor-ready teaser deck produced",
-    ],
-  },
-  {
     id: 4,
     modNumber: 4,
     label: "MODULE 04",
     pillLabel: "MOD 04",
-    title: "Innovation-to-Market Launchpad",
+    title: "Market Fit & Commercial Launchpad",
     shortTitle: "Launchpad",
     focusTitle: "Pilot Deals",
     trl: "TRL 5–6",
-    fromState: "MARKET-READY",
-    toState: "LAUNCH-READY VENTURE",
-    transition: "MARKET-READY → LAUNCH READY",
+    fromState: "BENCHMARKED TECH",
+    toState: "REVENUE TRACTION",
+    transition: "TECH → REVENUE TRACTION",
     color: "#F97316",
     darkColor: "#EA580C",
     glowColor: "rgba(249, 115, 22, 0.5)",
-    dotPxX: 796.8,
-    dotPxY: 558.1,
-    xPct: 65.58,
-    yPct: 79.62,
+    dotPxX: 894.9,
+    dotPxY: 558.5,
+    xPct: 65.80,
+    yPct: 79.67,
     barHeightPct: 82,
-    stickmanDescription: "Founder Inspecting Traction with Magnifier",
-    focus: "Commercial Launch & Pilot Deals",
-    tagline: "Complete go-to-market sprints, produce commercial demo videos, and achieve investor readiness.",
+    stickmanDescription: "Founder Scaling with Growth Bar Chart",
+    focus: "Customer Discovery & Unit Economics",
+    tagline: "Rise up the revenue curve—converting validated technology into paid pilot deals and proven unit economics.",
     outcomes: [
-      "Enterprise pilot deals / paid early adopters",
+      "Enterprise pilot deals / paid early adopters secured",
+      "Unit economics & scalable pricing model finalized",
       "Commercial demo video & media assets produced",
-      "GTM sprint & customer acquisition engine live",
-      "BHF Institutional Review Gate clearance",
+      "SISFS & external seed grant applications submitted",
     ],
   },
   {
@@ -191,20 +191,20 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     shortTitle: "Velocity",
     focusTitle: "Demo Day Pitch",
     trl: "TRL 6–9",
-    fromState: "LAUNCH-READY",
+    fromState: "EARLY TRACTION",
     toState: "SCALE-READY VENTURE",
-    transition: "LAUNCH-READY → SCALE READY",
+    transition: "TRACTION → SCALE-READY",
     color: "#EAB308",
     darkColor: "#CA8A04",
     glowColor: "rgba(234, 179, 8, 0.5)",
-    dotPxX: 972.4,
-    dotPxY: 469.2,
-    xPct: 80.03,
-    yPct: 66.93,
+    dotPxX: 1088.6,
+    dotPxY: 473.5,
+    xPct: 80.04,
+    yPct: 67.55,
     barHeightPct: 91,
-    stickmanDescription: "Founder Climbing with Growth Bar Chart",
+    stickmanDescription: "Founder Sprinting up Mountain Slope",
     focus: "Traction Velocity & Demo Day Pitch",
-    tagline: "Unleash high-velocity growth experiments, institutional investor syndicates, and market expansion.",
+    tagline: "Accelerate up the steep climb—high-velocity growth experiments and pitch rehearsals for Hatchery Demo Day.",
     outcomes: [
       "MoM revenue acceleration & key KPI growth",
       "Institutional data room & verified financial model",
@@ -227,10 +227,10 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     color: "#06B6D4",
     darkColor: "#0891B2",
     glowColor: "rgba(6, 182, 212, 0.6)",
-    dotPxX: 1140.7,
-    dotPxY: 258.0,
-    xPct: 93.88,
-    yPct: 36.81,
+    dotPxX: 1268.8,
+    dotPxY: 244.5,
+    xPct: 93.29,
+    yPct: 34.88,
     barHeightPct: 100,
     stickmanDescription: "Summit Victory: Raising Trophy & Flag",
     focus: "Series A Pipeline & Global Market Scale",
@@ -294,11 +294,11 @@ export default function ModuleOutcomesStaircase({
 
   // Clamp the pointer beak position so it stays gracefully on the speech bubble card
   const pointerX = Math.max(8, Math.min(92, currentStage.xPct));
-  const pointerPxX = Math.max(90, Math.min(1125, currentStage.dotPxX));
+  const pointerPxX = Math.max(100, Math.min(1270, currentStage.dotPxX));
 
   return (
     <div
-      className="w-full h-full flex flex-col justify-between select-none relative max-w-[960px] mx-auto pt-1 sm:pt-2 pb-1"
+      className="w-full h-full flex flex-col justify-between select-none relative max-w-[1080px] mx-auto pt-1 sm:pt-2 pb-1"
       onClick={(e) => {
         // Allow background clicks to advance, but don't intercept button or card clicks
         const target = e.target as HTMLElement | null;
@@ -331,11 +331,10 @@ export default function ModuleOutcomesStaircase({
             e.stopPropagation();
             setStage(isAllStagesView ? currentStage.id : 7);
           }}
-          className={`px-3 py-1 rounded-full font-mono text-[11px] sm:text-xs font-black transition-all cursor-pointer border flex items-center gap-1.5 shadow-sm ${
-            isAllStagesView
-              ? "bg-slate-900 text-white border-slate-900 shadow-md scale-105"
-              : "bg-gradient-to-r from-amber-500 via-pink-500 to-purple-600 text-white border-transparent hover:brightness-105 hover:scale-105"
-          }`}
+          className={`px-3 py-1 rounded-full font-mono text-[11px] sm:text-xs font-black transition-all cursor-pointer border flex items-center gap-1.5 shadow-sm ${isAllStagesView
+            ? "bg-slate-900 text-white border-slate-900 shadow-md scale-105"
+            : "bg-gradient-to-r from-amber-500 via-pink-500 to-purple-600 text-white border-transparent hover:brightness-105 hover:scale-105"
+            }`}
         >
           <Sparkles size={12} className={isAllStagesView ? "" : "animate-spin"} />
           <span>{isAllStagesView ? "← STAGE CALLOUTS" : "✦ 3D VENTURE PATH"}</span>
@@ -344,11 +343,11 @@ export default function ModuleOutcomesStaircase({
 
       {/* ─────────────────────────────────────────────────────────────
           2. STICKMAN ILLUSTRATION CANVAS
-             - Contains the stickman illustration (FULL OPACITY 100%, never faded)
+             - Contains the widened stickman illustration (FULL OPACITY 100%, never faded)
              - Title shifted into the open blank sky space above "IDEA? STARTUP? NEXT?" signpost!
              - Accurate 7 milestone dots directly on the white drawn trail circles
           ───────────────────────────────────────────────────────────── */}
-      <div className="relative w-full max-w-[920px] aspect-[1215/701] mx-auto shrink-0 select-none mt-1 sm:mt-2">
+      <div className="relative w-full max-w-[1040px] aspect-[1360/701] mx-auto shrink-0 select-none mt-1 sm:mt-2">
         {/* Full-Opacity Transparent Stickman Illustration (NOT FADED!) */}
         <img
           src="/stickman-journey-v2.png"
@@ -374,7 +373,7 @@ export default function ModuleOutcomesStaircase({
         {!isAllStagesView && (
           <svg
             className="absolute inset-0 w-full h-full pointer-events-none z-25 overflow-visible"
-            viewBox="0 0 1215 701"
+            viewBox="0 0 1360 701"
           >
             <defs>
               <filter id="glow-beam-v4" x="-20%" y="-20%" width="140%" height="140%">
@@ -388,9 +387,8 @@ export default function ModuleOutcomesStaircase({
 
             {/* Downward connecting guideline from active dot to bottom edge */}
             <path
-              d={`M ${currentStage.dotPxX} ${currentStage.dotPxY} Q ${
-                (currentStage.dotPxX + pointerPxX) / 2
-              } ${currentStage.dotPxY + 45}, ${pointerPxX} 701`}
+              d={`M ${currentStage.dotPxX} ${currentStage.dotPxY} Q ${(currentStage.dotPxX + pointerPxX) / 2
+                } ${currentStage.dotPxY + 45}, ${pointerPxX} 701`}
               fill="none"
               stroke={currentStage.color}
               strokeWidth="2.5"
@@ -447,11 +445,10 @@ export default function ModuleOutcomesStaircase({
 
                 {/* Dot ring indicator matching trail circle */}
                 <div
-                  className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full transition-all duration-200 border-2 border-white shadow-md flex items-center justify-center ${
-                    isDotActive
-                      ? "scale-125 ring-2 ring-slate-900/30"
-                      : "opacity-90 hover:opacity-100 hover:scale-120"
-                  }`}
+                  className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full transition-all duration-200 border-2 border-white shadow-md flex items-center justify-center ${isDotActive
+                    ? "scale-125 ring-2 ring-slate-900/30"
+                    : "opacity-90 hover:opacity-100 hover:scale-120"
+                    }`}
                   style={{ backgroundColor: stg.color }}
                 >
                   {isDotActive && (
@@ -469,7 +466,7 @@ export default function ModuleOutcomesStaircase({
              Hosts the Speech Bubble OR the Combined 3D Curved Stepped Ramp
              ZERO OVERLAP onto the stickman illustration!
           ───────────────────────────────────────────────────────────── */}
-      <div className="relative w-full max-w-[880px] mx-auto flex-1 flex items-center justify-center min-h-[220px] max-h-[290px] my-auto px-1 sm:px-2">
+      <div className="relative w-full max-w-[960px] mx-auto flex-1 flex items-center justify-center min-h-[220px] max-h-[290px] my-auto px-1 sm:px-2">
         <AnimatePresence mode="wait">
           {!isAllStagesView ? (
             /* ───────────────────────────────────────────────────────
@@ -481,7 +478,7 @@ export default function ModuleOutcomesStaircase({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="speech-bubble-card relative w-full max-w-[840px] pointer-events-auto"
+              className="speech-bubble-card relative w-full max-w-[920px] pointer-events-auto"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Upward pointing Speech Bubble Pointer Beak */}
@@ -577,9 +574,8 @@ export default function ModuleOutcomesStaircase({
                         key={s.id}
                         type="button"
                         onClick={() => setStage(s.id)}
-                        className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
-                          targetIdx === s.id ? "scale-135" : "opacity-40 hover:opacity-80"
-                        }`}
+                        className={`w-2 h-2 rounded-full transition-all cursor-pointer ${targetIdx === s.id ? "scale-135" : "opacity-40 hover:opacity-80"
+                          }`}
                         style={{ backgroundColor: s.color }}
                         title={s.pillLabel}
                       />
@@ -620,7 +616,7 @@ export default function ModuleOutcomesStaircase({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.35, ease: "easeOut" }}
-              className="interactive-3d-bar relative w-full max-w-[880px] pointer-events-auto select-none"
+              className="interactive-3d-bar relative w-full max-w-[960px] pointer-events-auto select-none"
               onClick={(e) => e.stopPropagation()}
             >
               {/* UNCONTAINERIZED: Freestanding 3D Growing Columns Stuck Together (NO OUTER BOX!) */}
@@ -728,11 +724,11 @@ export default function ModuleOutcomesStaircase({
               </span>
             </div>
             <p className="text-[10px] sm:text-[11px] font-mono text-slate-500 font-semibold">
-              Click any section to inspect module outcomes • Click Next to advance to 3D Lifecycle →
+
             </p>
           </div>
         ) : (
-          <div className="flex items-center justify-between w-full max-w-[840px] px-2 text-xs font-mono font-bold text-slate-500">
+          <div className="flex items-center justify-between w-full max-w-[920px] px-2 text-xs font-mono font-bold text-slate-500">
             <button
               type="button"
               onClick={handlePrev}
@@ -743,7 +739,7 @@ export default function ModuleOutcomesStaircase({
             </button>
 
             <span className="text-slate-400 text-[11px]">
-              STAGE {currentStage.id + 1} OF 7 // CLICK ANY DOT ON PATH TO JUMP
+              STAGE {currentStage.id + 1} OF 7
             </span>
 
             <button

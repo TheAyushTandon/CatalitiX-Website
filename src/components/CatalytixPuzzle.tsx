@@ -200,13 +200,16 @@ function getJigsawPath({
     );
   }
 
-  // 1. TOP EDGE: Left-to-Right
+  // 1. TOP EDGE: Left-to-Right (x: 0 -> w)
   let path = `M ${r} 0 `;
   if (top !== "none") {
-    const offsets = Array.isArray(topOffset) ? topOffset : [topOffset];
-    const types = Array.isArray(top) ? top : [top];
-    offsets.forEach((off, i) => {
-      const type = types[i] || types[0];
+    const rawOffsets = Array.isArray(topOffset) ? topOffset : [topOffset];
+    const rawTypes = Array.isArray(top) ? top : [top];
+    const items = rawOffsets
+      .map((off, i) => ({ off, type: rawTypes[i] || rawTypes[0] }))
+      .sort((a, b) => a.off - b.off);
+
+    items.forEach(({ off, type }) => {
       if (type === "none") return;
       const sign = type === "tab" ? 1 : -1;
       path += makeTabSegment(w * off, 0, 1, 0, 0, -1, sign);
@@ -215,12 +218,15 @@ function getJigsawPath({
   path += `L ${w - r} 0 `;
   path += `A ${r} ${r} 0 0 1 ${w} ${r} `;
 
-  // 2. RIGHT EDGE: Top-to-Bottom
+  // 2. RIGHT EDGE: Top-to-Bottom (y: 0 -> h)
   if (right !== "none") {
-    const offsets = Array.isArray(rightOffset) ? rightOffset : [rightOffset];
-    const types = Array.isArray(right) ? right : [right];
-    offsets.forEach((off, i) => {
-      const type = types[i] || types[0];
+    const rawOffsets = Array.isArray(rightOffset) ? rightOffset : [rightOffset];
+    const rawTypes = Array.isArray(right) ? right : [right];
+    const items = rawOffsets
+      .map((off, i) => ({ off, type: rawTypes[i] || rawTypes[0] }))
+      .sort((a, b) => a.off - b.off);
+
+    items.forEach(({ off, type }) => {
       if (type === "none") return;
       const sign = type === "tab" ? 1 : -1;
       path += makeTabSegment(w, h * off, 0, 1, 1, 0, sign);
@@ -229,12 +235,15 @@ function getJigsawPath({
   path += `L ${w} ${h - r} `;
   path += `A ${r} ${r} 0 0 1 ${w - r} ${h} `;
 
-  // 3. BOTTOM EDGE: Right-to-Left
+  // 3. BOTTOM EDGE: Right-to-Left (x: w -> 0)
   if (bottom !== "none") {
-    const offsets = Array.isArray(bottomOffset) ? bottomOffset : [bottomOffset];
-    const types = Array.isArray(bottom) ? bottom : [bottom];
-    offsets.forEach((off, i) => {
-      const type = types[i] || types[0];
+    const rawOffsets = Array.isArray(bottomOffset) ? bottomOffset : [bottomOffset];
+    const rawTypes = Array.isArray(bottom) ? bottom : [bottom];
+    const items = rawOffsets
+      .map((off, i) => ({ off, type: rawTypes[i] || rawTypes[0] }))
+      .sort((a, b) => b.off - a.off); // Descending for right-to-left traversal
+
+    items.forEach(({ off, type }) => {
       if (type === "none") return;
       const sign = type === "tab" ? 1 : -1;
       path += makeTabSegment(w * off, h, -1, 0, 0, 1, sign);
@@ -243,12 +252,15 @@ function getJigsawPath({
   path += `L ${r} ${h} `;
   path += `A ${r} ${r} 0 0 1 0 ${h - r} `;
 
-  // 4. LEFT EDGE: Bottom-to-Top
+  // 4. LEFT EDGE: Bottom-to-Top (y: h -> 0)
   if (left !== "none") {
-    const offsets = Array.isArray(leftOffset) ? leftOffset : [leftOffset];
-    const types = Array.isArray(left) ? left : [left];
-    offsets.forEach((off, i) => {
-      const type = types[i] || types[0];
+    const rawOffsets = Array.isArray(leftOffset) ? leftOffset : [leftOffset];
+    const rawTypes = Array.isArray(left) ? left : [left];
+    const items = rawOffsets
+      .map((off, i) => ({ off, type: rawTypes[i] || rawTypes[0] }))
+      .sort((a, b) => b.off - a.off); // Descending for bottom-to-top traversal
+
+    items.forEach(({ off, type }) => {
       if (type === "none") return;
       const sign = type === "tab" ? 1 : -1;
       path += makeTabSegment(0, h * off, 0, -1, -1, 0, sign);
@@ -260,70 +272,89 @@ function getJigsawPath({
   return path;
 }
 
-// Pre-compute aligned SVG paths for each of the 5 curriculum modules
+// Interlocking building block geometry:
+// Width: 1000px, Height: 72px, Corner Radius: 14px, Tab depth: 12px
+// Wide panoramic building blocks with dual tabs at 26% and 74% to provide ample space for full titles
+const BLOCK_WIDTH = 1000;
+const BLOCK_HEIGHT = 72;
+const TAB_OFFSETS = [0.26, 0.74];
+
 export function getModuleJigsawPath(moduleId: number): string {
   if (moduleId === 1) {
-    // Module 01: Top-Left (270 x 148)
-    // Bottom: male tab locking into Module 03
-    // Right: female slot receiving Module 05 top-left tab
+    // Module 01: Top Foundation Block
+    // Flat top, 2 tabs locking downwards into Module 02
     return getJigsawPath({
-      w: 270,
-      h: 148,
-      bottom: "tab",
-      bottomOffset: 0.5,
-      right: "slot",
-      rightOffset: 0.7162,
+      w: BLOCK_WIDTH,
+      h: BLOCK_HEIGHT,
+      r: 14,
+      d: 12,
+      top: "none",
+      bottom: ["tab", "tab"],
+      bottomOffset: TAB_OFFSETS,
+      left: "none",
+      right: "none",
     });
   }
   if (moduleId === 2) {
-    // Module 02: Top-Right (270 x 148)
-    // Left: female slot receiving Module 05 top-right tab
-    // Bottom: male tab locking into Module 04
+    // Module 02: Block 2
+    // 2 slots on top receiving Module 01, 2 tabs on bottom locking into Module 03
     return getJigsawPath({
-      w: 270,
-      h: 148,
-      left: "slot",
-      leftOffset: 0.7162,
-      bottom: "tab",
-      bottomOffset: 0.5,
+      w: BLOCK_WIDTH,
+      h: BLOCK_HEIGHT,
+      r: 14,
+      d: 12,
+      top: ["slot", "slot"],
+      topOffset: TAB_OFFSETS,
+      bottom: ["tab", "tab"],
+      bottomOffset: TAB_OFFSETS,
+      left: "none",
+      right: "none",
     });
   }
   if (moduleId === 3) {
-    // Module 03: Bottom-Left (270 x 148)
-    // Top: female slot receiving Module 01 bottom tab
-    // Right: female slot receiving Module 05 bottom-left tab
+    // Module 03: Block 3
+    // 2 slots on top receiving Module 02, 2 tabs on bottom locking into Module 04
     return getJigsawPath({
-      w: 270,
-      h: 148,
-      top: "slot",
-      topOffset: 0.5,
-      right: "slot",
-      rightOffset: 0.2838,
+      w: BLOCK_WIDTH,
+      h: BLOCK_HEIGHT,
+      r: 14,
+      d: 12,
+      top: ["slot", "slot"],
+      topOffset: TAB_OFFSETS,
+      bottom: ["tab", "tab"],
+      bottomOffset: TAB_OFFSETS,
+      left: "none",
+      right: "none",
     });
   }
   if (moduleId === 4) {
-    // Module 04: Bottom-Right (270 x 148)
-    // Left: female slot receiving Module 05 bottom-right tab
-    // Top: female slot receiving Module 02 bottom tab
+    // Module 04: Block 4
+    // 2 slots on top receiving Module 03, 2 tabs on bottom locking into Module 05
     return getJigsawPath({
-      w: 270,
-      h: 148,
-      left: "slot",
-      leftOffset: 0.2838,
-      top: "slot",
-      topOffset: 0.5,
+      w: BLOCK_WIDTH,
+      h: BLOCK_HEIGHT,
+      r: 14,
+      d: 12,
+      top: ["slot", "slot"],
+      topOffset: TAB_OFFSETS,
+      bottom: ["tab", "tab"],
+      bottomOffset: TAB_OFFSETS,
+      left: "none",
+      right: "none",
     });
   }
-  // Module 05: Center Hub Summit (280 x 168)
-  // Left: two male tabs locking into Modules 01 & 03
-  // Right: two male tabs locking into Modules 02 & 04
+  // Module 05: Block 5 (Scale / Summit)
+  // 2 slots on top receiving Module 04, flat base on bottom
   return getJigsawPath({
-    w: 280,
-    h: 168,
-    left: ["tab", "tab"],
-    leftOffset: [0.75, 0.25], // Bottom-to-top traversal: 0.75 then 0.25
-    right: ["tab", "tab"],
-    rightOffset: [0.25, 0.75], // Top-to-bottom traversal: 0.25 then 0.75
+    w: BLOCK_WIDTH,
+    h: BLOCK_HEIGHT,
+    r: 14,
+    d: 12,
+    top: ["slot", "slot"],
+    topOffset: TAB_OFFSETS,
+    bottom: "none",
+    left: "none",
+    right: "none",
   });
 }
 
@@ -341,23 +372,20 @@ export default function CatalytixPuzzle({
   onPrev,
 }: CatalytixPuzzleProps) {
   // Step 1 to 5: Focus on Module 1 to 5 (full info piece)
-  // Step 6: Zoom out & Assemble all 5 pieces beside each other interlocking with Module 5
+  // Step 6: Zoom out & Assemble all 5 pieces one above another like interlocking building blocks
   const isZoomedOut = presentationStep === 6;
   const activeModuleIndex = Math.min(4, Math.max(0, presentationStep - 1));
   const activeModule = curriculumModulesData[activeModuleIndex];
 
-  // Mathematically calculated center coordinates for the assembled 5-piece puzzle
-  // Relative to container center (0, 0):
-  // Module 05 width=280, height=168 (center at 0, 0, left=-140, right=+140)
-  // Modules 1, 2, 3, 4 width=270, height=148:
-  // - Columns meet Module 05 at x = +/- 140 (center x = +/- 275)
-  // - Rows meet each other at y = 0 (center y = +/- 74)
+  // Mathematically calculated stacked coordinates for the 5 building blocks:
+  // Stacked vertically: center x = 0, center y spaced by exactly BLOCK_HEIGHT (72px)
+  // Flush seam alignment with interlocking dual tabs
   const assembledConfig = [
-    { x: -275, y: -74, w: 270, h: 148, defaultZ: 2 }, // Module 01: Top-Left
-    { x: 275, y: -74, w: 270, h: 148, defaultZ: 2 },  // Module 02: Top-Right
-    { x: -275, y: 74, w: 270, h: 148, defaultZ: 1 },   // Module 03: Bottom-Left
-    { x: 275, y: 74, w: 270, h: 148, defaultZ: 1 },    // Module 04: Bottom-Right
-    { x: 0, y: 0, w: 280, h: 168, defaultZ: 10 },      // Module 05: Center Summit
+    { x: 0, y: -144, w: BLOCK_WIDTH, h: BLOCK_HEIGHT, defaultZ: 5 }, // Module 01: Top Block
+    { x: 0, y: -72,  w: BLOCK_WIDTH, h: BLOCK_HEIGHT, defaultZ: 4 }, // Module 02: Block 2
+    { x: 0, y: 0,    w: BLOCK_WIDTH, h: BLOCK_HEIGHT, defaultZ: 3 }, // Module 03: Block 3
+    { x: 0, y: 72,   w: BLOCK_WIDTH, h: BLOCK_HEIGHT, defaultZ: 2 }, // Module 04: Block 4
+    { x: 0, y: 144,  w: BLOCK_WIDTH, h: BLOCK_HEIGHT, defaultZ: 1 }, // Module 05: Block 5 (Summit)
   ];
 
   return (
@@ -389,11 +417,10 @@ export default function CatalytixPuzzle({
                   e.stopPropagation();
                   onStepChange(stepNum);
                 }}
-                className={`px-2.5 sm:px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-mono font-bold transition-all border cursor-pointer ${
-                  isActive && !isZoomedOut
+                className={`px-2.5 sm:px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-mono font-bold transition-all border cursor-pointer ${isActive && !isZoomedOut
                     ? "bg-slate-900 text-white border-slate-900 shadow-sm"
                     : "bg-white text-slate-700 hover:text-slate-950 border-slate-200 hover:bg-slate-100"
-                }`}
+                  }`}
                 style={isActive && !isZoomedOut ? { borderColor: m.color, color: "#ffffff" } : {}}
               >
                 MOD 0{m.id}
@@ -407,11 +434,10 @@ export default function CatalytixPuzzle({
               e.stopPropagation();
               onStepChange(6);
             }}
-            className={`px-3 sm:px-4 py-1 rounded-full text-[11px] sm:text-xs font-mono font-black transition-all border cursor-pointer flex items-center gap-1.5 ${
-              isZoomedOut
+            className={`px-3 sm:px-4 py-1 rounded-full text-[11px] sm:text-xs font-mono font-black transition-all border cursor-pointer flex items-center gap-1.5 ${isZoomedOut
                 ? "bg-gradient-to-r from-amber-500 via-pink-500 to-purple-600 text-white border-transparent shadow-md"
                 : "bg-white text-slate-800 hover:text-slate-950 border-slate-300 hover:bg-slate-100"
-            }`}
+              }`}
           >
             <span>✦</span>
             <span>ASSEMBLED (5/5)</span>
@@ -434,8 +460,8 @@ export default function CatalytixPuzzle({
           }}
         >
           {isZoomedOut ? (
-            /* ZOOMED-OUT ASSEMBLED STATE: True interlocking 5-piece jigsaw assembly with title-only view */
-            <div className="relative w-[860px] h-[360px] max-w-full flex items-center justify-center">
+            /* ZOOMED-OUT ASSEMBLED STATE: True interlocking 5-piece stacked building blocks with rich color fills */
+            <div className="relative w-[1040px] h-[390px] max-w-full flex items-center justify-center">
               {curriculumModulesData.map((module, idx) => {
                 const config = assembledConfig[idx];
                 return (
@@ -454,7 +480,7 @@ export default function CatalytixPuzzle({
                     initial={{
                       x: 0,
                       y: 0,
-                      scale: 0.88,
+                      scale: 0.9,
                       opacity: 0,
                     }}
                     animate={{
@@ -464,17 +490,17 @@ export default function CatalytixPuzzle({
                       opacity: 1,
                     }}
                     whileHover={{
-                      scale: 1.035,
+                      scale: 1.025,
                       zIndex: 35,
                     }}
                     transition={{
                       delay: idx * 0.07,
-                      duration: 0.7,
+                      duration: 0.65,
                       ease: [0.22, 1, 0.36, 1],
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      // Clicking any piece in assembled view zooms into that piece's details!
+                      // Clicking any building block zooms into that module's curriculum details
                       onStepChange(module.id);
                     }}
                     title={`Click to inspect ${module.label}: ${module.title}`}
@@ -522,14 +548,11 @@ export default function CatalytixPuzzle({
             <div className="flex items-center gap-2">
               <span className="font-mono text-xs font-black text-[#EC4899] tracking-widest uppercase">CATALYTIX</span>
               <span className="text-xs text-slate-400 font-bold">•</span>
-              <span className="text-xs sm:text-sm font-extrabold text-slate-900">One curriculum. Five stages. One venture.</span>
+              <span className="text-xs sm:text-sm font-extrabold text-slate-900">5 Interlocking Building Blocks // From Venture Start to Scale</span>
             </div>
-            <p className="text-[11px] sm:text-xs font-mono text-slate-500 font-semibold mt-0.5">
-              Click any piece to inspect details • Click anywhere to advance to Outcomes Staircase →
-            </p>
           </motion.div>
         ) : (
-          <div className="flex items-center justify-between w-full max-w-[720px] px-2 text-xs font-mono font-bold text-slate-500">
+          <div className="flex items-center justify-between w-full max-w-[920px] px-2 text-xs font-mono font-bold text-slate-500">
             <button
               type="button"
               onClick={(e) => {
@@ -542,7 +565,7 @@ export default function CatalytixPuzzle({
             </button>
 
             <span className="text-slate-400">
-              MODULE {activeModule.id} OF 5 // CLICK ANYWHERE TO ADVANCE
+              MODULE {activeModule.id} OF 5
             </span>
 
             <button
@@ -563,79 +586,180 @@ export default function CatalytixPuzzle({
 }
 
 // -------------------------------------------------------------
-// TITLE-ONLY PUZZLE PIECE (USED IN THE ASSEMBLED 5-PIECE VIEW)
-// Displays clean module number, bold title & true interlocking jigsaw border
+// VIBRANT BUILDING BLOCK COLOR THEMES
+// Fills each piece with its rich signature color, glossy highlight & crisp white text
+// -------------------------------------------------------------
+const moduleColorThemes: Record<
+  number,
+  {
+    start: string;
+    mid: string;
+    end: string;
+    stroke: string;
+    shadow: string;
+    badgeBg: string;
+    badgeBorder: string;
+  }
+> = {
+  1: {
+    // Module 01: Cyan
+    start: "#0284C7",
+    mid: "#06B6D4",
+    end: "#0891B2",
+    stroke: "#7DD3FC",
+    shadow: "rgba(6, 182, 212, 0.35)",
+    badgeBg: "rgba(255, 255, 255, 0.22)",
+    badgeBorder: "rgba(255, 255, 255, 0.35)",
+  },
+  2: {
+    // Module 02: Green
+    start: "#15803D",
+    mid: "#16A34A",
+    end: "#059669",
+    stroke: "#86EFAC",
+    shadow: "rgba(22, 163, 74, 0.35)",
+    badgeBg: "rgba(255, 255, 255, 0.22)",
+    badgeBorder: "rgba(255, 255, 255, 0.35)",
+  },
+  3: {
+    // Module 03: Pink
+    start: "#BE185D",
+    mid: "#EC4899",
+    end: "#DB2777",
+    stroke: "#FBCFE8",
+    shadow: "rgba(236, 72, 153, 0.35)",
+    badgeBg: "rgba(255, 255, 255, 0.22)",
+    badgeBorder: "rgba(255, 255, 255, 0.35)",
+  },
+  4: {
+    // Module 04: Purple
+    start: "#6D28D9",
+    mid: "#8B5CF6",
+    end: "#7C3AED",
+    stroke: "#DDD6FE",
+    shadow: "rgba(139, 92, 246, 0.35)",
+    badgeBg: "rgba(255, 255, 255, 0.22)",
+    badgeBorder: "rgba(255, 255, 255, 0.35)",
+  },
+  5: {
+    // Module 05: Amber/Gold
+    start: "#D97706",
+    mid: "#F59E0B",
+    end: "#EA580C",
+    stroke: "#FDE68A",
+    shadow: "rgba(245, 158, 11, 0.4)",
+    badgeBg: "rgba(255, 255, 255, 0.25)",
+    badgeBorder: "rgba(255, 255, 255, 0.4)",
+  },
+};
+
+// -------------------------------------------------------------
+// TITLE-ONLY PUZZLE PIECE (USED IN THE ASSEMBLED 5-BLOCK VIEW)
+// Fully filled with rich signature colors & authentic interlocking dual tabs
 // -------------------------------------------------------------
 function TitleOnlyPuzzlePiece({
   module,
 }: {
   module: Module;
 }) {
-  const isCenterPiece = module.id === 5;
-  const w = isCenterPiece ? 280 : 270;
-  const h = isCenterPiece ? 168 : 148;
+  const w = BLOCK_WIDTH;
+  const h = BLOCK_HEIGHT;
   const path = getModuleJigsawPath(module.id);
+  const theme = moduleColorThemes[module.id] || {
+    start: module.color,
+    mid: module.color,
+    end: module.color,
+    stroke: "#FFFFFF",
+    shadow: `${module.color}33`,
+    badgeBg: "rgba(255, 255, 255, 0.22)",
+    badgeBorder: "rgba(255, 255, 255, 0.35)",
+  };
 
   return (
     <div
       className="relative w-full h-full select-none cursor-pointer group"
       style={{
-        filter: isCenterPiece
-          ? "drop-shadow(0 8px 24px rgba(245, 158, 11, 0.28))"
-          : `drop-shadow(0 4px 12px ${module.color}22)`,
+        filter: `drop-shadow(0 6px 18px ${theme.shadow})`,
       }}
     >
-      {/* SVG Jigsaw Shape Background */}
+      {/* SVG Jigsaw Shape Background filled with rich gradient & glossy top highlight */}
       <svg
         viewBox={`0 0 ${w} ${h}`}
         className="absolute inset-0 w-full h-full overflow-visible"
       >
+        <defs>
+          <linearGradient
+            id={`jigsaw-grad-${module.id}`}
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="0%"
+          >
+            <stop offset="0%" stopColor={theme.start} />
+            <stop offset="50%" stopColor={theme.mid} />
+            <stop offset="100%" stopColor={theme.end} />
+          </linearGradient>
+
+          {/* Subtle 3D glossy highlight on the top edge */}
+          <linearGradient
+            id={`jigsaw-gloss-${module.id}`}
+            x1="0%"
+            y1="0%"
+            x2="0%"
+            y2="100%"
+          >
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.35" />
+            <stop offset="35%" stopColor="#FFFFFF" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+
+        {/* Main colored building block body */}
         <path
           d={path}
-          fill="#FFFFFF"
-          stroke={module.color}
-          strokeWidth={isCenterPiece ? 3 : 2.5}
-          className="transition-colors duration-200 group-hover:fill-slate-50/80"
+          fill={`url(#jigsaw-grad-${module.id})`}
+          stroke={theme.stroke}
+          strokeWidth={2}
+          strokeLinejoin="round"
+          className="transition-all duration-200 group-hover:brightness-110"
+        />
+
+        {/* Gloss highlight path */}
+        <path
+          d={path}
+          fill={`url(#jigsaw-gloss-${module.id})`}
+          pointerEvents="none"
         />
       </svg>
 
       {/* Card Content Overlay */}
-      <div className="absolute inset-0 p-5 flex flex-col justify-between pointer-events-none">
-        {/* Top: Module Badge */}
-        <div className="flex items-center justify-between">
+      <div className="absolute inset-0 px-6 sm:px-8 flex items-center justify-between pointer-events-none z-10">
+        {/* Left Side: Module Badge + Full Stage Title */}
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0 pr-4">
           <span
-            className="font-mono text-[11px] font-black tracking-wider uppercase px-2.5 py-0.5 rounded-full border shadow-2xs"
+            className="font-mono text-[11px] sm:text-xs font-black tracking-wider uppercase px-3 py-1 rounded-full text-white shrink-0 shadow-xs border"
             style={{
-              color: module.color,
-              borderColor: `${module.color}40`,
-              backgroundColor: `${module.color}15`,
+              backgroundColor: theme.badgeBg,
+              borderColor: theme.badgeBorder,
             }}
           >
-            {isCenterPiece ? "MODULE 05 // SUMMIT" : module.label}
+            {module.label}
           </span>
-          <span className="font-mono text-[10px] font-bold text-slate-400">
-            {module.trl}
-          </span>
-        </div>
-
-        {/* Middle: Stage Title */}
-        <div className="my-auto py-1">
-          <h3
-            className={`font-black text-slate-950 tracking-tight leading-snug ${
-              isCenterPiece ? "text-base sm:text-lg" : "text-sm sm:text-base"
-            }`}
-          >
+          <h3 className="font-black text-white tracking-tight text-sm sm:text-base lg:text-[1.05rem] whitespace-nowrap drop-shadow-xs">
             {module.title}
           </h3>
         </div>
 
-        {/* Bottom: Clean Click Hint on Hover */}
-        <div className="flex items-center justify-end text-[10.5px] font-mono font-extrabold h-4">
-          <span
-            className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5"
-            style={{ color: module.color }}
-          >
-            INSPECT DETAILS ↗
+        {/* Right Side: Primary Focus + TRL Badge + Inspect Prompt */}
+        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+          <span className="hidden md:block text-xs font-semibold text-white/90 max-w-[340px] truncate text-right">
+            {module.focus}
+          </span>
+          <span className="font-mono text-[11px] sm:text-xs font-black text-white px-3 py-1 rounded-md bg-black/25 border border-white/20 shadow-xs shrink-0">
+            {module.trl}
+          </span>
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity font-mono text-[11px] font-extrabold text-white flex items-center gap-1 shrink-0 bg-white/25 px-2.5 py-1 rounded-full shadow-xs">
+            INSPECT ↗
           </span>
         </div>
       </div>
@@ -658,22 +782,21 @@ function FullPuzzlePiece({
 }) {
   return (
     <div
-      className={`full-puzzle-piece relative bg-white rounded-2xl border-2 shadow-xl p-5 sm:p-6 transition-all duration-300 w-[720px] max-w-full ${
-        isFocused ? "is-active-piece ring-4 ring-slate-950/5" : ""
-      }`}
+      className={`full-puzzle-piece relative bg-white rounded-3xl border-2 shadow-2xl p-6 sm:p-8 md:p-9 transition-all duration-300 w-[920px] max-w-[95vw] ${isFocused ? "is-active-piece ring-4 ring-slate-950/5" : ""
+        }`}
       style={{
-        borderColor: `${module.color}60`,
-        boxShadow: `0 12px 36px ${module.color}18, 0 4px 12px rgba(15, 23, 42, 0.06)`,
+        borderColor: `${module.color}75`,
+        boxShadow: `0 20px 50px ${module.color}22, 0 6px 18px rgba(15, 23, 42, 0.08)`,
       }}
     >
       <div className="full-puzzle-piece-inner flex flex-col justify-between h-full">
         {/* TOP ROW: Badge, Title, Primary Focus */}
         <div>
-          <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-200/90 mb-3">
+          <div className="flex flex-wrap items-center justify-between gap-4 pb-4 sm:pb-5 border-b border-slate-200/90 mb-4 sm:mb-5">
             <div>
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex items-center gap-2.5 mb-1.5">
                 <span
-                  className="font-mono text-xs font-black uppercase tracking-wider px-3 py-0.5 rounded-full border shadow-xs"
+                  className="font-mono text-xs sm:text-[13px] font-black uppercase tracking-wider px-3.5 py-1 rounded-full border shadow-xs"
                   style={{
                     color: module.color,
                     borderColor: `${module.color}40`,
@@ -682,38 +805,40 @@ function FullPuzzlePiece({
                 >
                   {module.label}
                 </span>
-                <span className="font-mono text-xs font-bold text-slate-500 uppercase">
+                <span className="font-mono text-xs sm:text-[13px] font-extrabold text-slate-500 uppercase bg-slate-100 px-2.5 py-0.5 rounded">
                   {module.trl}
                 </span>
               </div>
-              <h3 className="text-xl sm:text-2xl font-black text-slate-950 tracking-tight">
+              <h3 className="text-2xl sm:text-3xl md:text-[2rem] font-black text-slate-950 tracking-tight leading-tight">
                 {module.title}
               </h3>
             </div>
 
             <div className="text-right shrink-0">
-              <span className="text-[10px] font-mono text-slate-500 uppercase font-black block">PRIMARY FOCUS</span>
-              <span className="text-xs sm:text-sm font-black text-slate-900 max-w-[210px] block leading-tight">
+              <span className="text-[11px] sm:text-xs font-mono text-slate-400 uppercase font-black block tracking-wider">
+                PRIMARY FOCUS
+              </span>
+              <span className="text-sm sm:text-base md:text-lg font-black text-slate-900 max-w-[280px] block leading-snug mt-1">
                 {module.focus}
               </span>
             </div>
           </div>
 
           {/* 3 COLUMNS: Masterclasses, Workshops, Review Gate */}
-          <div className="grid grid-cols-3 gap-3.5 mb-3 text-left">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-7 mb-4 sm:mb-5 text-left">
             {/* Col 1: Masterclasses */}
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <div
-                className="flex items-center gap-1.5 font-mono text-[11px] font-extrabold uppercase tracking-wider"
+                className="flex items-center gap-1.5 font-mono text-xs sm:text-[12.5px] font-extrabold uppercase tracking-wider"
                 style={{ color: module.color }}
               >
                 <span>✦</span> MASTERCLASSES
               </div>
-              <ul className="space-y-1">
+              <ul className="space-y-1.5">
                 {module.masterclasses.map((item, i) => (
-                  <li key={i} className="text-xs font-bold text-slate-800 flex items-start gap-1.5 leading-snug">
+                  <li key={i} className="text-xs sm:text-[13.5px] font-bold text-slate-800 flex items-start gap-2 leading-snug">
                     <span
-                      className="w-1.5 h-1.5 rounded-full mt-1 shrink-0"
+                      className="w-2 h-2 rounded-full mt-1.5 shrink-0"
                       style={{ backgroundColor: module.color }}
                     />
                     <span>{item}</span>
@@ -723,15 +848,15 @@ function FullPuzzlePiece({
             </div>
 
             {/* Col 2: Workshops & Sprints */}
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-1.5 font-mono text-[11px] font-extrabold uppercase tracking-wider text-[#16A34A]">
+            <div className="space-y-2">
+              <div className="flex items-center gap-1.5 font-mono text-xs sm:text-[12.5px] font-extrabold uppercase tracking-wider text-[#16A34A]">
                 <span>✦</span> WORKSHOPS &amp; SPRINTS
               </div>
-              <div className="flex flex-wrap gap-1">
+              <div className="flex flex-wrap gap-1.5">
                 {module.workshops.map((item, i) => (
                   <span
                     key={i}
-                    className="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-[11px] font-mono font-bold text-slate-800"
+                    className="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-xs sm:text-[12.5px] font-mono font-bold text-slate-800 shadow-2xs"
                   >
                     {item}
                   </span>
@@ -740,22 +865,22 @@ function FullPuzzlePiece({
             </div>
 
             {/* Col 3: Review Gate */}
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-1.5 font-mono text-[11px] font-extrabold uppercase tracking-wider text-[#EC4899]">
+            <div className="space-y-2">
+              <div className="flex items-center gap-1.5 font-mono text-xs sm:text-[12.5px] font-extrabold uppercase tracking-wider text-[#EC4899]">
                 <span>✦</span> REVIEW GATE
               </div>
-              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 shadow-xs">
-                <p className="text-[11px] font-black text-slate-900 mb-0.5">Evaluation Gate:</p>
-                <p className="text-xs font-semibold text-slate-700 leading-snug">{module.gate}</p>
+              <div className="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200/90 shadow-xs">
+                <p className="text-xs font-black text-slate-900 mb-1">Evaluation Gate:</p>
+                <p className="text-xs sm:text-[13px] font-semibold text-slate-700 leading-relaxed">{module.gate}</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* BOTTOM ROW: Policy Note & Click Indicator */}
-        <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-[10.5px] font-mono font-bold text-slate-600">
+        <div className="pt-3 sm:pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs sm:text-[12.5px] font-mono font-bold text-slate-600">
           <span>↳ Program can be renewed subject to approval from BHF governance</span>
-          <span className="font-extrabold flex items-center gap-1" style={{ color: module.color }}>
+          <span className="font-extrabold flex items-center gap-1.5" style={{ color: module.color }}>
             {isAssembled ? (
               <span>ZOOM IN ↗</span>
             ) : module.id === 5 ? (

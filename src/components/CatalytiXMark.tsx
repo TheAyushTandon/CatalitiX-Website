@@ -1,5 +1,11 @@
 import React from 'react';
 
+export interface GradientStop {
+  offset: string;
+  stopColor: string;
+  stopOpacity?: number | string;
+}
+
 interface CatalytiXMarkProps {
   className?: string;
   size?: number | string;
@@ -7,6 +13,8 @@ interface CatalytiXMarkProps {
   height?: number | string;
   fill?: string;
   gradientId?: string;
+  gradientStops?: GradientStop[];
+  animated?: boolean;
   rotate?: number;
   flipVertical?: boolean;
   scale?: number;
@@ -20,6 +28,8 @@ export default function CatalytiXMark({
   height,
   fill = 'currentColor',
   gradientId,
+  gradientStops,
+  animated = false,
   rotate = 45,
   flipVertical = true,
   scale = 1,
@@ -48,10 +58,33 @@ export default function CatalytiXMark({
       {gradientId && (
         <defs>
           <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FF2E93" />
-            <stop offset="35%" stopColor="#FF8A00" />
-            <stop offset="70%" stopColor="#7cff67" />
-            <stop offset="100%" stopColor="#00F0FF" />
+            {animated && (
+              <animateTransform
+                attributeName="gradientTransform"
+                type="rotate"
+                from="0 0.5 0.5"
+                to="360 0.5 0.5"
+                dur="8s"
+                repeatCount="indefinite"
+              />
+            )}
+            {gradientStops && gradientStops.length > 0 ? (
+              gradientStops.map((stop, idx) => (
+                <stop
+                  key={idx}
+                  offset={stop.offset}
+                  stopColor={stop.stopColor}
+                  stopOpacity={stop.stopOpacity ?? 1}
+                />
+              ))
+            ) : (
+              <>
+                <stop offset="0%" stopColor="#FF2E93" />
+                <stop offset="35%" stopColor="#FF8A00" />
+                <stop offset="70%" stopColor="#7cff67" />
+                <stop offset="100%" stopColor="#00F0FF" />
+              </>
+            )}
           </linearGradient>
           <linearGradient id={`${gradientId}-alt`} x1="100%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#00F0FF" />
