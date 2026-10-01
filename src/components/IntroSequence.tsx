@@ -23,9 +23,226 @@ export default function IntroSequence() {
   const lettersRef = useRef<(HTMLSpanElement | null)[]>([]);
   const xEntranceRef = useRef<HTMLDivElement>(null);
   const maskLayerRef = useRef<HTMLDivElement>(null);
+
+  // Audio playback refs (dual-engine: Web Audio API + HTML5 Audio element)
+  const audioElementRef = useRef<HTMLAudioElement | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const audioBufferRef = useRef<AudioBuffer | null>(null);
+  const activeSourceRef = useRef<AudioBufferSourceNode | null>(null);
+  const activeGainRef = useRef<GainNode | null>(null);
+  const isAudioPlayingRef = useRef<boolean>(false);
+  const fadeAnimFrameRef = useRef<number | null>(null);
+  const hasTriggeredClapRef = useRef<boolean>(false);
   
   // Launch Countdown screen state
   const [showCountdown, setShowCountdown] = useState(true);
+
+  // Stop clapping audio immediately and cleanup nodes
+  const stopClappingSound = useCallback(() => {
+    isAudioPlayingRef.current = false;
+    if (fadeAnimFrameRef.current) {
+      cancelAnimationFrame(fadeAnimFrameRef.current);
+      fadeAnimFrameRef.current = null;
+    }
+    if (activeSourceRef.current) {
+      try {
+        activeSourceRef.current.stop();
+      } catch (_) {}
+      activeSourceRef.current = null;
+    }
+    const audioEl = audioElementRef.current;
+    if (audioEl) {
+      try {
+        audioEl.pause();
+        audioEl.currentTime = 0;
+      } catch (_) {}
+    }
+  }, []);
+
+  // Smooth fade-off of clapping sound (over ~1.2s) when user clicks for the 360° X animation
+  const fadeOffClappingSound = useCallback((durationSeconds = 1.2) => {
+    isAudioPlayingRef.current = false;
+    if (fadeAnimFrameRef.current) {
+      cancelAnimationFrame(fadeAnimFrameRef.current);
+      fadeAnimFrameRef.current = null;
+    }
+
+    // 1. Web Audio fade-out
+    const ctx = audioCtxRef.current;
+    const gain = activeGainRef.current;
+    const src = activeSourceRef.current;
+    if (ctx && gain && src) {
+      try {
+        const now = ctx.currentTime;
+        const currentGain = gain.gain.value;
+        gain.gain.cancelScheduledValues(now);
+        gain.gain.setValueAtTime(Math.max(0.0001, currentGain), now);
+        gain.gain.linearRampToValueAtTime(0.0001, now + durationSeconds);
+        setTimeout(() => {
+          try {
+            src.stop();
+          } catch (_) {}
+        }, durationSeconds * 1000 + 100);
+      } catch (e) {
+        console.warn('[CatalytiX Audio] Web Audio fade error:', e);
+      }
+    }
+
+    // 2. HTML5 Audio fade-out
+    const audioEl = audioElementRef.current;
+    if (audioEl && !audioEl.paused) {
+      const startVol = audioEl.volume;
+      const startTime = performance.now();
+      const durationMs = durationSeconds * 1000;
+
+      const fadeStep = (time: number) => {
+        const elapsed = time - startTime;
+        const progress = Math.min(1, elapsed / durationMs);
+        audioEl.volume = Math.max(0, startVol * (1 - progress));
+        if (progress < 1) {
+          fadeAnimFrameRef.current = requestAnimationFrame(fadeStep);
+        } else {
+          audioEl.pause();
+          audioEl.currentTime = 0;
+          fadeAnimFrameRef.current = null;
+        }
+      };
+      fadeAnimFrameRef.current = requestAnimationFrame(fadeStep);
+    }
+  }, []);
+
+  // Trigger clapping audio: starts immediately when GO ends and CatalytiX screen is displayed (plays ONCE)
+  const triggerClappingSound = useCallback(() => {
+    if (isLockedRef.current || hasTriggeredClapRef.current) return;
+    hasTriggeredClapRef.current = true;
+    console.log('[CatalytiX Audio] Triggering clapping sound now (plays ONCE)!');
+    isAudioPlayingRef.current = true;
+
+    if (fadeAnimFrameRef.current) {
+      cancelAnimationFrame(fadeAnimFrameRef.current);
+      fadeAnimFrameRef.current = null;
+    }
+
+    let webAudioStarted = false;
+
+    // A. Web Audio API playback (zero latency, plays ONCE)
+    const ctx = audioCtxRef.current;
+    const buffer = audioBufferRef.current;
+    if (ctx && buffer) {
+      try {
+        if (ctx.state === 'suspended') {
+          ctx.resume().catch(() => {});
+        }
+        if (activeSourceRef.current) {
+          try {
+            activeSourceRef.current.stop();
+          } catch (_) {}
+          activeSourceRef.current = null;
+        }
+
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.loop = false; // Plays only ONCE, never loops again
+
+        source.onended = () => {
+          isAudioPlayingRef.current = false;
+          activeSourceRef.current = null;
+          activeGainRef.current = null;
+        };
+
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(1.0, ctx.currentTime);
+
+        source.connect(gain);
+        gain.connect(ctx.destination);
+        source.start(0);
+
+        activeSourceRef.current = source;
+        activeGainRef.current = gain;
+        webAudioStarted = true;
+        console.log('[CatalytiX Audio] Web Audio playing at volume 1.0 (once)');
+      } catch (e) {
+        console.warn('[CatalytiX Audio] Web Audio play failed, falling back to HTML5 audio:', e);
+      }
+    }
+
+    // B. HTML5 Audio element fallback / backup (plays ONCE)
+    const audioEl = audioElementRef.current;
+    if (audioEl) {
+      if (webAudioStarted) {
+        audioEl.pause();
+        audioEl.currentTime = 0;
+      } else {
+        audioEl.currentTime = 0;
+        audioEl.volume = 1.0;
+        audioEl.loop = false; // Plays only ONCE, never loops again
+        audioEl.onended = () => {
+          isAudioPlayingRef.current = false;
+        };
+        audioEl.play().then(() => {
+          console.log('[CatalytiX Audio] HTML5 audio playing at volume 1.0 (once)');
+        }).catch((err) => {
+          console.warn('[CatalytiX Audio] HTML5 audio play error:', err);
+        });
+      }
+    }
+  }, []);
+
+  // Pre-load and prime audio during user's click on Launch CatalytiX button (synchronous User Gesture)
+  const handleLaunchStart = useCallback(() => {
+    // 1. Initialize and resume Web Audio AudioContext inside user gesture
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (AudioCtx) {
+        if (!audioCtxRef.current) {
+          audioCtxRef.current = new AudioCtx();
+        }
+        if (audioCtxRef.current.state === 'suspended') {
+          audioCtxRef.current.resume().catch(() => {});
+        }
+      }
+    } catch (err) {
+      console.warn('[CatalytiX Audio] AudioContext init error:', err);
+    }
+
+    // 2. Fetch and decode audio buffer for instant playback
+    if (audioCtxRef.current && !audioBufferRef.current) {
+      fetch('/catalytix-clapping.wav?v=2026')
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.arrayBuffer();
+        })
+        .then((arrayBuf) => {
+          if (audioCtxRef.current) {
+            return audioCtxRef.current.decodeAudioData(arrayBuf);
+          }
+        })
+        .then((decoded) => {
+          if (decoded) {
+            audioBufferRef.current = decoded;
+            console.log('[CatalytiX Audio] Pre-decoded buffer ready');
+          }
+        })
+        .catch((err) => {
+          console.warn('[CatalytiX Audio] Web Audio decode failed:', err);
+        });
+    }
+
+    // 3. Prime HTML5 Audio element synchronously inside user gesture
+    const audioEl = audioElementRef.current;
+    if (audioEl) {
+      audioEl.volume = 0.0001;
+      const playPromise = audioEl.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            audioEl.pause();
+            audioEl.currentTime = 0;
+          })
+          .catch(() => {});
+      }
+    }
+  }, []);
 
   // Lock state: starts on the kinetic intro sequence, locks to inner webpage once X transition finishes
   const [isLocked, setIsLocked] = useState(false);
@@ -37,13 +254,16 @@ export default function IntroSequence() {
     if (isLockedRef.current) return;
     isLockedRef.current = true;
 
+    // Ensure audio is stopped
+    stopClappingSound();
+
     // Start elements incoming transition on inner webpage
     setIsIncoming(true);
 
     // Lock to inner webpage: intro container becomes display: none, page scrolls to top
     setIsLocked(true);
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, []);
+  }, [stopClappingSound]);
 
   // Compute center delta to align the X from its wordmark position to the screen center
   const computeCenterDelta = useCallback(() => {
@@ -109,6 +329,9 @@ export default function IntroSequence() {
   const playXTransition = useCallback(() => {
     if (isTransitioningRef.current || isLockedRef.current) return;
     isTransitioningRef.current = true;
+
+    // Fade off clapping sound when clicked again for the X animation
+    fadeOffClappingSound(1.2);
 
     // Stop entrance timeline if still animating
     if (entranceTlRef.current) {
@@ -188,7 +411,7 @@ export default function IntroSequence() {
         0.95
       );
     }
-  }, [computeCenterDelta, lockToWebpage]);
+  }, [computeCenterDelta, lockToWebpage, fadeOffClappingSound]);
 
   // Run the entrance animation:
   // 1. X appears in center alone
@@ -313,9 +536,24 @@ export default function IntroSequence() {
     if (subtitleBottomRef.current) gsap.set(subtitleBottomRef.current, { opacity: 0, y: -18 });
   }, [measureOffsets, updateMask]);
 
-  // Entrance animation trigger when countdown finishes
+  // Pre-fetch clapping sound on mount
+  useEffect(() => {
+    fetch('/catalytix-clapping.wav?v=2026').catch(() => {});
+  }, []);
+
+  // Cleanup audio on component unmount
+  useEffect(() => {
+    return () => {
+      stopClappingSound();
+    };
+  }, [stopClappingSound]);
+
+  // Entrance animation & celebratory clapping trigger when countdown finishes
   useEffect(() => {
     if (showCountdown || isLocked) return;
+
+    // Trigger clapping sound: plays right after GO and when CatalytiX screen is shown
+    triggerClappingSound();
 
     runEntrance();
 
@@ -341,13 +579,40 @@ export default function IntroSequence() {
       window.removeEventListener('keydown', handleKeyDown);
       if (entranceTlRef.current) entranceTlRef.current.kill();
     };
-  }, [showCountdown, isLocked, runEntrance, playXTransition]);
+  }, [showCountdown, isLocked, runEntrance, playXTransition, triggerClappingSound]);
+
+  // Safety net: in case browser restricted autoplay until first interaction on the CatalytiX screen
+  useEffect(() => {
+    const onPointerDown = () => {
+      if (isAudioPlayingRef.current && !isLockedRef.current && !isTransitioningRef.current) {
+        const ctx = audioCtxRef.current;
+        const audioEl = audioElementRef.current;
+        if ((ctx && ctx.state === 'suspended') || (audioEl && audioEl.paused && !activeSourceRef.current)) {
+          triggerClappingSound();
+        }
+      }
+    };
+    window.addEventListener('pointerdown', onPointerDown);
+    return () => window.removeEventListener('pointerdown', onPointerDown);
+  }, [triggerClappingSound]);
+
+  const handleCountdownComplete = useCallback(() => {
+    triggerClappingSound();
+    setShowCountdown(false);
+  }, [triggerClappingSound]);
 
   return (
-    <div className="relative w-full bg-white select-none">
+    <div
+      className={`relative w-full bg-white transition-colors duration-300 ${
+        isLocked ? 'min-h-screen select-auto overflow-visible' : 'h-screen select-none overflow-hidden'
+      }`}
+    >
       {/* 0. LAUNCH & COUNTDOWN WINDOW (Before the website) */}
       {showCountdown && (
-        <LaunchCountdown onComplete={() => setShowCountdown(false)} />
+        <LaunchCountdown
+          onStart={handleLaunchStart}
+          onComplete={handleCountdownComplete}
+        />
       )}
 
       {/* 1. INTRO WORDMARK SEQUENCE (Waits for Sir's click, then plays X transition to inner page) */}
@@ -446,11 +711,13 @@ export default function IntroSequence() {
                         style={{ opacity: 0, zIndex: 1, willChange: 'transform, opacity, clip-path' }}
                       >
                         <span
-                          className="relative z-10 font-asimovian select-none inline-flex items-center"
+                          className="relative z-10 font-sans select-none inline-flex items-baseline"
                           style={{
+                            fontFamily: "var(--font-wordmark), 'Montserrat', 'Plus Jakarta Sans', sans-serif",
                             fontSize: 'clamp(4.2rem, 16.5vmin, 16.8rem)',
-                            lineHeight: 0.95,
-                            letterSpacing: '0.03em',
+                            lineHeight: 1,
+                            letterSpacing: '0.02em',
+                            fontWeight: 900,
                             textTransform: 'uppercase',
                           }}
                         >
@@ -463,6 +730,8 @@ export default function IntroSequence() {
                               className="inline-block transform-gpu breathing-gradient-text"
                               style={{
                                 willChange: 'transform, opacity',
+                                lineHeight: 1.15,
+                                paddingBottom: '0.12em',
                               }}
                             >
                               {letter}
@@ -543,6 +812,16 @@ export default function IntroSequence() {
       >
         <HeroWebsite isIncoming={isIncoming} />
       </div>
+
+      {/* 3. CELEBRATORY CLAPPING AUDIO (Dual sources for rock-solid playback, plays ONCE) */}
+      <audio
+        ref={audioElementRef}
+        preload="auto"
+        playsInline
+      >
+        <source src="/catalytix-clapping.wav?v=2026" type="audio/wav" />
+        <source src="/mixkit-conference-audience-clapping-strongly-476.wav" type="audio/wav" />
+      </audio>
     </div>
   );
 }

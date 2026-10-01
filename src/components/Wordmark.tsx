@@ -24,26 +24,29 @@ export default function Wordmark({
     lg: { font: '3.2rem', icon: 96, gap: '10px' },
     hero: { font: 'clamp(3.5rem, 8vw, 7.5rem)', icon: 'clamp(116px, 18vw, 240px)', gap: '14px' },
     footer: {
-      font: 'clamp(3.2rem, 15.6vmin, 15.5rem)',
-      icon: 'clamp(58px, 15.6vmin, 160px)',
-      gap: 'clamp(2px, 0.6vmin, 8px)',
+      font: 'clamp(2.4rem, 10.5vmin, 9.5rem)',
+      icon: 'clamp(42px, 10.5vmin, 105px)',
+      gap: 'clamp(2px, 0.5vmin, 8px)',
     },
     full: {
-      font: 'clamp(3.2rem, 15.6vmin, 15.5rem)',
-      icon: 'clamp(58px, 15.6vmin, 160px)',
-      gap: 'clamp(2px, 0.6vmin, 8px)',
+      font: 'clamp(2.4rem, 10.5vmin, 9.5rem)',
+      icon: 'clamp(42px, 10.5vmin, 105px)',
+      gap: 'clamp(2px, 0.5vmin, 8px)',
     },
   };
 
   const currentSize = sizeMap[size];
 
   const textStyle: React.CSSProperties = {
-    fontFamily: "var(--font-asimovian), sans-serif",
+    fontFamily: "var(--font-wordmark), 'Montserrat', 'Plus Jakarta Sans', sans-serif",
     fontSize: currentSize.font,
-    lineHeight: 0.95,
-    letterSpacing: isFull ? '0.035em' : '0.04em',
+    lineHeight: 1.15,
+    letterSpacing: isFull ? '0.025em' : '0.03em',
     fontWeight: 900,
     textTransform: 'uppercase',
+    display: 'inline-block',
+    paddingBottom: '0.08em',
+    overflow: 'visible',
   };
 
   const resolvedMarkFill = markFill ?? (

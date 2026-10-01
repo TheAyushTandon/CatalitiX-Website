@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'CatalytiX — Next-Generation Kinetic Platform',
-  description: 'Unleash next-level performance and creative physics with CatalytiX.',
+  title: 'CATALYTIX — Next-Generation Kinetic Platform',
+  description: 'Unleash next-level performance and creative physics with CATALYTIX.',
   icons: {
     icon: '/icon.svg',
     shortcut: '/favicon.ico',

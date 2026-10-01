@@ -128,6 +128,12 @@ export default function GridTilesBackground() {
 
           if (activeKeysRef.current.has(key)) continue;
 
+          // Preserve clean typography by reducing tile density directly behind the central headlines
+          const midCol = cols / 2;
+          if (col >= midCol - 6 && col <= midCol + 6 && row >= 2 && row <= 8 && Math.random() < 0.85) {
+            continue;
+          }
+
           targetCol = col;
           targetRow = row;
           found = true;
@@ -209,13 +215,25 @@ export default function GridTilesBackground() {
       className="fixed inset-0 z-0 pointer-events-none overflow-hidden select-none"
       aria-hidden="true"
     >
-      {/* 1. Underlying Technical Grid Lines (pure 48px square pattern with crisp visibility) */}
+      {/* 0. Subtle Ambient Gradient Lighting (gives depth and warm brand atmosphere) */}
       <div 
-        className="absolute inset-0 pointer-events-none opacity-60"
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `
+            radial-gradient(ellipse 75% 55% at 50% 25%, rgba(0, 240, 255, 0.08) 0%, rgba(255, 46, 147, 0.05) 50%, transparent 80%),
+            radial-gradient(circle at 15% 75%, rgba(124, 255, 103, 0.05) 0%, transparent 45%),
+            radial-gradient(circle at 85% 75%, rgba(245, 158, 11, 0.05) 0%, transparent 45%)
+          `,
+        }}
+      />
+
+      {/* 1. Underlying Technical Grid Lines (crisp, elegant 48px square pattern) */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(15,23,42,0.045) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(15,23,42,0.045) 1px, transparent 1px)
+            linear-gradient(rgba(15, 23, 42, 0.07) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(15, 23, 42, 0.07) 1px, transparent 1px)
           `,
           backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px, ${CELL_SIZE}px ${CELL_SIZE}px`,
         }}

@@ -10,9 +10,10 @@ import Icons8 from './Icons8';
 
 interface LaunchCountdownProps {
   onComplete: () => void;
+  onStart?: () => void;
 }
 
-export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
+export default function LaunchCountdown({ onComplete, onStart }: LaunchCountdownProps) {
   const [isCounting, setIsCounting] = useState(false);
   const [count, setCount] = useState(3);
 
@@ -20,12 +21,30 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
   const bwLayerRef = useRef<HTMLDivElement>(null);
   const countdownBoxRef = useRef<HTMLDivElement>(null);
   const numberRef = useRef<HTMLDivElement>(null);
+  const countdownAudioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Click Launch -> Smooth fade of quote screen into pure black and white countdown
+  // Pre-fetch 3-2-1-GO countdown audio on mount
+  useEffect(() => {
+    fetch('/countdown-321-go.mp3?v=2026').catch(() => { });
+  }, []);
+
+  // Click Launch -> Play 3-2-1-GO audio immediately & smooth fade into countdown
   const handleLaunchClick = () => {
     if (isCounting) return;
     setIsCounting(true);
+    onStart?.();
 
+    // 1. Play 3-2-1-GO audio immediately in user gesture
+    const audio = countdownAudioRef.current;
+    if (audio) {
+      audio.currentTime = 0;
+      audio.volume = 1.0;
+      audio.play().catch((err) => {
+        console.warn('[Countdown Audio] play error:', err);
+      });
+    }
+
+    // 2. Fade out quote layer, reveal countdown box showing "3"
     if (bwLayerRef.current) {
       gsap.to(bwLayerRef.current, {
         opacity: 0,
@@ -41,47 +60,96 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
               { scale: 0.85, opacity: 0 },
               { scale: 1, opacity: 1, duration: 0.45, ease: 'back.out(1.5)' }
             );
+            if (numberRef.current) {
+              gsap.fromTo(
+                numberRef.current,
+                { scale: 1.4, opacity: 0, filter: 'blur(10px)' },
+                { scale: 1, opacity: 1, filter: 'blur(0px)', duration: 0.4, ease: 'power3.out' }
+              );
+            }
           }
         },
       });
     }
   };
 
-  // Countdown timer: 3 -> 2 -> 1 -> GO -> Complete
+  // Synchronized Countdown timeline matching mrstokes302-321-go-sfx audio peaks:
+  // t=0ms: Click & Audio starts
+  // t=350ms: Countdown box displays '3' (synced with 0.60s audio hit)
+  // t=1650ms: '2' (synced with 1.65s audio hit)
+  // t=2750ms: '1' (synced with 2.75s audio hit)
+  // t=3800ms: 'GO' (synced with 3.80s audio hit)
+  // t=4600ms: Smooth fade-out into CatalytiX screen and trigger onComplete()
   useEffect(() => {
     if (!isCounting) return;
 
-    if (count > 0) {
-      if (numberRef.current) {
-        gsap.fromTo(
-          numberRef.current,
-          { scale: 1.4, opacity: 0, filter: 'blur(10px)' },
-          { scale: 1, opacity: 1, filter: 'blur(0px)', duration: 0.45, ease: 'power3.out' }
-        );
-      }
+    const timers: NodeJS.Timeout[] = [];
 
-      const timer = setTimeout(() => {
-        setCount((prev) => prev - 1);
-      }, 1000);
+    // 2 appears at 1650ms
+    timers.push(
+      setTimeout(() => {
+        setCount(2);
+        if (numberRef.current) {
+          gsap.fromTo(
+            numberRef.current,
+            { scale: 1.45, opacity: 0, filter: 'blur(10px)' },
+            { scale: 1, opacity: 1, filter: 'blur(0px)', duration: 0.4, ease: 'power3.out' }
+          );
+        }
+      }, 1650)
+    );
 
-      return () => clearTimeout(timer);
-    } else {
-      // Final flash and completion
-      if (containerRef.current) {
-        gsap.to(containerRef.current, {
-          opacity: 0,
-          scale: 1.05,
-          duration: 0.6,
-          ease: 'power2.inOut',
-          onComplete: () => {
-            onComplete();
-          },
-        });
-      } else {
-        onComplete();
-      }
-    }
-  }, [isCounting, count, onComplete]);
+    // 1 appears at 2750ms
+    timers.push(
+      setTimeout(() => {
+        setCount(1);
+        if (numberRef.current) {
+          gsap.fromTo(
+            numberRef.current,
+            { scale: 1.45, opacity: 0, filter: 'blur(10px)' },
+            { scale: 1, opacity: 1, filter: 'blur(0px)', duration: 0.4, ease: 'power3.out' }
+          );
+        }
+      }, 2750)
+    );
+
+    // 'GO' appears at 3800ms
+    timers.push(
+      setTimeout(() => {
+        setCount(0);
+        if (numberRef.current) {
+          gsap.fromTo(
+            numberRef.current,
+            { scale: 1.6, opacity: 0, filter: 'blur(12px)' },
+            { scale: 1, opacity: 1, filter: 'blur(0px)', duration: 0.35, ease: 'power3.out' }
+          );
+        }
+      }, 3800)
+    );
+
+    // Fade out countdown container and complete at 4600ms
+    timers.push(
+      setTimeout(() => {
+        if (containerRef.current) {
+          gsap.to(containerRef.current, {
+            opacity: 0,
+            scale: 1.05,
+            duration: 0.55,
+            ease: 'power2.inOut',
+            onComplete: () => {
+              onComplete();
+            },
+          });
+        } else {
+          onComplete();
+        }
+      }, 4600)
+    );
+
+    return () => {
+      timers.forEach((t) => clearTimeout(t));
+    };
+  }, [isCounting, onComplete]);
 
   return (
     <div
@@ -127,7 +195,7 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
           {/* Clean Floating Quote */}
           <div className="max-w-2xl mx-auto space-y-5 py-2">
             <blockquote className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight italic tracking-tight">
-              &ldquo;A catalyst for disruptive innovation — turning ambitious ideas into market leaders with world-class labs, capital velocity, and governance.&rdquo;
+              &ldquo;The catalyst that churns raw ideas into market-ready ventures.&rdquo;
             </blockquote>
 
             <div className="space-y-1.5 pt-2">
@@ -157,7 +225,7 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
                   }}
                 >
                   <Icons8 name="rocket" size={24} color="090D16" />
-                  <span>Launch CatalytiX</span>
+                  <span>Launch CATALYTIX</span>
                 </button>
               </StarBorder>
             </Magnet>
@@ -165,7 +233,7 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
 
           <div className="pt-2 text-xs sm:text-sm font-mono font-bold">
             <ShinyText
-              text="Click To Launch CatalytiX"
+              text="Click To Launch CATALYTIX"
               speed={2.5}
               color="rgba(255, 255, 255, 0.7)"
               shineColor="#FFFFFF"
@@ -206,6 +274,16 @@ export default function LaunchCountdown({ onComplete }: LaunchCountdownProps) {
           </p>
         </div>
       </div>
+
+      {/* 3-2-1-GO Sound Effect (User-provided audio) */}
+      <audio
+        ref={countdownAudioRef}
+        preload="auto"
+        playsInline
+      >
+        <source src="/countdown-321-go.mp3?v=2026" type="audio/mpeg" />
+        <source src="/mrstokes302-321-go-sfx-mrstokes302-588516_gxZ47n3b.mp3" type="audio/mpeg" />
+      </audio>
     </div>
   );
 }
